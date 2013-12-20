@@ -1,1 +1,7 @@
+build.*.properties
+
 *.class
+
+bin/*
+build/*
+generator/classes/*
