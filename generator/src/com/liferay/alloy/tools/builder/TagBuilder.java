@@ -1,25 +1,29 @@
-package com.liferay.alloy.tools.tagbuilder;
+/**
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
+
+package com.liferay.alloy.tools.builder;
 
 import com.liferay.alloy.tools.model.Attribute;
 import com.liferay.alloy.tools.model.Component;
-import com.liferay.portal.freemarker.FreeMarkerUtil;
-import com.liferay.portal.kernel.util.FileUtil;
-import com.liferay.portal.kernel.util.GetterUtil;
-import com.liferay.portal.kernel.util.PropsUtil;
-import com.liferay.portal.kernel.util.StringPool;
-import com.liferay.portal.kernel.util.StringUtil;
-import com.liferay.portal.kernel.util.Validator;
-import com.liferay.portal.kernel.xml.Document;
-import com.liferay.portal.kernel.xml.Element;
-import com.liferay.portal.kernel.xml.Node;
-import com.liferay.portal.kernel.xml.SAXReaderUtil;
-import com.liferay.portal.kernel.xml.XPath;
-import com.liferay.portal.util.FileImpl;
-import com.liferay.portal.util.PropsImpl;
-import com.liferay.portal.xml.SAXReaderImpl;
+import com.liferay.alloy.util.FreeMarkerUtil;
+import com.liferay.alloy.util.StringUtil;
+import com.liferay.alloy.util.xpath.AlloyGeneratorNamespaceContext;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -28,13 +32,32 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import jodd.io.FileUtil;
+
+import jodd.typeconverter.Convert;
+
+import jodd.util.StringPool;
+
+import org.dom4j.Document;
+import org.dom4j.DocumentFactory;
+import org.dom4j.Element;
+import org.dom4j.Node;
+import org.dom4j.XPath;
+import org.dom4j.io.SAXReader;
+
+import org.jaxen.NamespaceContext;
+
+import org.xml.sax.InputSource;
+
 /**
- * <a href="TagBuilder.java.html"><b><i>View Source</i></b></a>
- *
  * @author Eduardo Lundgren
  * @author Bruno Basto
  */
 public class TagBuilder {
+
+	public static final String[] DEFAULT_AUTHORS = new String[] {
+		"Eduardo Lundgren", "Bruno Basto", "Nathan Cavanaugh"
+	};
 
 	public static void main(String[] args) throws Exception {
 		String componentsXML = System.getProperty("tagbuilder.components.xml");
@@ -42,7 +65,8 @@ public class TagBuilder {
 		String docrootDir = System.getProperty("tagbuilder.docroot.dir");
 		String javaDir = System.getProperty("tagbuilder.java.dir");
 		String javaPackage = System.getProperty("tagbuilder.java.package");
-		String jspCommonInitPath = System.getProperty("tagbuilder.jsp.common.init.path");
+		String jspCommonInitPath = System.getProperty(
+			"tagbuilder.jsp.common.init.path");
 		String jspDir = System.getProperty("tagbuilder.jsp.dir");
 		String templatesDir = System.getProperty("tagbuilder.templates.dir");
 		String tldDir = System.getProperty("tagbuilder.tld.dir");
@@ -51,13 +75,17 @@ public class TagBuilder {
 
 		_copyrightYear = String.valueOf(calendar.get(Calendar.YEAR));
 
-		if (Validator.isNotNull(copyrightYear)) {
+		if (StringUtil.isNotBlank(copyrightYear)) {
 			_copyrightYear = copyrightYear;
 		}
 
+		if (_saxReader == null) {
+			_saxReader = new SAXReader();
+		}
+
 		new TagBuilder(
-			componentsXML, templatesDir, javaDir, docrootDir,
-			javaPackage, jspDir, jspCommonInitPath, tldDir);
+			componentsXML, templatesDir, javaDir, docrootDir, javaPackage,
+			jspDir, jspCommonInitPath, tldDir);
 	}
 
 	public TagBuilder(
@@ -66,15 +94,7 @@ public class TagBuilder {
 			String jspCommonInitPath, String tldDir)
 		throws Exception {
 
-		if (SAXReaderUtil.getSAXReader() == null) {
-			(new SAXReaderUtil()).setSAXReader(new SAXReaderImpl());
-		}
-
-		if (PropsUtil.getProps() == null) {
-			PropsUtil.setProps(new PropsImpl());
-		}
-
-		_componentsXML = Arrays.asList(StringUtil.split(componentsXML));
+		_componentsXML = Arrays.asList(componentsXML.split(StringPool.COMMA));
 		_templatesDir = templatesDir;
 		_javaDir = javaDir;
 		_docrootDir = docrootDir;
@@ -97,7 +117,7 @@ public class TagBuilder {
 			File extFile = new File(componentExtXML);
 
 			if (extFile.exists()) {
-				_componentsExtDoc.add(SAXReaderUtil.read(extFile));
+				_componentsExtDoc.add(_saxReader.read(extFile));
 			}
 		}
 
@@ -105,9 +125,15 @@ public class TagBuilder {
 	}
 
 	protected List<Component> getAllComponents() throws Exception {
-		Document doc = SAXReaderUtil.createDocument();
+		DocumentFactory factory = _saxReader.getDocumentFactory();
 
-		Document taglibsDoc = SAXReaderUtil.read("<taglibs></taglibs>");
+		Document doc = factory.createDocument();
+
+		String taglibsXML = "<taglibs></taglibs>";
+
+		Document taglibsDoc = _saxReader.read(
+			new InputSource(
+				new ByteArrayInputStream(taglibsXML.getBytes("utf-8"))));
 
 		Element root = taglibsDoc.getRootElement();
 
@@ -118,7 +144,7 @@ public class TagBuilder {
 			List<Element> extComponentNodes = extRoot.elements("component");
 
 			for (Element extComponent : extComponentNodes) {
-				String extComponentPackage = GetterUtil.getString(
+				String extComponentPackage = Convert.toString(
 					extComponent.attributeValue("package"), defaultPackage);
 
 				extComponent.addAttribute("package", extComponentPackage);
@@ -173,18 +199,18 @@ public class TagBuilder {
 			String defaultValue = attributeNode.elementText("defaultValue");
 			String description = attributeNode.elementText("description");
 			String name = attributeNode.elementText("name");
-			String type = GetterUtil.getString(
+			String type = Convert.toString(
 				attributeNode.elementText("type"), _DEFAULT_TYPE);
-			String inputType = GetterUtil.getString(
+			String inputType = Convert.toString(
 				attributeNode.elementText("inputType"), type);
-			String outputType = GetterUtil.getString(
+			String outputType = Convert.toString(
 				attributeNode.elementText("outputType"), type);
 
-			boolean gettable = GetterUtil.getBoolean(
+			boolean gettable = Convert.toBoolean(
 				attributeNode.elementText("gettable"), true);
-			boolean required = GetterUtil.getBoolean(
-				attributeNode.elementText("required"));
-			boolean settable = GetterUtil.getBoolean(
+			boolean required = Convert.toBoolean(
+				attributeNode.elementText("required"), false);
+			boolean settable = Convert.toBoolean(
 				attributeNode.elementText("settable"), true);
 
 			Attribute attribute = new Attribute();
@@ -248,30 +274,29 @@ public class TagBuilder {
 		List<Element> allComponentNodes = root.elements("component");
 
 		for (Element node : allComponentNodes) {
-			String componentPackage = GetterUtil.getString(
+			String componentPackage = Convert.toString(
 				node.attributeValue("package"), defaultPackage);
 
 			String name = node.attributeValue("name");
 
-			boolean alloyComponent = GetterUtil.getBoolean(
+			boolean alloyComponent = Convert.toBoolean(
 				node.attributeValue("alloyComponent"));
 
-			boolean bodyContent = GetterUtil.getBoolean(
+			boolean bodyContent = Convert.toBoolean(
 				node.attributeValue("bodyContent"));
 
-			String className = GetterUtil.getString(
+			String className = Convert.toString(
 				node.attributeValue("className"));
 
-			boolean dynamicAttributes = GetterUtil.getBoolean(
+			boolean dynamicAttributes = Convert.toBoolean(
 				node.attributeValue("dynamicAttributes"), true);
 
-			String module = GetterUtil.getString(
-				node.attributeValue("module"));
+			String module = Convert.toString(node.attributeValue("module"));
 
-			String parentClass = GetterUtil.getString(
+			String parentClass = Convert.toString(
 				node.attributeValue("parentClass"), _DEFAULT_PARENT_CLASS);
 
-			boolean writeJSP = GetterUtil.getBoolean(
+			boolean writeJSP = Convert.toBoolean(
 				node.attributeValue("writeJSP"), true);
 
 			String[] authors = getAuthorList(node);
@@ -311,8 +336,8 @@ public class TagBuilder {
 		return null;
 	}
 
-	protected Map<String, Object> getDefaultTemplateContext() {
-		Map<String, Object> context = new HashMap<String, Object>();
+	protected HashMap<String, Object> getDefaultTemplateContext() {
+		HashMap<String, Object> context = new HashMap<String, Object>();
 
 		context.put("copyrightYear", _copyrightYear);
 		context.put("jspCommonInitPath", _jspCommonInitPath);
@@ -407,10 +432,10 @@ public class TagBuilder {
 	}
 
 	protected Map<String, Object> getTemplateContext(Component component) {
-		Map<String, Object> context = getDefaultTemplateContext();
+		HashMap<String, Object> context = getDefaultTemplateContext();
 
 		String jspRelativePath = getJspDir(component).concat(
-			component.getUncamelizedName(StringPool.UNDERLINE));
+			component.getUncamelizedName(StringPool.UNDERSCORE));
 
 		context.put("component", component);
 		context.put("namespace", component.getAttributeNamespace());
@@ -422,8 +447,18 @@ public class TagBuilder {
 	protected Document mergeTlds(Document sourceDoc, Document targetDoc) {
 		Element targetRoot = targetDoc.getRootElement();
 
-		XPath xpathTags = SAXReaderUtil.createXPath(
-			"//tld:tag", _TLD_XPATH_PREFIX, _TLD_XPATH_URI);
+		DocumentFactory factory = _saxReader.getDocumentFactory();
+
+		XPath xpathTags = factory.createXPath("//tld:tag");
+
+		Map<String, String> namespaceContextMap = new HashMap<String, String>();
+
+		namespaceContextMap.put(_TLD_XPATH_PREFIX, _TLD_XPATH_URI);
+
+		NamespaceContext namespaceContext = new AlloyGeneratorNamespaceContext(
+			namespaceContextMap);
+
+		xpathTags.setNamespaceContext(namespaceContext);
 
 		List<Node> sources = xpathTags.selectNodes(sourceDoc);
 
@@ -434,17 +469,17 @@ public class TagBuilder {
 
 			String xpathTagValue = "//tld:tag[tld:name='" + sourceName + "']";
 
-			XPath xpathTag = SAXReaderUtil.createXPath(
-				xpathTagValue, _TLD_XPATH_PREFIX, _TLD_XPATH_URI);
+			XPath xpathTag = factory.createXPath(xpathTagValue);
+
+			xpathTag.setNamespaceContext(namespaceContext);
 
 			List<Node> targets = xpathTag.selectNodes(targetDoc);
 
 			if (targets.size() > 0) {
 				Element targetElement = (Element)targets.get(0);
 
-				XPath xpathAttributes = SAXReaderUtil.createXPath(
-					xpathTagValue + "//tld:attribute", _TLD_XPATH_PREFIX,
-					_TLD_XPATH_URI);
+				XPath xpathAttributes = factory.createXPath(
+					xpathTagValue + "//tld:attribute");
 
 				List<Node> sourceAttributes = xpathAttributes.selectNodes(
 					source);
@@ -452,18 +487,19 @@ public class TagBuilder {
 				for (Node sourceAttribute : sourceAttributes) {
 					Element sourceAttributeElement = (Element)sourceAttribute;
 
-					String attributeName =
-						sourceAttributeElement.elementText("name");
+					String attributeName = sourceAttributeElement.elementText(
+						"name");
 
 					String xpathAttributeValue = "//tld:attribute[tld:name='" +
 							attributeName + "']";
 
-					XPath xpathAttribute = SAXReaderUtil.createXPath(
-						xpathTagValue + xpathAttributeValue, _TLD_XPATH_PREFIX,
-						_TLD_XPATH_URI);
+					XPath xpathAttribute = factory.createXPath(
+						xpathTagValue + xpathAttributeValue);
 
-					Node targetAttribute =
-						xpathAttribute.selectSingleNode(targetElement);
+					xpathAttribute.setNamespaceContext(namespaceContext);
+
+					Node targetAttribute = xpathAttribute.selectSingleNode(
+						targetElement);
 
 					if (targetAttribute != null) {
 						targetAttribute.detach();
@@ -472,8 +508,8 @@ public class TagBuilder {
 					targetElement.add(sourceAttributeElement.createCopy());
 				}
 
-				Element dynamicAttrElement =
-					targetElement.element("dynamic-attributes");
+				Element dynamicAttrElement = targetElement.element(
+					"dynamic-attributes");
 
 				if (dynamicAttrElement != null) {
 					targetElement.add(dynamicAttrElement.detach());
@@ -493,7 +529,9 @@ public class TagBuilder {
 		Element docRoot = doc1Root.createCopy();
 		docRoot.clearContent();
 
-		Document doc = SAXReaderUtil.createDocument();
+		DocumentFactory factory = _saxReader.getDocumentFactory();
+
+		Document doc = factory.createDocument();
 		doc.setRootElement(docRoot);
 
 		List<Element> doc1Components = doc1Root.elements(_COMPONENT);
@@ -507,11 +545,11 @@ public class TagBuilder {
 				Element doc2AttributesNode = doc2Component.element(_ATTRIBUTES);
 
 				if (doc2AttributesNode != null) {
-					List<Element> doc2Attributes =
-						doc2AttributesNode.elements(_ATTRIBUTE);
+					List<Element> doc2Attributes = doc2AttributesNode.elements(
+						_ATTRIBUTE);
 
-					Element doc1AttributesNode =
-						doc1Component.element(_ATTRIBUTES);
+					Element doc1AttributesNode = doc1Component.element(
+						_ATTRIBUTES);
 
 					for (Element doc2Attribute : doc2Attributes) {
 						Element doc1Attribute = getElementByName(
@@ -552,8 +590,8 @@ public class TagBuilder {
 	protected String processTemplate(String name, Map<String, Object> context)
 		throws Exception {
 
-		return com.liferay.portal.kernel.util.StringUtil.replace(
-			FreeMarkerUtil.process(name, context), '\r', StringPool.BLANK);
+		return StringUtil.replace(
+			FreeMarkerUtil.process(name, context), "\r", StringPool.EMPTY);
 	}
 
 	protected void writeFile(File file, String content) {
@@ -561,25 +599,24 @@ public class TagBuilder {
 	}
 
 	protected void writeFile(File file, String content, boolean overwrite) {
-		if (FileUtil.getFile() == null) {
-			(new FileUtil()).setFile(new FileImpl());
-		}
-
 		try {
+			file.getParentFile().mkdirs();
+
 			if (overwrite || !file.exists()) {
-				String oldContent = StringPool.BLANK;
+				String oldContent = StringPool.EMPTY;
 
 				if (file.exists()) {
-					oldContent = FileUtil.read(file);
+					oldContent = FileUtil.readString(file);
 				}
 
 				if (!file.exists() || !content.equals(oldContent)) {
 					System.out.println("Writing " + file);
 
-					FileUtil.write(file, content);
+					FileUtil.writeString(file, content);
 				}
 			}
-		} catch (IOException e) {
+		}
+		catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
@@ -622,9 +659,10 @@ public class TagBuilder {
 	}
 
 	private void _createCommonInitJSP() throws Exception {
-		Map<String, Object> context = getDefaultTemplateContext();
+		HashMap<String, Object> context = getDefaultTemplateContext();
 
-		String contentCommonInitJsp = processTemplate(_tplCommonInitJsp, context);
+		String contentCommonInitJsp = processTemplate(
+			_tplCommonInitJsp, context);
 
 		StringBuilder sb = new StringBuilder();
 
@@ -641,7 +679,7 @@ public class TagBuilder {
 			Component component, Map<String, Object> context)
 		throws Exception {
 
-		String pathName = component.getUncamelizedName(StringPool.UNDERLINE);
+		String pathName = component.getUncamelizedName(StringPool.UNDERSCORE);
 		String path = getJspOutputDir(component).concat(pathName);
 
 		String contentJsp = processTemplate(_tplJsp, context);
@@ -651,7 +689,7 @@ public class TagBuilder {
 		File initExtFile = new File(path.concat(_INIT_EXT_PAGE));
 
 		writeFile(initFile, contentInitJsp);
-		writeFile(initExtFile, StringPool.BLANK, false);
+		writeFile(initExtFile, StringPool.EMPTY, false);
 
 		if (component.isBodyContent()) {
 			String contentStart = processTemplate(_tplStartJsp, context);
@@ -667,8 +705,7 @@ public class TagBuilder {
 		}
 	}
 
-	private void _createTag(
-			Component component, Map<String, Object> context)
+	private void _createTag(Component component, Map<String, Object> context)
 		throws Exception {
 
 		StringBuilder sb = new StringBuilder();
@@ -685,16 +722,16 @@ public class TagBuilder {
 	}
 
 	private void _createTld() throws Exception {
-		Map<String, Object> context = getDefaultTemplateContext();
+		HashMap<String, Object> context = getDefaultTemplateContext();
 
 		for (Document doc : _componentsExtDoc) {
 			Element root = doc.getRootElement();
 
-			String shortName = GetterUtil.getString(
+			String shortName = Convert.toString(
 				root.attributeValue("short-name"), _DEFAULT_TAGLIB_SHORT_NAME);
-			String uri = GetterUtil.getString(
+			String uri = Convert.toString(
 				root.attributeValue("uri"), _DEFAULT_TAGLIB_URI);
-			String version = GetterUtil.getString(
+			String version = Convert.toString(
 				root.attributeValue("tlib-version"), _DEFAULT_TAGLIB_VERSION);
 
 			context.put("alloyComponent", shortName.equals(_DEFAULT_NAMESPACE));
@@ -710,51 +747,76 @@ public class TagBuilder {
 
 			String content = processTemplate(_tplTld, context);
 
-			Document source = SAXReaderUtil.read(content);
+//			Document source = _saxReader.read(content);
+//
+//			if (tldFile.exists()) {
+//				Document target = _saxReader.read(tldFile);
+//
+//				source = mergeTlds(source, target);
+//			}
 
-			if (tldFile.exists()) {
-				Document target = SAXReaderUtil.read(tldFile);
-
-				source = mergeTlds(source, target);
-			}
-
-			writeFile(tldFile, source.formattedString());
+			writeFile(tldFile, content, true);
 		}
 	}
 
-	public static final String[] DEFAULT_AUTHORS = new String[] {
-		"Eduardo Lundgren", "Bruno Basto", "Nathan Cavanaugh"
-	};
-
 	private static final String _AFTER = "after";
+
 	private static final String _ATTRIBUTE = "attribute";
+
 	private static final String _ATTRIBUTES = "attributes";
+
 	private static final String _AUTHOR = "author";
+
 	private static final String _AUTHORS = "authors";
+
 	private static final String _BASE = "base";
+
 	private static final String _BASE_CLASS_PREFIX = "Base";
+
 	private static final String _CLASS_SUFFIX = ".java";
+
 	private static final String _COMPONENT = "component";
+
 	private static final String _DEFAULT_NAMESPACE = "alloy";
-	private static final String _DEFAULT_PARENT_CLASS = "com.liferay.taglib.util.IncludeTag";
+
+	private static final String _DEFAULT_PARENT_CLASS =
+		"com.liferay.taglib.util.IncludeTag";
+
 	private static final String _DEFAULT_TAGLIB_SHORT_NAME = "alloy";
-	private static final String _DEFAULT_TAGLIB_URI = "http://alloy.liferay.com/tld/alloy";
+
+	private static final String _DEFAULT_TAGLIB_URI =
+		"http://alloy.liferay.com/tld/alloy";
+
 	private static final String _DEFAULT_TAGLIB_VERSION = "1.0";
+
 	private static final String _DEFAULT_TYPE = "java.lang.Object";
+
 	private static final String _EVENT = "event";
+
 	private static final String _EVENTS = "events";
+
 	private static final String _INIT_EXT_PAGE = "/init-ext.jspf";
+
 	private static final String _INIT_PAGE = "/init.jsp";
+
 	private static final String _ON = "on";
+
 	private static final String _PAGE = "/page.jsp";
+
 	private static final String _START_PAGE = "/start.jsp";
+
 	private static final String _TLD_EXTENSION = ".tld";
+
 	private static final String _TLD_XPATH_PREFIX = "tld";
-	private static final String _TLD_XPATH_URI = "http://java.sun.com/xml/ns/j2ee";
+
+	private static final String _TLD_XPATH_URI =
+		"http://java.sun.com/xml/ns/j2ee";
+
+	private static String _copyrightYear;
+	private static SAXReader _saxReader;
 
 	private List<Document> _componentsExtDoc;
 	private List<String> _componentsXML;
-	private static String _copyrightYear;
 	private String _docrootDir;
 	private String _javaDir;
 	private String _javaPackage;
