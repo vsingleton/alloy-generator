@@ -32,23 +32,9 @@
 		<antcall target="print-current-time" />
 	</target>
 
-	<target name="parse-alloy-docs" depends="compile">
+	<target name="build-taglibs" depends="generate-components-xml">
 		<java
-			classname="com.liferay.alloy.tools.xmlbuilder.XMLBuilder"
-			classpathref="project.classpath"
-			fork="true"
-			maxmemory="256m"
-			newenvironment="true"
-		>
-			<jvmarg value="-Dxmlbuilder.components.json=${xmlbuilder.components.json}" />
-			<jvmarg value="-Dtagbuilder.components.xml=${xmlbuilder.components.xml}" />
-			<jvmarg value="-Dxmlbuilder.components.excluded=${xmlbuilder.components.excluded}" />
-		</java>
-	</target>
-
-	<target name="build-taglibs" depends="compile,parse-alloy-docs">
-		<java
-			classname="com.liferay.alloy.tools.tagbuilder.TagBuilder"
+			classname="com.liferay.alloy.tools.builder.TagBuilder"
 			classpathref="project.classpath"
 			fork="true"
 			maxmemory="256m"
@@ -63,6 +49,20 @@
 			<jvmarg value="-Dtagbuilder.jsp.dir=${tagbuilder.jsp.dir}" />
 			<jvmarg value="-Dtagbuilder.templates.dir=${tagbuilder.templates.dir}" />
 			<jvmarg value="-Dtagbuilder.tld.dir=${tagbuilder.tld.dir}" />
+		</java>
+	</target>
+
+	<target name="generate-components-xml" depends="compile">
+		<java
+			classname="com.liferay.alloy.tools.transformer.AlloyDocsTransformer"
+			classpathref="project.classpath"
+			fork="true"
+			maxmemory="256m"
+			newenvironment="true"
+		>
+			<jvmarg value="-Dxmlbuilder.components.json=${transformer.input.json}" />
+			<jvmarg value="-Dtagbuilder.components.xml=${transformer.output.xml}" />
+			<jvmarg value="-Dxmlbuilder.components.excluded=${transformer.components.excluded}" />
 		</java>
 	</target>
 </project>

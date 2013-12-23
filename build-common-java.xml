@@ -41,7 +41,7 @@
 					destdir="classes"
 					includeAntRuntime="false"
 					nowarn="${javac.nowarn}"
-					source="1.5"
+					source="1.6"
 					srcdir="src"
 				/>
 			</else>
