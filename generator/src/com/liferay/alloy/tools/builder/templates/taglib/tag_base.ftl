@@ -64,9 +64,9 @@ public class Base${component.getClassName()} extends ${component.getParentClass(
 		<#if attribute.getDefaultValue()??>
 			<#assign defaultValue = attribute.getDefaultValue()>
 		</#if>
-		
+
 		<#assign defaultValue = getCleanUpValue(outputSimpleClassName, defaultValue)>
-		
+
 		</#compress>
 		<#if attribute.isGettable() || attribute.isSettable()>
 		_${attribute.getSafeName()} = ${defaultValue};
@@ -136,9 +136,9 @@ public class Base${component.getClassName()} extends ${component.getParentClass(
 	<#if attribute.getDefaultValue()??>
 		<#assign defaultValue = attribute.getDefaultValue()>
 	</#if>
-	
+
 	<#assign defaultValue = getCleanUpValue(outputSimpleClassName, defaultValue)>
-	
+
 	</#compress>
 	<#if attribute.isGettable() || attribute.isSettable()>
 	private ${attribute.getRawInputType()} _${attribute.getSafeName()} = ${defaultValue};

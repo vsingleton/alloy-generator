@@ -45,7 +45,7 @@
 	<#if (type == "int")>
 		<#assign outputType = "Integer">
 	</#if>
-	
+
 	<#return outputType?cap_first />
 </#function>
 
