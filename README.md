@@ -7,11 +7,11 @@ A code generator developed to help generating taglibs and facelets based on Allo
 
 ## How to setup?
 
-Just create your build.{username}.properties and override the properties you want from the build.properties.
+Just create your build.{username}.properties and override the properties you want from the [build.properties](build.properties).
 
 ## How to generate?
 
-Simply type
+Simply type:
 
 ```sh
 $ ant build-taglibs
