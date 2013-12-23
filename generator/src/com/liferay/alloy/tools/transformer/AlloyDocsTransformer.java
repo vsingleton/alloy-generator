@@ -298,10 +298,9 @@ public class AlloyDocsTransformer {
 					String outputJavaType = TypeUtil.getOutputJavaType(
 						outputType, true);
 
-					String defaultValue =
-						DefaultValueUtil.getDefaultValue(
-							outputJavaType,
-							JSONUtil.getString(attributeJSON, "default"));
+					String defaultValue = DefaultValueUtil.getDefaultValue(
+						outputJavaType,
+						JSONUtil.getString(attributeJSON, "default"));
 
 					String description = Convert.toString(
 						JSONUtil.getString(attributeJSON, "description"),
