@@ -1,15 +1,25 @@
+/**
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
+
 package com.liferay.alloy.tools.model;
 
-import com.liferay.portal.kernel.util.PortalClassLoaderUtil;
-import com.liferay.portal.kernel.util.PropsUtil;
-import com.liferay.portal.kernel.util.StringPool;
-import com.liferay.portal.kernel.util.StringUtil;
-import com.liferay.portal.kernel.util.TextFormatter;
-import com.liferay.portal.kernel.util.Validator;
+import com.liferay.alloy.util.StringUtil;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import jodd.util.StringPool;
 public class Component extends BaseModel {
 
 	public String getAttributeNamespace() {
@@ -41,13 +51,14 @@ public class Component extends BaseModel {
 	}
 
 	public String getCamelizedName() {
-		return TextFormatter.format(getName(), TextFormatter.M);
+		return StringUtil.toCamelCase(
+			getName(), true, StringPool.EMPTY.charAt(0));
 	}
 
 	public String getClassName() {
 		String className = _className;
 
-		if (Validator.isNull(className)) {
+		if (StringUtil.isBlank(className)) {
 			className = getSafeName().concat(_CLASS_NAME_SUFFIX);
 		}
 
@@ -71,14 +82,13 @@ public class Component extends BaseModel {
 	}
 
 	public String getSafeName() {
-		return StringUtil.replace(
-			getName(), StringPool.PERIOD, StringPool.BLANK);
+		return StringUtil.replace(getName(), StringPool.DOT, StringPool.EMPTY);
 	}
 
 	public String getUncamelizedName() {
 		String name = getName().replaceAll("\\.", StringPool.DASH);
 
-		return TextFormatter.format(name, TextFormatter.P);
+		return StringUtil.fromCamelCase(name, StringPool.DASH.charAt(0));
 	}
 
 	public String getUncamelizedName(String delimiter) {
@@ -101,14 +111,7 @@ public class Component extends BaseModel {
 		try {
 			String parentClassName = getParentClass();
 
-			if (Validator.isNotNull(parentClassName)) {
-				Thread currentThread = Thread.currentThread();
-
-				ClassLoader contextClassLoader =
-					currentThread.getContextClassLoader();
-
-				PortalClassLoaderUtil.setClassLoader(contextClassLoader);
-
+			if (StringUtil.isNotEmpty(parentClassName)) {
 				Class<?> parentClass = Class.forName(parentClassName);
 
 				Class<?> clazz = Class.forName(className);
