@@ -2,7 +2,7 @@
 
 A code generator developed to help generating taglibs and facelets based on AlloyUI inline code documentaiton.
 
-![Preview](http://cl.ly/image/0S2y3q0S421D)
+![Preview](http://cl.ly/image/0S2y3q0S421D?image.png)
 
 
 ## How to setup?
