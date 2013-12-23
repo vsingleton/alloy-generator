@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2010 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -14,27 +14,31 @@
 
 package com.liferay.alloy.util;
 
+import com.liferay.alloy.util.converter.NumberTypeConverter;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
+import jodd.typeconverter.Convert;
+import jodd.typeconverter.TypeConversionException;
+import jodd.typeconverter.TypeConverterManager;
+
+import jodd.util.StringPool;
+
 import org.apache.commons.lang.StringUtils;
 
-import com.liferay.portal.kernel.util.GetterUtil;
-import com.liferay.portal.kernel.util.StringPool;
-import com.liferay.portal.kernel.util.StringUtil;
-import com.liferay.portal.kernel.util.Validator;
-
 /**
- * <a href="DefaultValueUtil.java.html"><b><i>View Source</i></b></a>
- *
  * @author Eduardo Lundgren
+ * @author Bruno Basto
  */
 public class DefaultValueUtil {
 
 	public static String getDefaultValue(String className, String value) {
-		String defaultValue = StringPool.BLANK;
+		String defaultValue = StringPool.EMPTY;
+
+		_registerConverters();
 
 		if (className.equals(ArrayList.class.getName()) ||
 			className.equals(HashMap.class.getName()) ||
@@ -46,17 +50,15 @@ public class DefaultValueUtil {
 			}
 
 			if (_EMPTY_STRINGS.contains(value)) {
-				value = StringPool.BLANK;
+				value = StringPool.EMPTY;
 			}
 			else if (className.equals(ArrayList.class.getName()) &&
-					!StringUtil.startsWith(
-						value.trim(), StringPool.OPEN_BRACKET)) {
+					 !value.trim().startsWith(StringPool.LEFT_BRACKET)) {
 
 				value = "[]";
 			}
 			else if (className.equals(HashMap.class.getName()) &&
-					!StringUtil.startsWith(
-						value.trim(), StringPool.OPEN_CURLY_BRACE)) {
+					 !value.trim().startsWith(StringPool.LEFT_BRACE)) {
 
 				value = "{}";
 			}
@@ -66,7 +68,18 @@ public class DefaultValueUtil {
 		else if (className.equals(boolean.class.getName()) ||
 				 className.equals(Boolean.class.getName())) {
 
-			defaultValue = String.valueOf(GetterUtil.getBoolean(value));
+			if (StringUtil.isEmpty(value)) {
+				defaultValue = String.valueOf(false);
+			}
+			else {
+				try {
+					defaultValue = String.valueOf(
+						Convert.toBoolean(value.toLowerCase()));
+				}
+				catch (TypeConversionException tce) {
+					defaultValue = String.valueOf(false);
+				}
+			}
 		}
 		else if (className.equals(int.class.getName()) ||
 				 className.equals(Integer.class.getName())) {
@@ -75,7 +88,7 @@ public class DefaultValueUtil {
 				value = String.valueOf(Integer.MAX_VALUE);
 			}
 
-			defaultValue = String.valueOf(GetterUtil.getInteger(value));
+			defaultValue = String.valueOf(Convert.toInteger(value));
 		}
 		else if (className.equals(double.class.getName()) ||
 				 className.equals(Double.class.getName())) {
@@ -84,7 +97,7 @@ public class DefaultValueUtil {
 				value = String.valueOf(Double.MAX_VALUE);
 			}
 
-			defaultValue = String.valueOf(GetterUtil.getDouble(value));
+			defaultValue = String.valueOf(Convert.toDouble(value));
 		}
 		else if (className.equals(float.class.getName()) ||
 				 className.equals(Float.class.getName())) {
@@ -93,7 +106,7 @@ public class DefaultValueUtil {
 				value = String.valueOf(Float.MAX_VALUE);
 			}
 
-			defaultValue = String.valueOf(GetterUtil.getFloat(value));
+			defaultValue = String.valueOf(Convert.toFloat(value));
 		}
 		else if (className.equals(long.class.getName()) ||
 				 className.equals(Long.class.getName())) {
@@ -102,7 +115,7 @@ public class DefaultValueUtil {
 				value = String.valueOf(Long.MAX_VALUE);
 			}
 
-			defaultValue = String.valueOf(GetterUtil.getLong(value));
+			defaultValue = String.valueOf(Convert.toLong(value));
 		}
 		else if (className.equals(short.class.getName()) ||
 				 className.equals(Short.class.getName())) {
@@ -111,30 +124,31 @@ public class DefaultValueUtil {
 				value = String.valueOf(Short.MAX_VALUE);
 			}
 
-			defaultValue = String.valueOf(GetterUtil.getShort(value));
+			defaultValue = String.valueOf(Convert.toShort(value));
 		}
 		else if (className.equals(Number.class.getName())) {
 			if (_INFINITY.contains(value)) {
 				value = String.valueOf(Integer.MAX_VALUE);
 			}
 
-			defaultValue = String.valueOf(GetterUtil.getNumber(value));
+			defaultValue = String.valueOf(
+				TypeConverterManager.convertType(value, Number.class));
 		}
 
 		return defaultValue;
 	}
 
 	public static boolean isValidStringValue(String value) {
-		value = StringUtil.trim(GetterUtil.getString(value));
+		value = StringUtil.trimDown(Convert.toString(value, StringPool.EMPTY));
 
-		if (Validator.isNull(value)) {
+		if (StringUtil.isBlank(value)) {
 			return false;
 		}
 
 		if (StringUtils.isAlpha(value) ||
 			(!StringUtils.containsIgnoreCase(value, _GENERATED) &&
-			!StringUtils.isAlpha(value.substring(0, 1)) &&
-			!StringUtils.endsWith(value, StringPool.PERIOD))) {
+			 !StringUtils.isAlpha(value.substring(0, 1)) &&
+			 !StringUtils.endsWith(value, StringPool.DOT))) {
 
 			return true;
 		}
@@ -142,13 +156,18 @@ public class DefaultValueUtil {
 		return false;
 	}
 
+	private static void _registerConverters() {
+		TypeConverterManager.register(Number.class, new NumberTypeConverter());
+	}
+
 	private static final List<String> _EMPTY_STRINGS =
-		Arrays.asList("", "''", "\"\"", "(empty)", "empty", "EMPTY_STR",
-			"undefined", "WidgetStdMod.BODY", "HTMLTextNode");
+		Arrays.asList(
+			"", "''", "\"\"", "(empty)", "empty", "EMPTY_STR", "undefined",
+			"WidgetStdMod.BODY", "HTMLTextNode");
 
 	private static final String _GENERATED = "generated";
 
-	private static final List<String> _INFINITY =
-		Arrays.asList("infinity", "Infinity", "INFINITY");
+	private static final List<String> _INFINITY = Arrays.asList(
+		"infinity", "Infinity", "INFINITY");
 
 }

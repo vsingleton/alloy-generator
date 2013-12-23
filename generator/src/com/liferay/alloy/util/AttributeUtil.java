@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2010 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -19,8 +19,6 @@ import java.lang.reflect.Method;
 import jodd.util.ReflectUtil;
 
 /**
- * <a href="AttributeUtil.java.html"><b><i>View Source</i></b></a>
- *
  * @author Eduardo Lundgren
  */
 public class AttributeUtil {
@@ -41,7 +39,7 @@ public class AttributeUtil {
 		return null;
 	}
 
-	public static void setAttribute(Object obj, String key, Object  value) {
+	public static void setAttribute(Object obj, String key, Object value) {
 		try {
 			Method setAttribute = ReflectUtil.findMethod(
 				obj.getClass(), "setAttribute");

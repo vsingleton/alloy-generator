@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2010 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -14,32 +14,96 @@
 
 package com.liferay.alloy.util;
 
-import com.liferay.portal.kernel.util.CharPool;
-import com.liferay.portal.kernel.util.StringPool;
-import com.liferay.portal.kernel.util.StringUtil;
-import com.liferay.portal.kernel.util.Validator;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import jodd.util.StringPool;
+
 /**
- * <a href="TypeUtil.java.html"><b><i>View Source</i></b></a>
- *
  * @author Eduardo Lundgren
+ * @author Bruno Basto
  */
 public class TypeUtil {
 
+	public static final String ARRAY_NOTATION = "[]";
+
+	public static final String[] ARRAYS = {
+		"array", "[]"
+	};
+
 	public static final String BOOLEAN = "boolean";
+
+	public static final String[] BOOLEANS = {
+		"boolean", "bool"
+	};
 
 	public static final String DOUBLE = "double";
 
+	public static final String[] DOUBLES = {
+		"double"
+	};
+
 	public static final String FLOAT = "float";
+
+	public static final String[] FLOATS = {
+		"float"
+	};
 
 	public static final String INT = "int";
 
+	public static final String[] INTEGERS = {
+		"integer", "int", "int | string"
+	};
+
 	public static final String LONG = "long";
 
+	public static final String[] LONGS = {
+		"long"
+	};
+
+	public static final String[] NUMBERS = {
+		"num", "number"
+	};
+
+	public static final String[] OBJECTS = {
+		"object", "{}"
+	};
+
 	public static final String SHORT = "short";
+
+	public static final String[] SHORTS = {
+		"short"
+	};
+
+	public static final String[] STRINGS = {
+		"node | string", "string", "string | node", "string | int"
+	};
+
+	public static String getInputJavaType(
+		String type, boolean removeGenericsType) {
+
+		if (_instance == null) {
+			_instance = new TypeUtil();
+		}
+
+		return _instance._getInputJavaType(type, removeGenericsType);
+	}
+
+	public static String getOutputJavaType(
+		String type, boolean removeGenericsType) {
+
+		if (_instance == null) {
+			_instance = new TypeUtil();
+		}
+
+		return _instance._getOutputJavaType(type, removeGenericsType);
+	}
+
+	public static boolean isPrimitiveType(String type) {
+		return (TypeUtil.BOOLEAN.equals(type) || TypeUtil.DOUBLE.equals(type) ||
+				TypeUtil.FLOAT.equals(type) || TypeUtil.INT.equals(type) ||
+				TypeUtil.LONG.equals(type) || TypeUtil.SHORT.equals(type));
+	}
 
 	private TypeUtil() {
 		_INPUT_TYPES = new HashMap<String, String>();
@@ -68,27 +132,10 @@ public class TypeUtil {
 		_registerTypes(_OUTPUT_TYPES, STRINGS, String.class.getName());
 	}
 
-	public static String getInputJavaType(
-			String type, boolean removeGenericsType) {
-
-		return _instance._getInputJavaType(type, removeGenericsType);
-	}
-
-	public static String getOutputJavaType(
-		String type, boolean removeGenericsType) {
-
-		return _instance._getOutputJavaType(type, removeGenericsType);
-	}
-
-	public static boolean isPrimitiveType(String type) {
-		return (TypeUtil.BOOLEAN.equals(type) || TypeUtil.DOUBLE.equals(type) ||
-				TypeUtil.FLOAT.equals(type) || TypeUtil.INT.equals(type) ||
-				TypeUtil.LONG.equals(type) || TypeUtil.SHORT.equals(type));
-	}
-
 	private String _getGenericsType(String type) {
-		int begin = type.indexOf(CharPool.LESS_THAN);
-		int end = type.indexOf(CharPool.GREATER_THAN);
+		int begin = type.indexOf(StringPool.LEFT_CHEV);
+		int end = type.indexOf(StringPool.RIGHT_CHEV);
+
 		String genericsType = null;
 
 		if ((begin > -1) && (end > -1)) {
@@ -109,7 +156,7 @@ public class TypeUtil {
 
 		String javaType = _INPUT_TYPES.get(type.toLowerCase());
 
-		if (Validator.isNull(javaType)) {
+		if (StringUtil.isBlank(javaType)) {
 			javaType = Object.class.getName();
 		}
 
@@ -127,7 +174,7 @@ public class TypeUtil {
 
 		String javaType = _OUTPUT_TYPES.get(type.toLowerCase());
 
-		if (Validator.isNull(javaType)) {
+		if (StringUtil.isBlank(javaType)) {
 			javaType = Object.class.getName();
 		}
 
@@ -142,13 +189,14 @@ public class TypeUtil {
 			try {
 				String genericsType = _getGenericsType(type);
 
-				if (Validator.isNotNull(genericsType)) {
-					String[] genericsTypes = StringUtil.split(genericsType);
+				if (StringUtil.isNotBlank(genericsType)) {
+					String[] genericsTypes = genericsType.split(
+						StringPool.COMMA);
 
 					for (int i = 0; i < genericsTypes.length; i++) {
 						String curType = genericsTypes[i].trim();
 
-						if (!curType.equals(StringPool.QUESTION)) {
+						if (!curType.equals(StringPool.QUESTION_MARK)) {
 							Class.forName(_removeArrayNotation(curType));
 						}
 					}
@@ -175,67 +223,25 @@ public class TypeUtil {
 	}
 
 	private String _removeArrayNotation(String type) {
-		return type.replace(ARRAY_NOTATION, StringPool.BLANK);
+		return type.replace(ARRAY_NOTATION, StringPool.EMPTY);
 	}
 
 	private String _removeGenericsType(String type) {
 		String genericsType = _getGenericsType(type);
 
-		if (Validator.isNotNull(genericsType)) {
+		if (StringUtil.isNotBlank(genericsType)) {
 			type = type.replace(
-				StringPool.LESS_THAN.concat(genericsType).concat(
-					StringPool.GREATER_THAN), StringPool.BLANK);
+				StringPool.LEFT_CHEV.concat(genericsType).concat(
+					StringPool.RIGHT_CHEV), StringPool.EMPTY);
 		}
 
 		return type;
 	}
 
-	public static final String ARRAY_NOTATION = "[]";
-
-	public static final String[] ARRAYS = {
-		"array", "[]"
-	};
-
-	public static final String[] BOOLEANS = {
-		"boolean", "bool"
-	};
-
-	public static final String[] DOUBLES = {
-		"double"
-	};
-
-	public static final String[] FLOATS = {
-		"float"
-	};
-
-	public static final String[] INTEGERS = {
-		"integer", "int", "int | string"
-	};
-
-	public static final String[] LONGS = {
-		"long"
-	};
-
-	public static final String[] NUMBERS = {
-		"num", "number"
-	};
-
-	public static final String[] OBJECTS = {
-		"object", "{}"
-	};
-
-	public static final String[] SHORTS = {
-		"short"
-	};
-
-	public static final String[] STRINGS = {
-		"node | string", "string", "string | node", "string | int"
-	};
+	private static TypeUtil _instance = null;
 
 	private static HashMap<String, String> _INPUT_TYPES = null;
 
 	private static HashMap<String, String> _OUTPUT_TYPES = null;
-
-	private static TypeUtil _instance = new TypeUtil();
 
 }

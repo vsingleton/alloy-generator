@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2010 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -14,29 +14,36 @@
 
 package com.liferay.alloy.util;
 
+import com.liferay.alloy.tools.model.Attribute;
+import com.liferay.alloy.tools.model.Component;
+
 import java.util.Arrays;
 import java.util.List;
 
-import org.apache.commons.lang.StringUtils;
-
-import com.liferay.alloy.tools.model.Attribute;
-import com.liferay.alloy.tools.model.Component;
-import com.liferay.portal.kernel.util.StringPool;
-import com.liferay.portal.kernel.util.StringUtil;
+import jodd.util.StringPool;
 
 /**
- * <a href="ReservedAttributeUtil.java.html"><b><i>View Source</i></b></a>
- *
  * @author Eduardo Lundgren
+ * @author Bruno Basto
  */
 public class ReservedAttributeUtil {
+
+	public static final List<String> RESERVED_ATTRIBUTES = Arrays.asList(
+		new String[] {
+			"values", "value", "servletRequest", "servletResponse",
+			"servletContext", "scopedAttribute", "scopedAttributes",
+			"previousOut", "parent", "namespacedAttribute",
+			"attributeNamespace", "bodyContent", "class", "dynamicAttribute",
+			"dynamicAttributes", "id", "scriptPosition", "page", "locale"
+		}
+	);
 
 	public static String getOriginalName(
 		String componentName, String attributeName) {
 
-		String originalName = StringUtils.uncapitalize(
+		String originalName = StringUtil.uncapitalize(
 			StringUtil.replaceFirst(
-				attributeName, componentName.toLowerCase(), StringPool.BLANK));
+				attributeName, componentName.toLowerCase(), StringPool.EMPTY));
 
 		if (isReserved(originalName)) {
 			attributeName = originalName;
@@ -54,7 +61,7 @@ public class ReservedAttributeUtil {
 			String componentName = component.getName();
 
 			name = componentName.toLowerCase().concat(
-				StringUtils.capitalize(name));
+				StringUtil.capitalize(name));
 		}
 
 		return name;
@@ -67,15 +74,5 @@ public class ReservedAttributeUtil {
 	public static boolean isReserved(String attributeName) {
 		return RESERVED_ATTRIBUTES.contains(attributeName);
 	}
-
-	public static final List<String> RESERVED_ATTRIBUTES =	Arrays.asList(
-		new String[] {
-			"values", "value", "servletRequest", "servletResponse",
-			"servletContext", "scopedAttribute", "scopedAttributes",
-			"previousOut", "parent", "namespacedAttribute",
-			"attributeNamespace", "bodyContent", "class", "dynamicAttribute",
-			"dynamicAttributes", "id", "scriptPosition", "page", "locale"
-		}
-	);
 
 }
