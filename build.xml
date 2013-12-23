@@ -32,7 +32,7 @@
 		<antcall target="print-current-time" />
 	</target>
 
-	<target name="build-taglibs" depends="generate-components-xml">
+	<target name="build-taglibs" depends="compile">
 		<java
 			classname="com.liferay.alloy.tools.builder.TagBuilder"
 			classpathref="project.classpath"

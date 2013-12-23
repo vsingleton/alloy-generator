@@ -159,7 +159,7 @@ public class AlloyDocsTransformer {
 		ArrayList<Component> components = getComponents();
 
 		Document doc = DocumentFactory.getInstance().createDocument();
-		Element root = doc.addElement("taglibs");
+		Element root = doc.addElement("components");
 
 		root.addAttribute("short-name", _DEFAULT_TAGLIB_SHORT_NAME);
 		root.addAttribute("uri", _DEFAULT_TAGLIB_URI);
