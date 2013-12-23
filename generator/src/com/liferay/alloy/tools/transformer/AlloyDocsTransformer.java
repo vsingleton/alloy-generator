@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2010 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -12,25 +12,19 @@
  * details.
  */
 
-package com.liferay.alloy.tools.xmlbuilder;
+package com.liferay.alloy.tools.transformer;
 
 import com.liferay.alloy.tools.model.Attribute;
 import com.liferay.alloy.tools.model.Component;
 import com.liferay.alloy.util.DefaultValueUtil;
 import com.liferay.alloy.util.JSONUtil;
+import com.liferay.alloy.util.StringUtil;
 import com.liferay.alloy.util.TypeUtil;
-import com.liferay.portal.kernel.util.FileUtil;
-import com.liferay.portal.kernel.util.GetterUtil;
-import com.liferay.portal.kernel.util.StringBundler;
-import com.liferay.portal.kernel.util.StringUtil;
-import com.liferay.portal.kernel.util.Validator;
-import com.liferay.portal.kernel.xml.SAXReaderUtil;
-import com.liferay.portal.util.FileImpl;
-import com.liferay.portal.xml.SAXReaderImpl;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -39,49 +33,52 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import jodd.typeconverter.Convert;
+
+import jodd.util.StringPool;
+
+import org.apache.commons.io.FileUtils;
+
 import org.dom4j.Document;
 import org.dom4j.DocumentFactory;
 import org.dom4j.Element;
 import org.dom4j.io.OutputFormat;
 import org.dom4j.io.XMLWriter;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
- * <a href="XMLBuilder.java.html"><b><i>View Source</i></b></a>
- *
  * @author Eduardo Lundgren
+ * @author Bruno Basto
  */
-public class XMLBuilder {
+public class AlloyDocsTransformer {
 
 	public static void main(String[] args) throws Exception {
-		String componentsJSON = System.getProperty("xmlbuilder.components.json");
+		String componentsJSON = System.getProperty(
+			"xmlbuilder.components.json");
 		String componentsXML = System.getProperty("tagbuilder.components.xml");
-		String componentExcluded = System.getProperty("xmlbuilder.components.excluded");
+		String componentExcluded = System.getProperty(
+			"xmlbuilder.components.excluded");
 
-		new XMLBuilder(componentsJSON, componentsXML, componentExcluded);
+		new AlloyDocsTransformer(
+			componentsJSON, componentsXML, componentExcluded);
 	}
 
-	public XMLBuilder(String componentsJSON, String componentsXML,
+	public AlloyDocsTransformer(
+			String componentsJSON, String componentsXML,
 			String componentExcluded)
 		throws Exception {
 
-		if (FileUtil.getFile() == null) {
-			(new FileUtil()).setFile(new FileImpl());
-		}
-
-		if (SAXReaderUtil.getSAXReader() == null) {
-			(new SAXReaderUtil()).setSAXReader(new SAXReaderImpl());
-		}
-
 		_componentJSON = componentsJSON;
 		_componentXML = componentsXML;
-		_componentExcluded = Arrays.asList(StringUtil.split(componentExcluded));
+		_componentExcluded = Arrays.asList(
+			componentExcluded.split(StringPool.COMMA));
 
 		_fileXML = new File(_componentXML);
 		_fileJSON = new File(_componentJSON);
 
-		_json = new JSONObject(FileUtil.read(_fileJSON));
+		_json = new JSONObject(FileUtils.readFileToString(_fileJSON));
 		_classMapJSON = _json.getJSONObject("classmap");
 
 		_create();
@@ -106,16 +103,16 @@ public class XMLBuilder {
 		while (it.hasNext()) {
 			String className = it.next();
 
-			JSONObject componentJSON =
-				JSONUtil.getJSONObject(_classMapJSON, className);
+			JSONObject componentJSON = JSONUtil.getJSONObject(
+				_classMapJSON, className);
 
-			String namespace = GetterUtil.getString(_DEFAULT_NAMESPACE);
+			String namespace = Convert.toString(_DEFAULT_NAMESPACE);
 			String name = JSONUtil.getString(componentJSON, "name");
-			String module = GetterUtil.getString(
+			String module = Convert.toString(
 				JSONUtil.getString(componentJSON, "module"), name);
 
-			boolean bodyContent = GetterUtil.getBoolean(
-				JSONUtil.getString(componentJSON, "bodyContent"));
+			boolean bodyContent = Convert.toBoolean(
+				JSONUtil.getString(componentJSON, "bodyContent"), true);
 
 			List<Attribute> attributes = new ArrayList<Attribute>(
 				getComponentAttributes(className));
@@ -139,8 +136,8 @@ public class XMLBuilder {
 			}
 		}
 
-		ArrayList<Component> sortedComponents =
-			new ArrayList<Component>(components);
+		ArrayList<Component> sortedComponents = new ArrayList<Component>(
+			components);
 
 		Collections.sort(sortedComponents);
 
@@ -188,11 +185,11 @@ public class XMLBuilder {
 				Element nameNode = attributeNode.addElement("name");
 				Element inputTypeNode = attributeNode.addElement("inputType");
 				Element outputTypeNode = attributeNode.addElement("outputType");
-				Element defaultValueNode =
-					attributeNode.addElement("defaultValue");
+				Element defaultValueNode = attributeNode.addElement(
+					"defaultValue");
 
-				Element descriptionNode =
-					attributeNode.addElement("description");
+				Element descriptionNode = attributeNode.addElement(
+					"description");
 
 				nameNode.setText(attribute.getName());
 				inputTypeNode.setText(attribute.getInputType());
@@ -213,7 +210,7 @@ public class XMLBuilder {
 			}
 		}
 
-		try{
+		try {
 			FileOutputStream fos = new FileOutputStream(_componentXML);
 
 			OutputFormat format = OutputFormat.createPrettyPrint();
@@ -225,7 +222,7 @@ public class XMLBuilder {
 
 			System.out.println("Writing " + _componentXML);
 		}
-		catch(IOException e) {
+		catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
@@ -234,10 +231,10 @@ public class XMLBuilder {
 
 		JSONObject descriptionJSON = new JSONObject();
 
-		try{
+		try {
 			String defaultValue = attribute.getDefaultValue();
 
-			if (Validator.isNotNull(defaultValue)) {
+			if (StringUtil.isBlank(defaultValue)) {
 				descriptionJSON.put("defaultValue", defaultValue);
 			}
 
@@ -250,12 +247,11 @@ public class XMLBuilder {
 			jsone.printStackTrace();
 		}
 
-		StringBundler sb = new StringBundler(attribute.getDescription());
+		StringBuilder sb = new StringBuilder(attribute.getDescription());
 
 		sb.append(_HTML_COMMENT_START);
 		sb.append(descriptionJSON.toString());
 		sb.append(_HTML_COMMENT_END);
-
 
 		return sb.toString();
 	}
@@ -267,7 +263,7 @@ public class XMLBuilder {
 
 		ArrayList<String> hierarchy = getComponentHierarchy(className);
 
-		try{
+		try {
 			for (String parentClass : hierarchy) {
 				JSONObject componentJSON = JSONUtil.getJSONObject(
 					_classMapJSON, parentClass);
@@ -291,26 +287,28 @@ public class XMLBuilder {
 					JSONObject attributeJSON = JSONUtil.getJSONObject(
 						typeJSON, name);
 
-					String inputType = GetterUtil.getString(
+					String inputType = Convert.toString(
 						JSONUtil.getString(attributeJSON, "type"),
-							_DEFAULT_TYPE);
+						_DEFAULT_TYPE);
 
-					String outputType = GetterUtil.getString(
+					String outputType = Convert.toString(
 						JSONUtil.getString(attributeJSON, "type"),
-							_DEFAULT_TYPE);
+						_DEFAULT_TYPE);
 
-					String outputJavaType =
-						TypeUtil.getOutputJavaType(outputType, true);
+					String outputJavaType = TypeUtil.getOutputJavaType(
+						outputType, true);
 
 					String defaultValue =
-						DefaultValueUtil.getDefaultValue(outputJavaType,
+						DefaultValueUtil.getDefaultValue(
+							outputJavaType,
 							JSONUtil.getString(attributeJSON, "default"));
 
-					String description = GetterUtil.getString(
-						JSONUtil.getString(attributeJSON, "description"));
+					String description = Convert.toString(
+						JSONUtil.getString(attributeJSON, "description"),
+						StringPool.EMPTY);
 
-					boolean required = GetterUtil.getBoolean(
-						JSONUtil.getString(attributeJSON, "required"));
+					boolean required = Convert.toBoolean(
+						JSONUtil.getString(attributeJSON, "required"), false);
 
 					Attribute attribute = new Attribute();
 
@@ -329,8 +327,8 @@ public class XMLBuilder {
 			e.printStackTrace();
 		}
 
-		ArrayList<Attribute> sortedAttributes =
-			new ArrayList<Attribute>(attributes);
+		ArrayList<Attribute> sortedAttributes = new ArrayList<Attribute>(
+			attributes);
 
 		Collections.sort(sortedAttributes);
 
@@ -340,7 +338,7 @@ public class XMLBuilder {
 	private ArrayList<String> _getComponentHierarchy(
 		String className, ArrayList<String> hierarchy) {
 
-		try{
+		try {
 			JSONObject componentJSON = JSONUtil.getJSONObject(
 				_classMapJSON, className);
 
@@ -364,14 +362,22 @@ public class XMLBuilder {
 		return hierarchy;
 	}
 
-	private static final String AUI_PREFIX = "aui-";
 	private static final String _DEFAULT_NAMESPACE = "alloy";
+
 	private static final String _DEFAULT_TAGLIB_SHORT_NAME = "alloy";
-	private static final String _DEFAULT_TAGLIB_URI = "http://alloy.liferay.com/tld/alloy";
+
+	private static final String _DEFAULT_TAGLIB_URI =
+		"http://alloy.liferay.com/tld/alloy";
+
 	private static final String _DEFAULT_TAGLIB_VERSION = "1.0";
+
 	private static final String _DEFAULT_TYPE = Object.class.getName();
+
 	private static final String _HTML_COMMENT_END = "-->";
+
 	private static final String _HTML_COMMENT_START = "<!--";
+
+	private static final String AUI_PREFIX = "aui-";
 
 	private JSONObject _classMapJSON;
 	private List<String> _componentExcluded;
