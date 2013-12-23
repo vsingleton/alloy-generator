@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.alloy.util.xpath;
+package com.liferay.alloy.util.xml.xpath;
 
 import java.util.Map;
 

@@ -18,12 +18,11 @@ import com.liferay.alloy.tools.model.Attribute;
 import com.liferay.alloy.tools.model.Component;
 import com.liferay.alloy.util.FreeMarkerUtil;
 import com.liferay.alloy.util.StringUtil;
-import com.liferay.alloy.util.xpath.AlloyGeneratorNamespaceContext;
+import com.liferay.alloy.util.xml.xpath.AlloyGeneratorNamespaceContext;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -33,9 +32,7 @@ import java.util.List;
 import java.util.Map;
 
 import jodd.io.FileUtil;
-
 import jodd.typeconverter.Convert;
-
 import jodd.util.StringPool;
 
 import org.dom4j.Document;
@@ -44,9 +41,7 @@ import org.dom4j.Element;
 import org.dom4j.Node;
 import org.dom4j.XPath;
 import org.dom4j.io.SAXReader;
-
 import org.jaxen.NamespaceContext;
-
 import org.xml.sax.InputSource;
 
 /**
@@ -80,7 +75,7 @@ public class TagBuilder {
 		}
 
 		if (_saxReader == null) {
-			_saxReader = new SAXReader();
+			_saxReader = new SAXReader(false);
 		}
 
 		new TagBuilder(
@@ -129,7 +124,7 @@ public class TagBuilder {
 
 		Document doc = factory.createDocument();
 
-		String taglibsXML = "<taglibs></taglibs>";
+		String taglibsXML = "<components></components>";
 
 		Document taglibsDoc = _saxReader.read(
 			new InputSource(
@@ -481,6 +476,12 @@ public class TagBuilder {
 				XPath xpathAttributes = factory.createXPath(
 					xpathTagValue + "//tld:attribute");
 
+				Map<String, String> namespaces = new HashMap<String, String>();
+
+				namespaces.put("tld", StringPool.EMPTY);
+
+				xpathAttributes.setNamespaceURIs(namespaces);
+
 				List<Node> sourceAttributes = xpathAttributes.selectNodes(
 					source);
 
@@ -747,13 +748,15 @@ public class TagBuilder {
 
 			String content = processTemplate(_tplTld, context);
 
-//			Document source = _saxReader.read(content);
-//
-//			if (tldFile.exists()) {
-//				Document target = _saxReader.read(tldFile);
-//
-//				source = mergeTlds(source, target);
-//			}
+			Document source = _saxReader.read(
+				new ByteArrayInputStream(content.getBytes()));
+
+			if (tldFile.exists()) {
+				Document target = _saxReader.read(
+					new ByteArrayInputStream(FileUtil.readBytes(tldFile)));
+
+				source = mergeTlds(source, target);
+			}
 
 			writeFile(tldFile, content, true);
 		}
