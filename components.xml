@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<taglibs short-name="alloy" uri="http://alloy.liferay.com/tld/alloy" tlib-version="1.0">
+<components short-name="alloy" uri="http://alloy.liferay.com/tld/alloy" tlib-version="1.0">
   <component name="A.io" module="aui-io" package="alloy" bodyContent="true" alloyComponent="true">
     <attributes/>
     <events/>
@@ -14053,4 +14053,4 @@ cannot prevent initialization).
       </event>
     </events>
   </component>
-</taglibs>
+</components>
