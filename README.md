@@ -11,8 +11,10 @@ Just create your build.{username}.properties and override the properties you wan
 
 ## How to generate?
 
-Simply type:
+To run the generator for the first time, no configuration is needed. Simply type:
 
 ```sh
 $ ant build-taglibs
 ```
+
+And it's gonna generate code fore you under the folder [build](build)
