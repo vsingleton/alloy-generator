@@ -17,4 +17,4 @@ To run the generator for the first time, no configuration is needed. Simply type
 $ ant build-taglibs
 ```
 
-And it's gonna generate code fore you under the folder [build](build)
+And it's gonna generate code for you under the [build](build) folder.
