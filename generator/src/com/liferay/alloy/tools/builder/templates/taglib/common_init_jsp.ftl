@@ -1,5 +1,5 @@
 <%--
-<#include "copyright.ftl">
+<#include "../copyright.ftl">
 
 @generated
 --%>

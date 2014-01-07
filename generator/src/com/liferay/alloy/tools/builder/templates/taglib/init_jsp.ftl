@@ -1,10 +1,10 @@
 <%--
-<#include "copyright.ftl">
+<#include "../copyright.ftl">
 
 @generated
 --%>
 
-<#include "init.ftl">
+<#include "../init.ftl">
 <#compress>
 <#function isValidAttribute attributeName>
 	<#return ((attributeName != "boundingBox") && (attributeName != "contentBox") && (attributeName != "srcNode")) />
