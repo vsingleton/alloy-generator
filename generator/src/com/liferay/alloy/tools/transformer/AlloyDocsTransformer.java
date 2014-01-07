@@ -276,8 +276,7 @@ public class AlloyDocsTransformer {
 
 			Attribute onEvent = new Attribute();
 
-			onEvent.setName(
-				"on" + StringUtil.capitalize(name) + "Change");
+			onEvent.setName("on" + StringUtil.capitalize(name) + "Change");
 			onEvent.setInputType("String");
 			onEvent.setOutputType("String");
 			onEvent.setDefaultValue(null);
