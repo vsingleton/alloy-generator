@@ -15,28 +15,26 @@
 package com.liferay.alloy.tools.model;
 
 import com.liferay.alloy.util.ReservedAttributeUtil;
+import com.liferay.alloy.util.StringUtil;
 import com.liferay.alloy.util.TypeUtil;
 
 import java.util.List;
 
-import org.apache.commons.lang.StringUtils;
-
-import com.liferay.alloy.util.StringUtil;
-
 import jodd.util.StringPool;
 
+import org.apache.commons.lang.StringUtils;
 public class Attribute extends BaseModel {
 
 	public String getCapitalizedName() {
 		return StringUtils.capitalize(getSafeName());
 	}
-	
-	public String getConstantName() {
-		return jodd.util.StringUtil.fromCamelCase(getSafeName(), '_').toUpperCase();
-	}
 
 	public Component getComponent() {
 		return _component;
+	}
+
+	public String getConstantName() {
+		return StringUtil.fromCamelCase(getSafeName(), '_').toUpperCase();
 	}
 
 	public String getDefaultValue() {
@@ -46,17 +44,6 @@ public class Attribute extends BaseModel {
 	public String getDescription() {
 		return _description;
 	}
-	
-	public String getJSFInputType() {
-		String inputJavaType = TypeUtil.getInputJavaType(_inputType, true);
-		if(TypeUtil.isPrimitiveType(inputJavaType)) {
-			//possible check if we have enough of a string
-			inputJavaType = inputJavaType.substring(0, 1).toUpperCase() + inputJavaType.substring(1);
-			return "java.lang." + inputJavaType;			
-		} else {
-			return inputJavaType;
-		}
-	}
 
 	public String getInputType() {
 		return TypeUtil.getInputJavaType(_inputType, true);
@@ -64,6 +51,22 @@ public class Attribute extends BaseModel {
 
 	public String getInputTypeSimpleClassName() {
 		return getTypeSimpleClassName(getRawInputType());
+	}
+
+	public String getJSFInputType() {
+		String inputJavaType = TypeUtil.getInputJavaType(_inputType, true);
+
+		if (TypeUtil.isPrimitiveType(inputJavaType)) {
+			//possible check if we have enough of a string
+			inputJavaType =
+				inputJavaType.substring(0, 1).toUpperCase() +
+				inputJavaType.substring(1);
+
+			return "java.lang." + inputJavaType;
+		}
+		else {
+			return inputJavaType;
+		}
 	}
 
 	public String getOutputType() {

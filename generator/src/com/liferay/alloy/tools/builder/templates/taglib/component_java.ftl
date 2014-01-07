@@ -27,7 +27,7 @@ public class ${component.getClassName()} extends HtmlInputText {
 	<#list component.getAttributesAndEvents() as attribute>
 	private static final String ${attribute.getConstantName()} = "${attribute.getSafeName()}";
 	</#list>
-	
+
 	<#list component.getAttributesAndEvents() as attribute>
 	<#if attribute.isGettable()>
 	<#if (attribute.getDefaultValue()??) && attribute.getDefaultValue() != "">
@@ -39,7 +39,7 @@ public class ${component.getClassName()} extends HtmlInputText {
 		return (${attribute.getJSFInputType()}) getStateHelper().eval(${attribute.getConstantName()}, ${defaultValue});
 	}
 	</#if>
-	
+
 	<#if attribute.isSettable()>
 	public void set${attribute.getCapitalizedName()}(${attribute.getJSFInputType()} ${attribute.getSafeName()}) {
 		getStateHelper().put(${attribute.getConstantName()}, ${attribute.getSafeName()});
