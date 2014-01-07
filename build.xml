@@ -32,6 +32,20 @@
 		<antcall target="print-current-time" />
 	</target>
 
+	<target name="build-faces" depends="compile">
+		<java
+			classname="com.liferay.alloy.tools.builder.FacesBuilder"
+			classpathref="project.classpath"
+			fork="true"
+			maxmemory="256m"
+			newenvironment="true"
+		>
+			<jvmarg value="-Dbuilder.faces.components.definitions=${builder.faces.components.definitions}" />
+			<jvmarg value="-Dbuilder.faces.output.dir=${builder.faces.output.dir}" />
+			<jvmarg value="-Dbuilder.faces.version=${builder.faces.version}" />
+		</java>
+	</target>
+
 	<target name="build-taglibs" depends="compile">
 		<java
 			classname="com.liferay.alloy.tools.builder.TagBuilder"
