@@ -23,6 +23,7 @@ import com.liferay.alloy.util.xml.xpath.AlloyGeneratorNamespaceContext;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -32,7 +33,9 @@ import java.util.List;
 import java.util.Map;
 
 import jodd.io.FileUtil;
+
 import jodd.typeconverter.Convert;
+
 import jodd.util.StringPool;
 
 import org.dom4j.Document;
@@ -41,7 +44,9 @@ import org.dom4j.Element;
 import org.dom4j.Node;
 import org.dom4j.XPath;
 import org.dom4j.io.SAXReader;
+
 import org.jaxen.NamespaceContext;
+
 import org.xml.sax.InputSource;
 
 /**
