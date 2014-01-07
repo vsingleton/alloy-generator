@@ -52,7 +52,6 @@ public class TagBuilder extends BaseBuilder {
 		String jspCommonInitPath = System.getProperty(
 			"tagbuilder.jsp.common.init.path");
 		String jspDir = System.getProperty("tagbuilder.jsp.dir");
-		String templatesDir = System.getProperty("tagbuilder.templates.dir");
 		String tldDir = System.getProperty("tagbuilder.tld.dir");
 
 		Calendar calendar = Calendar.getInstance();
@@ -64,14 +63,14 @@ public class TagBuilder extends BaseBuilder {
 		}
 
 		new TagBuilder(
-			componentsXML, templatesDir, javaDir, docrootDir, javaPackage,
-			jspDir, jspCommonInitPath, tldDir);
+			componentsXML, javaDir, docrootDir, javaPackage, jspDir,
+			jspCommonInitPath, tldDir);
 	}
 
 	public TagBuilder(
-			String componentsDefinitionList, String templatesDir,
-			String javaDir, String docrootDir, String javaPackage,
-			String jspDir, String jspCommonInitPath, String tldDir)
+			String componentsDefinitionList, String javaDir, String docrootDir,
+			String javaPackage, String jspDir, String jspCommonInitPath,
+			String tldDir)
 		throws Exception {
 
 		_componentsDefinitionList = Arrays.asList(
@@ -82,16 +81,15 @@ public class TagBuilder extends BaseBuilder {
 		_javaPackage = javaPackage;
 		_jspCommonInitPath = jspCommonInitPath;
 		_jspDir = jspDir;
-		_templatesDir = templatesDir;
 		_tldDir = tldDir;
 
-		_tplCommonInitJsp = _templatesDir + "common_init_jsp.ftl";
-		_tplInitJsp = _templatesDir + "init_jsp.ftl";
-		_tplJsp = _templatesDir + "jsp.ftl";
-		_tplStartJsp = _templatesDir + "start_jsp.ftl";
-		_tplTag = _templatesDir + "tag.ftl";
-		_tplTagBase = _templatesDir + "tag_base.ftl";
-		_tplTld = _templatesDir + "tld.ftl";
+		_tplCommonInitJsp = getTemplatesDir() + "common_init_jsp.ftl";
+		_tplInitJsp = getTemplatesDir() + "init_jsp.ftl";
+		_tplJsp = getTemplatesDir() + "jsp.ftl";
+		_tplStartJsp = getTemplatesDir() + "start_jsp.ftl";
+		_tplTag = getTemplatesDir() + "tag.ftl";
+		_tplTagBase = getTemplatesDir() + "tag_base.ftl";
+		_tplTld = getTemplatesDir() + "tld.ftl";
 
 		build();
 	}
@@ -119,6 +117,11 @@ public class TagBuilder extends BaseBuilder {
 	@Override
 	public List<String> getComponentDefinitionsList() {
 		return _componentsDefinitionList;
+	}
+
+	@Override
+	public String getTemplatesDir() {
+		return _TEMPLATES_DIR;
 	}
 
 	@Override
@@ -424,6 +427,9 @@ public class TagBuilder extends BaseBuilder {
 
 	private static final String _START_PAGE = "/start.jsp";
 
+	private static final String _TEMPLATES_DIR =
+		"com/liferay/alloy/tools/builder/templates/taglib/";
+
 	private static final String _TLD_EXTENSION = ".tld";
 
 	private static final String _TLD_XPATH_PREFIX = "tld";
@@ -439,7 +445,6 @@ public class TagBuilder extends BaseBuilder {
 	private String _javaPackage;
 	private String _jspCommonInitPath;
 	private String _jspDir;
-	private String _templatesDir;
 	private String _tldDir;
 	private String _tplCommonInitJsp;
 	private String _tplInitJsp;
