@@ -45,6 +45,7 @@ import org.dom4j.Element;
 import org.dom4j.io.OutputFormat;
 import org.dom4j.io.XMLWriter;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -75,21 +76,17 @@ public class AlloyDocsTransformer {
 		_componentExcluded = Arrays.asList(
 			componentExcluded.split(StringPool.COMMA));
 
-		_fileXML = new File(_componentXML);
 		_fileJSON = new File(_componentJSON);
 
 		_json = new JSONObject(FileUtils.readFileToString(_fileJSON));
-		_classMapJSON = _json.getJSONObject("classmap");
+		_classMapJSON = _json.getJSONObject("classes");
+		_classItemsJSONArray = _json.getJSONArray("classitems");
 
 		_create();
 	}
 
 	public ArrayList<Attribute> getComponentAttributes(String className) {
-		return _getComponentAttributes(className, "configs");
-	}
-
-	public ArrayList<Attribute> getComponentEvents(String className) {
-		return _getComponentAttributes(className, "events");
+		return _getComponentAttributes(className, "attribute");
 	}
 
 	public ArrayList<String> getComponentHierarchy(String className) {
@@ -98,6 +95,7 @@ public class AlloyDocsTransformer {
 
 	public ArrayList<Component> getComponents() {
 		Set<Component> components = new HashSet<Component>();
+
 		Iterator<String> it = _classMapJSON.keys();
 
 		while (it.hasNext()) {
@@ -114,11 +112,9 @@ public class AlloyDocsTransformer {
 			boolean bodyContent = Convert.toBoolean(
 				JSONUtil.getString(componentJSON, "bodyContent"), true);
 
-			List<Attribute> attributes = new ArrayList<Attribute>(
-				getComponentAttributes(className));
+			List<Attribute> attributes = getComponentAttributes(className);
 
-			List<Attribute> events = new ArrayList<Attribute>(
-				getComponentEvents(className));
+			List<Attribute> events = _getAttributesEvents(attributes);
 
 			Component component = new Component();
 
@@ -228,13 +224,12 @@ public class AlloyDocsTransformer {
 	}
 
 	private String _getAttributeDescription(Attribute attribute) {
-
 		JSONObject descriptionJSON = new JSONObject();
 
 		try {
 			String defaultValue = attribute.getDefaultValue();
 
-			if (StringUtil.isBlank(defaultValue)) {
+			if (StringUtil.isNotBlank(defaultValue)) {
 				descriptionJSON.put("defaultValue", defaultValue);
 			}
 
@@ -247,13 +242,81 @@ public class AlloyDocsTransformer {
 			jsone.printStackTrace();
 		}
 
-		StringBuilder sb = new StringBuilder(attribute.getDescription());
+		StringBuilder sb = new StringBuilder();
+
+		if (StringUtil.isNotBlank(attribute.getDescription())) {
+			sb.append(attribute.getDescription());
+		}
 
 		sb.append(_HTML_COMMENT_START);
 		sb.append(descriptionJSON.toString());
 		sb.append(_HTML_COMMENT_END);
 
 		return sb.toString();
+	}
+
+	private List<Attribute> _getAttributesEvents(List<Attribute> attributes) {
+		ArrayList<Attribute> events = new ArrayList<Attribute>();
+
+		for (Attribute attribute : attributes) {
+			String name = attribute.getName();
+
+			Attribute afterEvent = new Attribute();
+
+			afterEvent.setName(
+				"after" + StringUtil.capitalize(name) + "Change");
+			afterEvent.setInputType("String");
+			afterEvent.setOutputType("String");
+			afterEvent.setDefaultValue(null);
+			afterEvent.setDescription(
+				"Triggers after the attribute '" + name + "' changes.");
+			afterEvent.setRequired(false);
+
+			events.add(afterEvent);
+
+			Attribute onEvent = new Attribute();
+
+			onEvent.setName(
+				"on" + StringUtil.capitalize(name) + "Change");
+			onEvent.setInputType("String");
+			onEvent.setOutputType("String");
+			onEvent.setDefaultValue(null);
+			afterEvent.setDescription(
+				"Triggers before the attribute '" + name + "' changes.");
+			onEvent.setRequired(false);
+
+			events.add(onEvent);
+		}
+
+		return events;
+	}
+
+	private ArrayList<JSONObject> _getClassItems(
+		String classname, String type) {
+
+		ArrayList<JSONObject> items = new ArrayList<JSONObject>();
+
+		for (int i = 0; i < _classItemsJSONArray.length(); i++) {
+			try {
+				JSONObject item = _classItemsJSONArray.getJSONObject(i);
+
+				if (item.has("class") && item.has("itemtype")) {
+					String itemClassName = item.getString("class");
+					String itemType = item.getString("itemtype");
+
+					if (itemClassName.equals(classname) &&
+						itemType.equals(type)) {
+
+						items.add(item);
+					}
+				}
+			}
+			catch (JSONException e) {
+				e.printStackTrace();
+			}
+		}
+
+		return items;
 	}
 
 	private ArrayList<Attribute> _getComponentAttributes(
@@ -265,27 +328,15 @@ public class AlloyDocsTransformer {
 
 		try {
 			for (String parentClass : hierarchy) {
-				JSONObject componentJSON = JSONUtil.getJSONObject(
-					_classMapJSON, parentClass);
+				ArrayList<JSONObject> classItems = _getClassItems(
+					parentClass, attributeType);
 
-				if (componentJSON == null) {
-					continue;
-				}
-
-				JSONObject typeJSON = JSONUtil.getJSONObject(
-					componentJSON, attributeType);
-
-				if (typeJSON == null) {
-					continue;
-				}
-
-				Iterator<String> it = typeJSON.keys();
+				Iterator<JSONObject> it = classItems.iterator();
 
 				while (it.hasNext()) {
-					String name = it.next();
+					JSONObject attributeJSON = it.next();
 
-					JSONObject attributeJSON = JSONUtil.getJSONObject(
-						typeJSON, name);
+					String name = attributeJSON.getString("name");
 
 					String inputType = Convert.toString(
 						JSONUtil.getString(attributeJSON, "type"),
@@ -378,12 +429,12 @@ public class AlloyDocsTransformer {
 
 	private static final String AUI_PREFIX = "aui-";
 
+	private JSONArray _classItemsJSONArray;
 	private JSONObject _classMapJSON;
 	private List<String> _componentExcluded;
 	private String _componentJSON;
 	private String _componentXML;
 	private File _fileJSON;
-	private File _fileXML;
 	private JSONObject _json;
 
 }
