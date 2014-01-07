@@ -266,30 +266,15 @@ public class AlloyDocsTransformer {
 		for (Attribute attribute : attributes) {
 			String name = attribute.getName();
 
-			Attribute afterEvent = new Attribute();
+			Attribute event = new Attribute();
 
-			afterEvent.setName(
-				"after" + StringUtil.capitalize(name) + "Change");
-			afterEvent.setInputType("String");
-			afterEvent.setOutputType("String");
-			afterEvent.setDefaultValue(null);
-			afterEvent.setDescription(
-				"Triggers after the attribute '" + name + "' changes.");
-			afterEvent.setRequired(false);
+			event.setName(name + "Change");
+			event.setInputType("String");
+			event.setOutputType("String");
+			event.setDefaultValue(null);
+			event.setRequired(false);
 
-			events.add(afterEvent);
-
-			Attribute onEvent = new Attribute();
-
-			onEvent.setName("on" + StringUtil.capitalize(name) + "Change");
-			onEvent.setInputType("String");
-			onEvent.setOutputType("String");
-			onEvent.setDefaultValue(null);
-			afterEvent.setDescription(
-				"Triggers before the attribute '" + name + "' changes.");
-			onEvent.setRequired(false);
-
-			events.add(onEvent);
+			events.add(event);
 		}
 
 		return events;
