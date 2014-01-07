@@ -78,6 +78,8 @@ public abstract class BaseBuilder {
 
 	public abstract List<String> getComponentDefinitionsList();
 
+	public abstract String getTemplatesDir();
+
 	protected List<Component> getAllComponents() throws Exception {
 		DocumentFactory factory = SAXReaderUtil.getDocumentFactory();
 
