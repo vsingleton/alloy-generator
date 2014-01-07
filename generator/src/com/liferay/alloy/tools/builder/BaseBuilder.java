@@ -315,8 +315,7 @@ public abstract class BaseBuilder {
 
 		for (Attribute event : afterEvents) {
 			String name = _AFTER.concat(
-				org.apache.commons.lang.StringUtils.capitalize(
-					event.getSafeName()));
+				StringUtil.capitalize(event.getSafeName()));
 
 			event.setName(name);
 
@@ -325,8 +324,7 @@ public abstract class BaseBuilder {
 
 		for (Attribute event : onEvents) {
 			String name = _ON.concat(
-				org.apache.commons.lang.StringUtils.capitalize(
-					event.getSafeName()));
+				StringUtil.capitalize(event.getSafeName()));
 
 			event.setName(name);
 
