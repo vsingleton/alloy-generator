@@ -106,6 +106,11 @@ public class AlloyDocsTransformer {
 
 			String namespace = Convert.toString(_DEFAULT_NAMESPACE);
 			String name = JSONUtil.getString(componentJSON, "name");
+
+			if (name.startsWith(_ALLOY_CLASS_PREFIX)) {
+				name = name.replace(_ALLOY_CLASS_PREFIX, StringPool.EMPTY);
+			}
+
 			String module = Convert.toString(
 				JSONUtil.getString(componentJSON, "module"), name);
 
@@ -410,6 +415,8 @@ public class AlloyDocsTransformer {
 
 		return hierarchy;
 	}
+
+	private static final String _ALLOY_CLASS_PREFIX = "A.";
 
 	private static final String _DEFAULT_NAMESPACE = "alloy";
 
