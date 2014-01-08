@@ -32,6 +32,10 @@ public abstract class BaseModel implements Comparable<Object> {
 		return _name.equals(model.getName());
 	}
 
+	public String getDescription() {
+		return _description;
+	}
+
 	public String getName() {
 		return _name;
 	}
@@ -40,11 +44,15 @@ public abstract class BaseModel implements Comparable<Object> {
 		return _name.hashCode();
 	}
 
-	public void setName(String name) {
+	public void setDescription(String description) {
+		_description = description;
+	}
 
+	public void setName(String name) {
 		_name = name;
 	}
 
+	private String _description;
 	private String _name;
 
 }

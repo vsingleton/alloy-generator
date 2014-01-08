@@ -41,10 +41,6 @@ public class Attribute extends BaseModel {
 		return _defaultValue;
 	}
 
-	public String getDescription() {
-		return _description;
-	}
-
 	public String getInputType() {
 		return TypeUtil.getInputJavaType(_inputType, true);
 	}
@@ -145,10 +141,6 @@ public class Attribute extends BaseModel {
 		_defaultValue = defaultValue;
 	}
 
-	public void setDescription(String description) {
-		_description = description;
-	}
-
 	public void setGettable(boolean gettable) {
 		_gettable = gettable;
 	}
@@ -171,7 +163,6 @@ public class Attribute extends BaseModel {
 
 	private Component _component;
 	private String _defaultValue;
-	private String _description;
 	private boolean _gettable = true;
 	private String _inputType;
 	private String _outputType;

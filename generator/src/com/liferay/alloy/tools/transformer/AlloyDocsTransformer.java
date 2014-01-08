@@ -101,18 +101,23 @@ public class AlloyDocsTransformer {
 			JSONObject componentJSON = JSONUtil.getJSONObject(
 				_classMapJSON, className);
 
-			String namespace = Convert.toString(_DEFAULT_NAMESPACE);
 			String name = JSONUtil.getString(componentJSON, "name");
 
 			if (name.startsWith(_ALLOY_CLASS_PREFIX)) {
 				name = name.replace(_ALLOY_CLASS_PREFIX, StringPool.EMPTY);
 			}
 
+			boolean bodyContent = Convert.toBoolean(
+				JSONUtil.getString(componentJSON, "bodyContent"), true);
+
+			String description = Convert.toString(
+				JSONUtil.getString(componentJSON, "description"),
+				StringPool.EMPTY);
+
 			String module = Convert.toString(
 				JSONUtil.getString(componentJSON, "module"), name);
 
-			boolean bodyContent = Convert.toBoolean(
-				JSONUtil.getString(componentJSON, "bodyContent"), true);
+			String namespace = Convert.toString(_DEFAULT_NAMESPACE);
 
 			List<Attribute> attributes = getComponentAttributes(className);
 
@@ -124,6 +129,7 @@ public class AlloyDocsTransformer {
 			component.setAttributes(attributes);
 			component.setAuthors(null);
 			component.setBodyContent(bodyContent);
+			component.setDescription(description);
 			component.setEvents(events);
 			component.setModule(module);
 			component.setName(name);

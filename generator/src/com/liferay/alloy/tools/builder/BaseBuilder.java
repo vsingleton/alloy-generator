@@ -279,6 +279,9 @@ public abstract class BaseBuilder {
 				node.attributeValue("componentInterface"),
 				getComponentDefaultInterface());
 
+			String description = Convert.toString(
+				node.attributeValue("description"), StringPool.EMPTY);
+
 			boolean dynamicAttributes = Convert.toBoolean(
 				node.attributeValue("dynamicAttributes"), true);
 
@@ -302,6 +305,7 @@ public abstract class BaseBuilder {
 			component.setAuthors(authors);
 			component.setBodyContent(bodyContent);
 			component.setClassName(className);
+			component.setDescription(description);
 			component.setDynamicAttributes(dynamicAttributes);
 			component.setEvents(events);
 			component.setInterface(componentInterface);
