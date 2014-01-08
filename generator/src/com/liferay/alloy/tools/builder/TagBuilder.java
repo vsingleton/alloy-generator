@@ -15,7 +15,6 @@
 package com.liferay.alloy.tools.builder;
 
 import com.liferay.alloy.tools.model.Component;
-import com.liferay.alloy.util.StringUtil;
 import com.liferay.alloy.util.xml.SAXReaderUtil;
 import com.liferay.alloy.util.xml.xpath.AlloyGeneratorNamespaceContext;
 
@@ -23,7 +22,6 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 
 import java.util.Arrays;
-import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
