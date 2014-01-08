@@ -177,7 +177,7 @@ public class FacesBuilder extends BaseBuilder {
 
 		String rendererBaseContent = processTemplate(_tplRendererBase, context);
 
-		StringBuilder fileNameSb = new StringBuilder(4);
+		StringBuilder fileNameSb = new StringBuilder(5);
 
 		fileNameSb.append(path);
 		fileNameSb.append(_BASE_CLASS_PREFIX);
