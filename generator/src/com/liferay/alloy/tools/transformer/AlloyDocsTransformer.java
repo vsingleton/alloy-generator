@@ -59,7 +59,7 @@ public class AlloyDocsTransformer {
 		String inputJSON = System.getProperty("transformer.input.json");
 		String outputXML = System.getProperty("transformer.output.xml");
 		String componentExcluded = System.getProperty(
-			"xmlbuilder.components.excluded");
+			"transformer.components.excluded");
 
 		new AlloyDocsTransformer(inputJSON, outputXML, componentExcluded);
 	}
