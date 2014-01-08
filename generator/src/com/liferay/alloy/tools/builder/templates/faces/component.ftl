@@ -1,13 +1,17 @@
+<#include "../common/init.ftl">
 <#include "../common/copyright.ftl">
 
-package ${packagePath}.${component.getPackage()};
+<#compress>
 
-import ${packagePath}.${component.getPackage()}.base.Base${component.getClassName()};
+<#assign componentInterface = "${component.getInterface()!}">
+
+</#compress>
+package ${packagePath}.${component.getPackage()};
 
 /**
 <#list component.getAuthors() as author>
  * @author ${author}
 </#list>
  */
-public class ${component.getClassName()} extends Base${component.getClassName()} {
+public class ${component.getClassName()} extends Base${component.getClassName()}${(componentInterface?? && (componentInterface != BLANK))?string(' implements ' + componentInterface, BLANK)} {
 }

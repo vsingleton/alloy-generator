@@ -106,8 +106,13 @@ public class TagBuilder extends BaseBuilder {
 	}
 
 	@Override
-	protected String getDefaultParentClass() {
-		return _DEFAULT_PARENT_CLASS;
+	protected String getComponentDefaultInterface() {
+		return null;
+	};
+
+	@Override
+	protected String getComponentDefaultParentClass() {
+		return _COMPONENT_DEFAULT_PARENT_CLASS;
 	}
 
 	@Override
@@ -386,10 +391,10 @@ public class TagBuilder extends BaseBuilder {
 
 	private static final String _CLASS_SUFFIX = ".java";
 
-	private static final String _DEFAULT_NAMESPACE = "alloy";
-
-	private static final String _DEFAULT_PARENT_CLASS =
+	private static final String _COMPONENT_DEFAULT_PARENT_CLASS =
 		"com.liferay.taglib.util.IncludeTag";
+
+	private static final String _DEFAULT_NAMESPACE = "alloy";
 
 	private static final String _DEFAULT_TAGLIB_SHORT_NAME = "alloy";
 

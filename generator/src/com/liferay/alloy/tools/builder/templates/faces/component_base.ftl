@@ -20,7 +20,7 @@ import javax.servlet.jsp.JspException;
 </#list>
  * @generated
  */
-public class ${component.getClassName()} extends ${component.getParentClass()} {
+public class ${component.getClassName()} extends ${component.getParentClass()} implements javax.faces.component.NamingContainer {
 
 	private static final Logger logger = LoggerFactory.getLogger(${component.getClassName()}.class);
 

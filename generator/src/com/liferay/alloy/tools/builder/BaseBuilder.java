@@ -236,6 +236,10 @@ public abstract class BaseBuilder {
 		}
 	}
 
+	protected abstract String getComponentDefaultInterface();
+
+	protected abstract String getComponentDefaultParentClass();
+
 	protected Element getComponentNode(Document doc, String name) {
 		List<Element> components = doc.getRootElement().elements(_COMPONENT);
 
@@ -271,13 +275,18 @@ public abstract class BaseBuilder {
 			String className = Convert.toString(
 				node.attributeValue("className"));
 
+			String componentInterface = Convert.toString(
+				node.attributeValue("componentInterface"),
+				getComponentDefaultInterface());
+
 			boolean dynamicAttributes = Convert.toBoolean(
 				node.attributeValue("dynamicAttributes"), true);
 
 			String module = Convert.toString(node.attributeValue("module"));
 
 			String parentClass = Convert.toString(
-				node.attributeValue("parentClass"), getDefaultParentClass());
+				node.attributeValue("parentClass"),
+				getComponentDefaultParentClass());
 
 			boolean writeJSP = Convert.toBoolean(
 				node.attributeValue("writeJSP"), true);
@@ -295,6 +304,7 @@ public abstract class BaseBuilder {
 			component.setClassName(className);
 			component.setDynamicAttributes(dynamicAttributes);
 			component.setEvents(events);
+			component.setInterface(componentInterface);
 			component.setModule(module);
 			component.setName(name);
 			component.setPackage(componentPackage);
@@ -318,8 +328,6 @@ public abstract class BaseBuilder {
 
 		return null;
 	}
-
-	protected abstract String getDefaultParentClass();
 
 	protected Map<String, Object> getDefaultTemplateContext() {
 		Map<String, Object> context = new HashMap<String, Object>();

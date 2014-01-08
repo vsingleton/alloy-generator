@@ -69,6 +69,16 @@ public class FacesBuilder extends BaseBuilder {
 		return _TEMPLATES_DIR;
 	}
 
+	@Override
+	protected String getComponentDefaultInterface() {
+		return _COMPONENT_DEFAULT_INTERFACE;
+	}
+
+	@Override
+	protected String getComponentDefaultParentClass() {
+		return _COMPONENT_DEFAULT_PARENT_CLASS;
+	}
+
 	protected String getComponentOutputDir(Component component) {
 		StringBuilder sb = new StringBuilder(6);
 
@@ -80,11 +90,6 @@ public class FacesBuilder extends BaseBuilder {
 		sb.append(StringPool.SLASH);
 
 		return sb.toString();
-	}
-
-	@Override
-	protected String getDefaultParentClass() {
-		return _DEFAULT_PARENT_CLASS;
 	}
 
 	@Override
@@ -186,10 +191,13 @@ public class FacesBuilder extends BaseBuilder {
 
 	private static final String _BASE_CLASS_PREFIX = "Base";
 
+	private static final String _COMPONENT_DEFAULT_INTERFACE = "Interface";
+
+	private static final String _COMPONENT_DEFAULT_PARENT_CLASS =
+		"HtmlInputText";
+
 	private static final String _COMPONENTS_PACKAGE =
 		"com.liferay.faces.alloy.component";
-
-	private static final String _DEFAULT_PARENT_CLASS = "HtmlInputText";
 
 	private static final String _JAVA_EXT = ".java";
 

@@ -69,6 +69,10 @@ public class Component extends BaseModel {
 		return _events;
 	}
 
+	public String getInterface() {
+		return _componentInterface;
+	}
+
 	public String getModule() {
 		return _module;
 	}
@@ -165,6 +169,10 @@ public class Component extends BaseModel {
 		}
 	}
 
+	public void setInterface(String componentInterface) {
+		_componentInterface = componentInterface;
+	}
+
 	public void setModule(String type) {
 		_module = type;
 	}
@@ -188,6 +196,7 @@ public class Component extends BaseModel {
 	private String[] _authors;
 	private boolean _bodyContent;
 	private String _className;
+	private String _componentInterface;
 	private boolean _dynamicAttributes;
 	private List<Attribute> _events;
 	private String _module;
