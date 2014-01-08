@@ -98,7 +98,7 @@ public class Component extends BaseModel {
 	public String getUncamelizedName(String delimiter) {
 		return getUncamelizedName().replaceAll("\\-", delimiter);
 	}
-	
+
 	public String getUncapitalizedName() {
 		return StringUtil.uncapitalize(getCamelizedName());
 	}

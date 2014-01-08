@@ -17,10 +17,12 @@ package com.liferay.alloy.tools.builder;
 import com.liferay.alloy.tools.model.Component;
 
 import java.io.File;
+
 import java.util.List;
 import java.util.Map;
 
 import jodd.typeconverter.Convert;
+
 import jodd.util.StringPool;
 
 import org.dom4j.Document;
@@ -166,7 +168,7 @@ public class FacesBuilder extends BaseBuilder {
 
 		writeFile(rendererFile, rendererContent);
 	}
-	
+
 	private void _buildRendererBase(
 			Component component, Map<String, Object> context)
 		throws Exception {

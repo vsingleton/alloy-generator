@@ -114,7 +114,7 @@ public class Attribute extends BaseModel {
 
 		return StringPool.EMPTY;
 	}
-	
+
 	public String getUncapitalizedName() {
 		return StringUtil.uncapitalize(getSafeName());
 	}

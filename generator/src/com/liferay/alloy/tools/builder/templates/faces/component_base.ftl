@@ -40,7 +40,7 @@ public class ${component.getCamelizedName()} extends ${component.getParentClass(
 		return (${attribute.getJSFInputType()}) getStateHelper().eval(${attribute.getConstantName()}, ${defaultValue});
 	}
 	</#if>
-	
+
 	<#if attribute.isSettable()>
 	public void set${attribute.getCapitalizedName()}(${attribute.getJSFInputType()} ${attribute.getSafeName()}) {
 		getStateHelper().put(${attribute.getConstantName()}, ${attribute.getSafeName()});
