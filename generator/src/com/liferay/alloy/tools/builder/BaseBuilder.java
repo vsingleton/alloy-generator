@@ -29,6 +29,7 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -61,13 +62,15 @@ public abstract class BaseBuilder {
 		if (_componentsDefinitionDocs == null) {
 			_componentsDefinitionDocs = new ArrayList<Document>();
 
-			for (String componentExtXML : getComponentDefinitionsList()) {
-				File extFile = new File(componentExtXML);
+			for (String componentsXML : getComponentDefinitionsList()) {
+				File componentsFile = new File(componentsXML);
 
-				if (extFile.exists()) {
+				if (componentsFile.exists()) {
 					try {
+						Document document = SAXReaderUtil.read(componentsFile);
+
 						_componentsDefinitionDocs.add(
-							SAXReaderUtil.read(extFile));
+							_getExtendedDocument(document));
 					}
 					catch (DocumentException e) {
 						e.printStackTrace();
@@ -120,11 +123,13 @@ public abstract class BaseBuilder {
 
 		Element root = taglibsDoc.getRootElement();
 
-		for (Document extDoc : getComponentDefinitionDocs()) {
-			Element extRoot = extDoc.getRootElement();
+		for (Document currentDoc : getComponentDefinitionDocs()) {
+			currentDoc = _getExtendedDocument(currentDoc);
 
-			String defaultPackage = extRoot.attributeValue("short-name");
-			List<Element> extComponentNodes = extRoot.elements("component");
+			Element currentRoot = currentDoc.getRootElement();
+
+			String defaultPackage = currentRoot.attributeValue("short-name");
+			List<Element> extComponentNodes = currentRoot.elements("component");
 
 			for (Element extComponent : extComponentNodes) {
 				String extComponentPackage = Convert.toString(
@@ -133,16 +138,9 @@ public abstract class BaseBuilder {
 				extComponent.addAttribute("package", extComponentPackage);
 			}
 
-			Document parentDoc = getComponentsDocByShortName(
-				extDoc.getRootElement().attributeValue("extends"));
+			Element authors = currentRoot.element(_AUTHORS);
 
-			if (parentDoc != null) {
-				extDoc = mergeXMLAttributes(extDoc, parentDoc);
-			}
-
-			Element authors = extRoot.element(_AUTHORS);
-
-			List<Element> components = extRoot.elements("component");
+			List<Element> components = currentRoot.elements("component");
 
 			for (Element component : components) {
 				Element copy = component.createCopy();
@@ -391,9 +389,9 @@ public abstract class BaseBuilder {
 	}
 
 	protected Document mergeXMLAttributes(Document doc1, Document doc2) {
-		Element doc1Root = doc1.getRootElement();
+		Element doc2Root = doc2.getRootElement();
 
-		Element docRoot = doc1Root.createCopy();
+		Element docRoot = doc2Root.createCopy();
 		docRoot.clearContent();
 
 		DocumentFactory factory = SAXReaderUtil.getDocumentFactory();
@@ -401,54 +399,73 @@ public abstract class BaseBuilder {
 		Document doc = factory.createDocument();
 		doc.setRootElement(docRoot);
 
-		List<Element> doc1Components = doc1Root.elements(_COMPONENT);
+		List<Element> doc2Components = doc2Root.elements(_COMPONENT);
 
-		for (Element doc1Component : doc1Components) {
-			String name = doc1Component.attributeValue("name");
+		for (Element doc2Component : doc2Components) {
+			Element component = doc2Component.createCopy();
 
-			Element doc2Component = getComponentNode(doc2, name);
+			String name = doc2Component.attributeValue("name");
 
-			if (doc2Component != null) {
-				Element doc2AttributesNode = doc2Component.element(_ATTRIBUTES);
+			Element doc1Component = getComponentNode(doc1, name);
 
-				if (doc2AttributesNode != null) {
-					List<Element> doc2Attributes = doc2AttributesNode.elements(
+			if (doc1Component != null) {
+				Iterator<Object> attributesIterator =
+					doc1Component.attributeIterator();
+
+				while (attributesIterator.hasNext()) {
+					org.dom4j.Attribute attribute =
+						(org.dom4j.Attribute)attributesIterator.next();
+
+					component.addAttribute(
+						attribute.getName(), attribute.getValue());
+				}
+
+				Element doc1AttributesNode = doc1Component.element(_ATTRIBUTES);
+
+				Element attributesNode = component.element(_ATTRIBUTES);
+
+				if ((doc1AttributesNode != null) && (attributesNode != null)) {
+					List<Element> doc1Attributes = doc1AttributesNode.elements(
 						_ATTRIBUTE);
 
-					Element doc1AttributesNode = doc1Component.element(
-						_ATTRIBUTES);
+					List<Element> attributes = attributesNode.elements(
+						_ATTRIBUTE);
 
-					for (Element doc2Attribute : doc2Attributes) {
-						Element doc1Attribute = getElementByName(
-							doc1AttributesNode.elements("attribute"),
-							doc2Attribute.elementText("name"));
+					for (Element doc1Attribute : doc1Attributes) {
+						Element attribute = getElementByName(
+							attributes, doc1Attribute.elementText("name"));
 
-						if (doc1Attribute == null) {
-							doc1AttributesNode.add(doc2Attribute.createCopy());
+						if (attribute != null) {
+							attributesNode.remove(attribute);
 						}
+
+						attributesNode.add(doc1Attribute.createCopy());
 					}
 				}
 
-				Element doc2EventsNode = doc2Component.element(_EVENTS);
+				Element doc1EventsNode = doc1Component.element(_EVENTS);
 
-				if (doc2EventsNode != null) {
-					List<Element> doc2Events = doc2EventsNode.elements(_EVENT);
+				Element eventsNode = doc2Component.element(_EVENTS);
 
-					Element doc1EventsNode = doc1Component.element(_EVENTS);
+				if ((doc1EventsNode != null) && (eventsNode != null)) {
+					List<Element> doc1Events = doc1EventsNode.elements(_EVENT);
 
-					for (Element doc2Event : doc2Events) {
-						Element doc1Event = getElementByName(
-							doc1EventsNode.elements("event"),
-							doc2Event.elementText("name"));
+					List<Element> events = eventsNode.elements(_EVENT);
 
-						if (doc1Event == null) {
-							doc1EventsNode.add(doc2Event.createCopy());
+					for (Element doc1Event : doc1Events) {
+						Element event = getElementByName(
+							events, doc1Event.elementText("name"));
+
+						if (event != null) {
+							eventsNode.add(event);
 						}
+
+						eventsNode.add(doc1Event.createCopy());
 					}
 				}
 			}
 
-			doc.getRootElement().add(doc1Component.createCopy());
+			doc.getRootElement().add(component);
 		}
 
 		return doc;
@@ -486,6 +503,33 @@ public abstract class BaseBuilder {
 		catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+
+	private Document _getExtendedDocument(Document document) {
+		String parentXMLPath = document.getRootElement().attributeValue(
+			"extends");
+
+		if (StringUtil.isNotBlank(parentXMLPath)) {
+			File parentXML = new File(parentXMLPath);
+
+			if (parentXML.exists()) {
+				try {
+					Document parentDoc = SAXReaderUtil.read(parentXML);
+
+					document = mergeXMLAttributes(document, parentDoc);
+				}
+				catch (DocumentException e) {
+					e.printStackTrace();
+				}
+			}
+			else {
+				System.out.println(
+					"Could not extend from: " + parentXMLPath +
+					". File does not exist.");
+			}
+		}
+
+		return document;
 	}
 
 	private static final String _AFTER = "after";
