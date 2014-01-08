@@ -8,10 +8,15 @@
 	<target name="all">
 		<antcall target="clean" />
 		<antcall target="start" />
+		<antcall target="generate-components-xml" />
+		<antcall target="build-faces" />
+		<antcall target="build-taglibs" />
 	</target>
 
 	<target name="clean">
 		<ant dir="generator" target="clean" inheritAll="false" />
+
+		<delete dir="build" />
 
 		<antcall target="print-current-time" />
 	</target>
