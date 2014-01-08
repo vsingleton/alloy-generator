@@ -1,17 +1,13 @@
 <#include "../common/init.ftl">
 <#include "../common/copyright.ftl">
 
-<#compress>
-
-<#assign componentInterface = "${component.getInterface()!}">
-
-</#compress>
-package ${packagePath}.${component.getPackage()};
+package ${packagePath}.${component.getUncamelizedName(BLANK)};
 
 /**
 <#list component.getAuthors() as author>
  * @author ${author}
 </#list>
  */
-public class ${component.getClassName()} extends Base${component.getClassName()}${(componentInterface?? && (componentInterface != BLANK))?string(' implements ' + componentInterface, BLANK)} {
+@FacesComponent(value = "${packagePath}.${component.getPackage()}.${component.getCamelizedName()}")
+public class ${component.getCamelizedName()} extends Base${component.getCamelizedName()} {
 }

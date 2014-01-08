@@ -7,7 +7,7 @@
 
 </#compress>
 
-package ${packagePath}.${component.getUncamelizedName()};
+package ${packagePath}.${component.getUncamelizedName(BLANK)};
 
 <#if component.getWriteJSP() == true>
 import javax.servlet.http.HttpServletRequest;
@@ -20,9 +20,9 @@ import javax.servlet.jsp.JspException;
 </#list>
  * @generated
  */
-public class ${component.getClassName()} extends ${component.getParentClass()} implements javax.faces.component.NamingContainer {
+public class ${component.getCamelizedName()} extends ${component.getParentClass()} {
 
-	private static final Logger logger = LoggerFactory.getLogger(${component.getClassName()}.class);
+	private static final Logger logger = LoggerFactory.getLogger(${component.getCamelizedName()}.class);
 
 	<#list component.getAttributesAndEvents() as attribute>
 	private static final String ${attribute.getConstantName()} = "${attribute.getSafeName()}";
@@ -31,7 +31,8 @@ public class ${component.getClassName()} extends ${component.getParentClass()} i
 	<#list component.getAttributesAndEvents() as attribute>
 	<#if attribute.isGettable()>
 	<#if (attribute.getDefaultValue()??) && attribute.getDefaultValue() != "">
-		<#assign defaultValue = attribute.getDefaultValue()>
+		<#assign outputSimpleClassName = attribute.getOutputTypeSimpleClassName()>
+		<#assign defaultValue = getCleanUpValue(outputSimpleClassName, attribute.getDefaultValue())>
 	<#else>
 		<#assign defaultValue = "null">
 	</#if>
@@ -39,7 +40,7 @@ public class ${component.getClassName()} extends ${component.getParentClass()} i
 		return (${attribute.getJSFInputType()}) getStateHelper().eval(${attribute.getConstantName()}, ${defaultValue});
 	}
 	</#if>
-
+	
 	<#if attribute.isSettable()>
 	public void set${attribute.getCapitalizedName()}(${attribute.getJSFInputType()} ${attribute.getSafeName()}) {
 		getStateHelper().put(${attribute.getConstantName()}, ${attribute.getSafeName()});

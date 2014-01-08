@@ -114,6 +114,10 @@ public class Attribute extends BaseModel {
 
 		return StringPool.EMPTY;
 	}
+	
+	public String getUncapitalizedName() {
+		return StringUtil.uncapitalize(getSafeName());
+	}
 
 	public boolean isEvent() {
 		List<Attribute> events = _component.getEvents();

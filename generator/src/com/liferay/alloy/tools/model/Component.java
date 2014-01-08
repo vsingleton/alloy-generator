@@ -52,7 +52,7 @@ public class Component extends BaseModel {
 
 	public String getCamelizedName() {
 		return StringUtil.toCamelCase(
-			getName(), true, StringPool.EMPTY.charAt(0));
+			getName(), true, StringPool.DASH.charAt(0));
 	}
 
 	public String getClassName() {
@@ -97,6 +97,10 @@ public class Component extends BaseModel {
 
 	public String getUncamelizedName(String delimiter) {
 		return getUncamelizedName().replaceAll("\\-", delimiter);
+	}
+	
+	public String getUncapitalizedName() {
+		return StringUtil.uncapitalize(getCamelizedName());
 	}
 
 	public boolean getWriteJSP() {

@@ -17,12 +17,10 @@ package com.liferay.alloy.tools.builder;
 import com.liferay.alloy.tools.model.Component;
 
 import java.io.File;
-
 import java.util.List;
 import java.util.Map;
 
 import jodd.typeconverter.Convert;
-
 import jodd.util.StringPool;
 
 import org.dom4j.Document;
@@ -42,6 +40,7 @@ public class FacesBuilder extends BaseBuilder {
 		_tplComponent = getTemplatesDir() + "component.ftl";
 		_tplComponentBase = getTemplatesDir() + "component_base.ftl";
 		_tplRenderer = getTemplatesDir() + "renderer.ftl";
+		_tplRendererBase = getTemplatesDir() + "renderer_base.ftl";
 		_tplTaglibsXML = getTemplatesDir() + "taglibs.ftl";
 
 		_version = version;
@@ -59,6 +58,7 @@ public class FacesBuilder extends BaseBuilder {
 			_buildComponent(component, context);
 			_buildComponentBase(component, context);
 			_buildRenderer(component, context);
+			_buildRendererBase(component, context);
 		}
 
 		_buildTaglibsXML();
@@ -86,7 +86,7 @@ public class FacesBuilder extends BaseBuilder {
 		sb.append(StringPool.SLASH);
 		sb.append(_COMPONENTS_PACKAGE.replaceAll("\\.", StringPool.SLASH));
 		sb.append(StringPool.SLASH);
-		sb.append(component.getUncamelizedName(StringPool.UNDERSCORE));
+		sb.append(component.getUncamelizedName(StringPool.EMPTY));
 		sb.append(StringPool.SLASH);
 
 		return sb.toString();
@@ -166,6 +166,27 @@ public class FacesBuilder extends BaseBuilder {
 
 		writeFile(rendererFile, rendererContent);
 	}
+	
+	private void _buildRendererBase(
+			Component component, Map<String, Object> context)
+		throws Exception {
+
+		String path = getComponentOutputDir(component);
+
+		String rendererBaseContent = processTemplate(_tplRendererBase, context);
+
+		StringBuilder fileNameSb = new StringBuilder(4);
+
+		fileNameSb.append(path);
+		fileNameSb.append(_BASE_CLASS_PREFIX);
+		fileNameSb.append(component.getSafeName());
+		fileNameSb.append(_RENDERER_CLASS_SUFIX);
+		fileNameSb.append(_JAVA_EXT);
+
+		File rendererBaseFile = new File(fileNameSb.toString());
+
+		writeFile(rendererBaseFile, rendererBaseContent);
+	}
 
 	private void _buildTaglibsXML() throws Exception {
 		Map<String, Object> context = getDefaultTemplateContext();
@@ -191,10 +212,10 @@ public class FacesBuilder extends BaseBuilder {
 
 	private static final String _BASE_CLASS_PREFIX = "Base";
 
-	private static final String _COMPONENT_DEFAULT_INTERFACE = "Interface";
+	private static final String _COMPONENT_DEFAULT_INTERFACE = null;
 
 	private static final String _COMPONENT_DEFAULT_PARENT_CLASS =
-		"HtmlInputText";
+		"javax.faces.component.UIComponentBase";
 
 	private static final String _COMPONENTS_PACKAGE =
 		"com.liferay.faces.alloy.component";
@@ -214,6 +235,7 @@ public class FacesBuilder extends BaseBuilder {
 	private String _tplComponent;
 	private String _tplComponentBase;
 	private String _tplRenderer;
+	private String _tplRendererBase;
 	private String _tplTaglibsXML;
 	private String _version;
 
