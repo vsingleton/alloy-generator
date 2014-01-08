@@ -18,7 +18,6 @@ import com.liferay.alloy.tools.model.Component;
 
 import java.io.File;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -32,20 +31,12 @@ public class FacesBuilder extends BaseBuilder {
 
 	public static void main(String[] args) throws Exception {
 		String baseOutputDir = System.getProperty("builder.faces.output.dir");
-		String componentsDefinitionList = System.getProperty(
-			"builder.faces.components.definitions");
 		String version = System.getProperty("builder.faces.version");
 
-		new FacesBuilder(componentsDefinitionList, baseOutputDir, version);
+		new FacesBuilder(baseOutputDir, version);
 	}
 
-	public FacesBuilder(
-			String componentsDefinitionList, String baseOutputDir,
-			String version)
-		throws Exception {
-
-		_componentsDefinitionList = Arrays.asList(
-			componentsDefinitionList.split(StringPool.COMMA));
+	public FacesBuilder(String baseOutputDir, String version) throws Exception {
 		_baseOutputDir = baseOutputDir;
 
 		_tplComponent = getTemplatesDir() + "component.ftl";
@@ -71,11 +62,6 @@ public class FacesBuilder extends BaseBuilder {
 		}
 
 		_buildTaglibsXML();
-	}
-
-	@Override
-	public List<String> getComponentDefinitionsList() {
-		return _componentsDefinitionList;
 	}
 
 	@Override
@@ -217,7 +203,6 @@ public class FacesBuilder extends BaseBuilder {
 	private static final String _XML_EXT = ".xml";
 
 	private String _baseOutputDir;
-	private List<String> _componentsDefinitionList;
 	private String _tplComponent;
 	private String _tplComponentBase;
 	private String _tplRenderer;

@@ -56,27 +56,24 @@ import org.json.JSONObject;
 public class AlloyDocsTransformer {
 
 	public static void main(String[] args) throws Exception {
-		String componentsJSON = System.getProperty(
-			"xmlbuilder.components.json");
-		String componentsXML = System.getProperty("tagbuilder.components.xml");
+		String inputJSON = System.getProperty("transformer.input.json");
+		String outputXML = System.getProperty("transformer.output.xml");
 		String componentExcluded = System.getProperty(
 			"xmlbuilder.components.excluded");
 
-		new AlloyDocsTransformer(
-			componentsJSON, componentsXML, componentExcluded);
+		new AlloyDocsTransformer(inputJSON, outputXML, componentExcluded);
 	}
 
 	public AlloyDocsTransformer(
-			String componentsJSON, String componentsXML,
-			String componentExcluded)
+			String inputJSON, String outputXML, String componentExcluded)
 		throws Exception {
 
-		_componentJSON = componentsJSON;
-		_componentXML = componentsXML;
+		_inputJSON = inputJSON;
+		_outputXML = outputXML;
 		_componentExcluded = Arrays.asList(
 			componentExcluded.split(StringPool.COMMA));
 
-		_fileJSON = new File(_componentJSON);
+		_fileJSON = new File(_inputJSON);
 
 		_json = new JSONObject(FileUtils.readFileToString(_fileJSON));
 		_classMapJSON = _json.getJSONObject("classes");
@@ -212,7 +209,11 @@ public class AlloyDocsTransformer {
 		}
 
 		try {
-			FileOutputStream fos = new FileOutputStream(_componentXML);
+			File file = new File(_outputXML);
+
+			file.getParentFile().mkdirs();
+
+			FileOutputStream fos = new FileOutputStream(file);
 
 			OutputFormat format = OutputFormat.createPrettyPrint();
 
@@ -221,7 +222,7 @@ public class AlloyDocsTransformer {
 			writer.write(doc);
 			writer.flush();
 
-			System.out.println("Writing " + _componentXML);
+			System.out.println("Writing " + _outputXML);
 		}
 		catch (IOException e) {
 			e.printStackTrace();
@@ -423,9 +424,9 @@ public class AlloyDocsTransformer {
 	private JSONArray _classItemsJSONArray;
 	private JSONObject _classMapJSON;
 	private List<String> _componentExcluded;
-	private String _componentJSON;
-	private String _componentXML;
 	private File _fileJSON;
+	private String _inputJSON;
 	private JSONObject _json;
+	private String _outputXML;
 
 }

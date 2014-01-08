@@ -25,6 +25,7 @@ import java.io.File;
 import java.io.IOException;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.HashMap;
@@ -78,7 +79,17 @@ public abstract class BaseBuilder {
 		return _componentsDefinitionDocs;
 	}
 
-	public abstract List<String> getComponentDefinitionsList();
+	public List<String> getComponentDefinitionsList() {
+		if (_componentsDefinitionList == null) {
+			String componentsDefinitionList = System.getProperty(
+					"builder.components.definitions");
+
+			_componentsDefinitionList = Arrays.asList(
+				componentsDefinitionList.split(StringPool.COMMA));
+		}
+
+		return _componentsDefinitionList;
+	}
 
 	public String getCopyrightYear() {
 		if (_copyrightYear == null) {
@@ -486,6 +497,7 @@ public abstract class BaseBuilder {
 	private static final String _ON = "on";
 
 	private List<Document> _componentsDefinitionDocs;
+	private List<String> _componentsDefinitionList;
 	private String _copyrightYear;
 
 }

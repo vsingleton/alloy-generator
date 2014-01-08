@@ -21,7 +21,6 @@ import com.liferay.alloy.util.xml.xpath.AlloyGeneratorNamespaceContext;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -42,14 +41,15 @@ import org.jaxen.NamespaceContext;
 public class TagBuilder extends BaseBuilder {
 
 	public static void main(String[] args) throws Exception {
-		String componentsXML = System.getProperty("tagbuilder.components.xml");
-		String docrootDir = System.getProperty("tagbuilder.docroot.dir");
-		String javaDir = System.getProperty("tagbuilder.java.dir");
-		String javaPackage = System.getProperty("tagbuilder.java.package");
+		String componentsXML = System.getProperty(
+			"builder.taglibs.components.definitions");
+		String docrootDir = System.getProperty("builder.taglibs.docroot.dir");
+		String javaDir = System.getProperty("builder.taglibs.java.dir");
+		String javaPackage = System.getProperty("builder.taglibs.java.package");
 		String jspCommonInitPath = System.getProperty(
-			"tagbuilder.jsp.common.init.path");
-		String jspDir = System.getProperty("tagbuilder.jsp.dir");
-		String tldDir = System.getProperty("tagbuilder.tld.dir");
+			"builder.taglibs.jsp.common.init.path");
+		String jspDir = System.getProperty("builder.taglibs.jsp.dir");
+		String tldDir = System.getProperty("builder.taglibs.tld.dir");
 
 		new TagBuilder(
 			componentsXML, javaDir, docrootDir, javaPackage, jspDir,
@@ -61,9 +61,6 @@ public class TagBuilder extends BaseBuilder {
 			String javaPackage, String jspDir, String jspCommonInitPath,
 			String tldDir)
 		throws Exception {
-
-		_componentsDefinitionList = Arrays.asList(
-			componentsDefinitionList.split(StringPool.COMMA));
 
 		_docrootDir = docrootDir;
 		_javaDir = javaDir;
@@ -101,11 +98,6 @@ public class TagBuilder extends BaseBuilder {
 
 		_createCommonInitJSP();
 		_createTld();
-	}
-
-	@Override
-	public List<String> getComponentDefinitionsList() {
-		return _componentsDefinitionList;
 	}
 
 	@Override
@@ -424,7 +416,6 @@ public class TagBuilder extends BaseBuilder {
 	private static final String _TLD_XPATH_URI =
 		"http://java.sun.com/xml/ns/j2ee";
 
-	private List<String> _componentsDefinitionList;
 	private String _docrootDir;
 	private String _javaDir;
 	private String _javaPackage;

@@ -45,7 +45,8 @@
 			maxmemory="256m"
 			newenvironment="true"
 		>
-			<jvmarg value="-Dbuilder.faces.components.definitions=${builder.faces.components.definitions}" />
+			<jvmarg value="-Dbuilder.components.definitions=${builder.components.definitions}" />
+			<jvmarg value="-Dbuilder.copyright.year=${builder.copyright.year}" />
 			<jvmarg value="-Dbuilder.faces.output.dir=${builder.faces.output.dir}" />
 			<jvmarg value="-Dbuilder.faces.version=${builder.faces.version}" />
 		</java>
@@ -59,15 +60,15 @@
 			maxmemory="256m"
 			newenvironment="true"
 		>
-			<jvmarg value="-Dtagbuilder.components.xml=${tagbuilder.components.xml}" />
-			<jvmarg value="-Dtagbuilder.copyright.year=${tagbuilder.copyright.year}" />
-			<jvmarg value="-Dtagbuilder.docroot.dir=${tagbuilder.docroot.dir}" />
-			<jvmarg value="-Dtagbuilder.java.dir=${tagbuilder.java.dir}" />
-			<jvmarg value="-Dtagbuilder.java.package=${tagbuilder.java.package}" />
-			<jvmarg value="-Dtagbuilder.jsp.common.init.path=${tagbuilder.jsp.common.init.path}" />
-			<jvmarg value="-Dtagbuilder.jsp.dir=${tagbuilder.jsp.dir}" />
-			<jvmarg value="-Dtagbuilder.templates.dir=${tagbuilder.templates.dir}" />
-			<jvmarg value="-Dtagbuilder.tld.dir=${tagbuilder.tld.dir}" />
+			<jvmarg value="-Dbuilder.components.definitions=${builder.components.definitions}" />
+			<jvmarg value="-Dbuilder.copyright.year=${builder.copyright.year}" />
+			<jvmarg value="-Dbuilder.taglibs.docroot.dir=${builder.taglibs.docroot.dir}" />
+			<jvmarg value="-Dbuilder.taglibs.java.dir=${builder.taglibs.java.dir}" />
+			<jvmarg value="-Dbuilder.taglibs.java.package=${builder.taglibs.java.package}" />
+			<jvmarg value="-Dbuilder.taglibs.jsp.common.init.path=${builder.taglibs.jsp.common.init.path}" />
+			<jvmarg value="-Dbuilder.taglibs.jsp.dir=${builder.taglibs.jsp.dir}" />
+			<jvmarg value="-Dbuilder.taglibs.templates.dir=${builder.taglibs.templates.dir}" />
+			<jvmarg value="-Dbuilder.taglibs.tld.dir=${builder.taglibs.tld.dir}" />
 		</java>
 	</target>
 
@@ -79,9 +80,9 @@
 			maxmemory="256m"
 			newenvironment="true"
 		>
-			<jvmarg value="-Dxmlbuilder.components.json=${transformer.input.json}" />
-			<jvmarg value="-Dtagbuilder.components.xml=${transformer.output.xml}" />
-			<jvmarg value="-Dxmlbuilder.components.excluded=${transformer.components.excluded}" />
+			<jvmarg value="-Dtransformer.components.excluded=${transformer.components.excluded}" />
+			<jvmarg value="-Dtransformer.input.json=${transformer.input.json}" />
+			<jvmarg value="-Dtransformer.output.xml=${transformer.output.xml}" />
 		</java>
 	</target>
 </project>
