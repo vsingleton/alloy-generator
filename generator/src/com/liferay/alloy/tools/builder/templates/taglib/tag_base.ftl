@@ -1,5 +1,5 @@
-<#include "../init.ftl">
-<#include "../copyright.ftl">
+<#include "../common/init.ftl">
+<#include "../common/copyright.ftl">
 <#compress>
 
 <#assign isChildClassOfAttributeTagSupport = component.isChildClassOf("com.liferay.taglib.util.AttributesTagSupport")>
