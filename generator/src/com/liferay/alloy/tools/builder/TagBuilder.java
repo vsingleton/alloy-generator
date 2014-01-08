@@ -120,8 +120,9 @@ public class TagBuilder extends BaseBuilder {
 		return _DEFAULT_PARENT_CLASS;
 	}
 
-	protected HashMap<String, Object> getDefaultTemplateContext() {
-		HashMap<String, Object> context = new HashMap<String, Object>();
+	@Override
+	protected Map<String, Object> getDefaultTemplateContext() {
+		Map<String, Object> context = super.getDefaultTemplateContext();
 
 		context.put("jspCommonInitPath", _jspCommonInitPath);
 		context.put("jspDir", _jspDir);
@@ -173,13 +174,11 @@ public class TagBuilder extends BaseBuilder {
 	}
 
 	protected Map<String, Object> getTemplateContext(Component component) {
-		HashMap<String, Object> context = getDefaultTemplateContext();
+		Map<String, Object> context = super.getTemplateContext(component);
 
 		String jspRelativePath = getJspDir(component).concat(
 			component.getUncamelizedName(StringPool.UNDERSCORE));
 
-		context.put("component", component);
-		context.put("namespace", component.getAttributeNamespace());
 		context.put("jspRelativePath", jspRelativePath);
 
 		return context;
@@ -289,7 +288,7 @@ public class TagBuilder extends BaseBuilder {
 	}
 
 	private void _createCommonInitJSP() throws Exception {
-		HashMap<String, Object> context = getDefaultTemplateContext();
+		Map<String, Object> context = getDefaultTemplateContext();
 
 		String contentCommonInitJsp = processTemplate(
 			_tplCommonInitJsp, context);
@@ -352,7 +351,7 @@ public class TagBuilder extends BaseBuilder {
 	}
 
 	private void _createTld() throws Exception {
-		HashMap<String, Object> context = getDefaultTemplateContext();
+		Map<String, Object> context = getDefaultTemplateContext();
 
 		for (Document doc : getComponentDefinitionDocs()) {
 			Element root = doc.getRootElement();

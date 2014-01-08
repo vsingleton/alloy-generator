@@ -23,24 +23,21 @@ import com.liferay.alloy.util.xml.SAXReaderUtil;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
-
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import jodd.io.FileUtil;
-
 import jodd.typeconverter.Convert;
-
 import jodd.util.StringPool;
 
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.DocumentFactory;
 import org.dom4j.Element;
-
 import org.xml.sax.InputSource;
 
 /**
@@ -309,6 +306,14 @@ public abstract class BaseBuilder {
 
 	protected abstract String getDefaultParentClass();
 
+	protected Map<String, Object> getDefaultTemplateContext() {
+		Map<String, Object> context = new HashMap<String, Object>();
+		
+		context.put("copyrightYear", getCopyrightYear());
+
+		return context;
+	}
+
 	protected Element getElementByName(List<Element> elements, String name) {
 		for (Element element : elements) {
 			if (name.equals(element.elementText("name"))) {
@@ -347,6 +352,15 @@ public abstract class BaseBuilder {
 		}
 
 		return prefixedEvents;
+	}
+
+	protected Map<String, Object> getTemplateContext(Component component) {
+		Map<String, Object> context = getDefaultTemplateContext();
+
+		context.put("component", component);
+		context.put("namespace", component.getAttributeNamespace());
+
+		return context;
 	}
 
 	protected Document mergeXMLAttributes(Document doc1, Document doc2) {
