@@ -73,7 +73,7 @@ public class FacesBuilder extends BaseBuilder {
 
 	@Override
 	protected String getComponentDefaultInterface() {
-		return _COMPONENT_DEFAULT_INTERFACE;
+		return null;
 	}
 
 	@Override
@@ -213,8 +213,6 @@ public class FacesBuilder extends BaseBuilder {
 	}
 
 	private static final String _BASE_CLASS_PREFIX = "Base";
-
-	private static final String _COMPONENT_DEFAULT_INTERFACE = null;
 
 	private static final String _COMPONENT_DEFAULT_PARENT_CLASS =
 		"javax.faces.component.UIComponentBase";
