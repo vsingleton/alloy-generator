@@ -9,11 +9,6 @@
 
 package ${packagePath}.${component.getUncamelizedName(BLANK)};
 
-<#if component.getWriteJSP() == true>
-import javax.servlet.http.HttpServletRequest;
-</#if>
-import javax.servlet.jsp.JspException;
-
 /**
 <#list component.getAuthors() as author>
  * @author ${author}
@@ -48,5 +43,4 @@ public class ${component.getCamelizedName()} extends ${component.getParentClass(
 
 	</#if>
 	</#list>
-
 }
