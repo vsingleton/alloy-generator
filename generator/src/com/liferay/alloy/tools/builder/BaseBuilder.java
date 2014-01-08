@@ -25,6 +25,7 @@ import java.io.File;
 import java.io.IOException;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -51,6 +52,20 @@ public abstract class BaseBuilder {
 	public static final String[] DEFAULT_AUTHORS = new String[] {
 		"Eduardo Lundgren", "Bruno Basto", "Nathan Cavanaugh"
 	};
+	
+	public String getCopyrightYear() {
+		if (_copyrightYear == null) {
+			_copyrightYear = System.getProperty("builder.copyright.year");
+
+			if (StringUtil.isBlank(_copyrightYear)) {
+				Calendar calendar = Calendar.getInstance();
+				
+				_copyrightYear = String.valueOf(calendar.get(Calendar.YEAR));
+			}
+		}
+
+		return _copyrightYear;
+	}
 
 	public abstract void build() throws Exception;
 
@@ -453,5 +468,7 @@ public abstract class BaseBuilder {
 	private static final String _ON = "on";
 
 	private List<Document> _componentsDefinitionDocs;
+	
+	private String _copyrightYear;
 
 }

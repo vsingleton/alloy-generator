@@ -45,7 +45,6 @@ public class TagBuilder extends BaseBuilder {
 
 	public static void main(String[] args) throws Exception {
 		String componentsXML = System.getProperty("tagbuilder.components.xml");
-		String copyrightYear = System.getProperty("tagbuilder.copyright.year");
 		String docrootDir = System.getProperty("tagbuilder.docroot.dir");
 		String javaDir = System.getProperty("tagbuilder.java.dir");
 		String javaPackage = System.getProperty("tagbuilder.java.package");
@@ -53,14 +52,6 @@ public class TagBuilder extends BaseBuilder {
 			"tagbuilder.jsp.common.init.path");
 		String jspDir = System.getProperty("tagbuilder.jsp.dir");
 		String tldDir = System.getProperty("tagbuilder.tld.dir");
-
-		Calendar calendar = Calendar.getInstance();
-
-		_copyrightYear = String.valueOf(calendar.get(Calendar.YEAR));
-
-		if (StringUtil.isNotBlank(copyrightYear)) {
-			_copyrightYear = copyrightYear;
-		}
 
 		new TagBuilder(
 			componentsXML, javaDir, docrootDir, javaPackage, jspDir,
@@ -132,7 +123,6 @@ public class TagBuilder extends BaseBuilder {
 	protected HashMap<String, Object> getDefaultTemplateContext() {
 		HashMap<String, Object> context = new HashMap<String, Object>();
 
-		context.put("copyrightYear", _copyrightYear);
 		context.put("jspCommonInitPath", _jspCommonInitPath);
 		context.put("jspDir", _jspDir);
 		context.put("packagePath", _javaPackage);
@@ -436,8 +426,6 @@ public class TagBuilder extends BaseBuilder {
 
 	private static final String _TLD_XPATH_URI =
 		"http://java.sun.com/xml/ns/j2ee";
-
-	private static String _copyrightYear;
 
 	private List<String> _componentsDefinitionList;
 	private String _docrootDir;
