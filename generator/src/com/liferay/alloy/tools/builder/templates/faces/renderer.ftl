@@ -3,7 +3,7 @@
 
 package ${packagePath}.${component.getUncamelizedName(BLANK)};
 
-import ${packagePath}.${component.getPackage()}.base.Base${component.getCamelizedName()};
+import javax.faces.render.FacesRenderer;
 
 <#compress>
 <#assign componentInterface = "${component.getInterface()!}">
@@ -15,7 +15,7 @@ import ${packagePath}.${component.getPackage()}.base.Base${component.getCamelize
 </#list>
  */
 @FacesRenderer(
-	componentFamily = "javax.faces.Panel", rendererType = "${packagePath}.${component.getPackage()}.${component.getCamelizedName()}"
+	componentFamily = "javax.faces.Panel", rendererType = "${packagePath}.${component.getUncamelizedName(BLANK)}.${component.getCamelizedName()}Renderer"
 )
-public class ${component.getCamelizedName()}Renderer extends Base${component.getCamelizedName()}Renderer${(componentInterface?? && (componentInterface != BLANK))?string(' implements ' + componentInterface, BLANK)} {
+public class ${component.getCamelizedName()}Renderer extends ${component.getCamelizedName()}RendererBase${(componentInterface?? && (componentInterface != BLANK))?string(' implements ' + componentInterface, BLANK)} {
 }

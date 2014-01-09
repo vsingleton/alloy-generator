@@ -109,7 +109,7 @@ public class FacesBuilder extends BaseBuilder {
 
 		sb.append(_baseOutputDir);
 		sb.append(StringPool.SLASH);
-		sb.append(_TAGLIBS_XML_DIR);
+		sb.append(_TAGLIB_XML_DIR);
 
 		return sb.toString();
 	}
@@ -125,7 +125,7 @@ public class FacesBuilder extends BaseBuilder {
 		File componentFile = new File(
 			path.concat(component.getSafeName().concat(_JAVA_EXT)));
 
-		writeFile(componentFile, componentContent);
+		writeFile(componentFile, componentContent, false);
 	}
 
 	private void _buildComponentBase(
@@ -140,8 +140,8 @@ public class FacesBuilder extends BaseBuilder {
 		StringBuilder fileNameSb = new StringBuilder(4);
 
 		fileNameSb.append(path);
-		fileNameSb.append(_BASE_CLASS_PREFIX);
 		fileNameSb.append(component.getSafeName());
+		fileNameSb.append(_BASE_CLASS_SUFFIX);
 		fileNameSb.append(_JAVA_EXT);
 
 		File componentBaseFile = new File(fileNameSb.toString());
@@ -161,12 +161,12 @@ public class FacesBuilder extends BaseBuilder {
 
 		fileNameSb.append(path);
 		fileNameSb.append(component.getSafeName());
-		fileNameSb.append(_RENDERER_CLASS_SUFIX);
+		fileNameSb.append(_RENDERER_CLASS_SUFFIX);
 		fileNameSb.append(_JAVA_EXT);
 
 		File rendererFile = new File(fileNameSb.toString());
 
-		writeFile(rendererFile, rendererContent);
+		writeFile(rendererFile, rendererContent, false);
 	}
 
 	private void _buildRendererBase(
@@ -180,9 +180,9 @@ public class FacesBuilder extends BaseBuilder {
 		StringBuilder fileNameSb = new StringBuilder(5);
 
 		fileNameSb.append(path);
-		fileNameSb.append(_BASE_CLASS_PREFIX);
 		fileNameSb.append(component.getSafeName());
-		fileNameSb.append(_RENDERER_CLASS_SUFIX);
+		fileNameSb.append(_RENDERER_CLASS_SUFFIX);
+		fileNameSb.append(_BASE_CLASS_SUFFIX);
 		fileNameSb.append(_JAVA_EXT);
 
 		File rendererBaseFile = new File(fileNameSb.toString());
@@ -208,23 +208,23 @@ public class FacesBuilder extends BaseBuilder {
 			File rendererFile = new File(
 				path.concat(shortName).concat(_XML_EXT));
 
-			writeFile(rendererFile, rendererContent, true);
+			writeFile(rendererFile, rendererContent, false);
 		}
 	}
 
-	private static final String _BASE_CLASS_PREFIX = "Base";
+	private static final String _BASE_CLASS_SUFFIX = "Base";
 
 	private static final String _COMPONENT_DEFAULT_PARENT_CLASS =
-		"javax.faces.component.UIComponentBase";
+		"javax.faces.component.UIPanel";
 
 	private static final String _COMPONENTS_PACKAGE =
 		"com.liferay.faces.alloy.component";
 
 	private static final String _JAVA_EXT = ".java";
 
-	private static final String _RENDERER_CLASS_SUFIX = "Renderer";
+	private static final String _RENDERER_CLASS_SUFFIX = "Renderer";
 
-	private static final String _TAGLIBS_XML_DIR = "com/liferay/faces/alloy/";
+	private static final String _TAGLIB_XML_DIR = "com/liferay/faces/alloy/";
 
 	private static final String _TEMPLATES_DIR =
 		"com/liferay/alloy/tools/builder/templates/faces/";

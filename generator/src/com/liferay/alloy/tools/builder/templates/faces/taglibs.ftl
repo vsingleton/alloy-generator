@@ -17,7 +17,7 @@
 <#list components as component>
 	<tag>
 		<description>${component.getDescription()}</description>
-		<tag-name>${component.getUncamelizedName()}</tag-name>
+		<tag-name>${component.getCamelizedName()}</tag-name>
 		<component>
 			<component-type>${packagePath}.${component.getUncamelizedName(BLANK)}.${component.getCamelizedName()}</component-type>
 			<renderer-type>${packagePath}.${component.getUncamelizedName(BLANK)}.${component.getCamelizedName()}Renderer</renderer-type>
@@ -29,7 +29,7 @@
 			</#if>
 			<name>${attribute.getSafeName()}</name>
 			<required>${attribute.isRequired()?string("true", "false")}</required>
-			<type>${attribute.getInputType()}</type>
+			<type>${attribute.getJSFInputType()}</type>
 		</attribute>
 		</#list>
 		<tag-extension>

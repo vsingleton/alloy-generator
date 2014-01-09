@@ -3,30 +3,38 @@
 
 package ${packagePath}.${component.getUncamelizedName(BLANK)};
 
+import java.io.IOException;
+
+import javax.faces.component.UIComponent;
+import javax.faces.context.FacesContext;
+import javax.faces.context.ResponseWriter;
+
+import com.liferay.faces.alloy.component.base.AUIRenderer;
+import com.liferay.faces.util.lang.StringPool;
+
 /**
 <#list component.getAuthors() as author>
  * @author ${author}
 </#list>
  */
-public abstract class Base${component.getCamelizedName()}Renderer extends AUIRenderer {
+public abstract class ${component.getCamelizedName()}RendererBase extends AUIRenderer {
 
 	@Override
 	public void encodeBegin(FacesContext facesContext, UIComponent uiComponent) throws IOException {
 
+		super.encodeBegin(facesContext, uiComponent);
 		${component.getCamelizedName()} ${component.getUncapitalizedName()} = (${component.getCamelizedName()}) uiComponent;
 		encodeHTML(facesContext, ${component.getUncapitalizedName()});
-		encodeJavascript(facesContext, ${component.getUncapitalizedName()});
+		encodeJavaScript(facesContext, ${component.getUncapitalizedName()});
 	}
 
-	@Override
-	protected abstract void encodeHTML(FacesContext facesContext, ${component.getCamelizedName()} ${component.getUncapitalizedName()}) throws IOException {}
+	protected abstract void encodeHTML(FacesContext facesContext, ${component.getCamelizedName()} ${component.getUncapitalizedName()}) throws IOException;
 
-	@Override
-	protected void encodeJavascript(FacesContext facesContext, ${component.getCamelizedName()} ${component.getUncapitalizedName()}) throws IOException {
+	protected void encodeJavaScript(FacesContext facesContext, ${component.getCamelizedName()} ${component.getUncapitalizedName()}) throws IOException {
 
 		ResponseWriter responseWriter = facesContext.getResponseWriter();
 
-		responseWriter.startElement("script", uiComponent);
+		responseWriter.startElement("script", ${component.getUncapitalizedName()});
 		responseWriter.writeAttribute("type", "text/javascript", null);
 
 		responseWriter.write(StringPool.FORWARD_SLASH);
@@ -50,15 +58,19 @@ public abstract class Base${component.getCamelizedName()}Renderer extends AUIRen
 
 		<#list component.getAttributes() as attribute>
 		<#if attribute.isGettable()>
-		responseWriter.write("${attribute.getUncapitalizedName()}: ");
-		responseWriter.write(StringPool.APOSTROPHE);
-		responseWriter.write(${component.getUncapitalizedName()}.get${attribute.getCapitalizedName()}());
-		responseWriter.write(StringPool.APOSTROPHE);
-		responseWriter.write(StringPool.COMMA);
-		responseWriter.write(StringPool.NEW_LINE);
+		if(${component.getUncapitalizedName()}.get${attribute.getCapitalizedName()}() != null)
+		{
+		
+			responseWriter.write("${attribute.getUncapitalizedName()}: ");
+			responseWriter.write(StringPool.APOSTROPHE);
+			responseWriter.write(${component.getUncapitalizedName()}.get${attribute.getCapitalizedName()}().toString());
+			responseWriter.write(StringPool.APOSTROPHE);
+			responseWriter.write(StringPool.COMMA);
+			responseWriter.write(StringPool.NEW_LINE);
+		}
+		
 		</#if>
 		</#list>
-
 		responseWriter.write(StringPool.NEW_LINE);
 		responseWriter.write(StringPool.CLOSE_CURLY_BRACE);
 		responseWriter.write(StringPool.CLOSE_PARENTHESIS);
@@ -76,7 +88,7 @@ public abstract class Base${component.getCamelizedName()}Renderer extends AUIRen
 		responseWriter.write(StringPool.CDATA_CLOSE);
 		responseWriter.write(StringPool.NEW_LINE);
 
-		responseWriter.endElement(SCRIPT);
+		responseWriter.endElement("script");
 		responseWriter.write(StringPool.NEW_LINE);
 	}
 

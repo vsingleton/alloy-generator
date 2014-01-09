@@ -15,9 +15,7 @@ package ${packagePath}.${component.getUncamelizedName(BLANK)};
 </#list>
  * @generated
  */
-public class ${component.getCamelizedName()} extends ${component.getParentClass()} {
-
-	private static final Logger logger = LoggerFactory.getLogger(${component.getCamelizedName()}.class);
+public abstract class ${component.getCamelizedName()}Base extends ${component.getParentClass()} {
 
 	<#list component.getAttributesAndEvents() as attribute>
 	private static final String ${attribute.getConstantName()} = "${attribute.getSafeName()}";
@@ -25,19 +23,13 @@ public class ${component.getCamelizedName()} extends ${component.getParentClass(
 
 	<#list component.getAttributesAndEvents() as attribute>
 	<#if attribute.isGettable()>
-	<#if (attribute.getDefaultValue()??) && attribute.getDefaultValue() != "">
-		<#assign outputSimpleClassName = attribute.getOutputTypeSimpleClassName()>
-		<#assign defaultValue = getCleanUpValue(outputSimpleClassName, attribute.getDefaultValue())>
-	<#else>
-		<#assign defaultValue = "null">
-	</#if>
-	public ${attribute.getJSFInputType()} get${attribute.getCapitalizedName()}() {
-		return (${attribute.getJSFInputType()}) getStateHelper().eval(${attribute.getConstantName()}, ${defaultValue});
+	protected ${attribute.getJSFInputType()} get${attribute.getCapitalizedName()}() {
+		return (${attribute.getJSFInputType()}) getStateHelper().eval(${attribute.getConstantName()}, null);
 	}
 	</#if>
 
 	<#if attribute.isSettable()>
-	public void set${attribute.getCapitalizedName()}(${attribute.getJSFInputType()} ${attribute.getSafeName()}) {
+	protected void set${attribute.getCapitalizedName()}(${attribute.getJSFInputType()} ${attribute.getSafeName()}) {
 		getStateHelper().put(${attribute.getConstantName()}, ${attribute.getSafeName()});
 	}
 
