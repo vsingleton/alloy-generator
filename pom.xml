@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.liferay.alloy</groupId>
 	<artifactId>alloy-generator</artifactId>
-	<version>2.0.0</version>
+	<version>0.1.0</version>
 	<description>POM was created from install:install-file</description>
 	<dependencies>
 		<dependency>
@@ -57,4 +57,48 @@
 			<version>20131018</version>
 		</dependency>
 	</dependencies>
+	
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+		<jdk.version>1.6</jdk.version>
+	</properties>
+
+	<build>
+		<sourceDirectory>${basedir}/generator/src</sourceDirectory>
+		<plugins>
+			<plugin>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>2.3.2</version>
+				<configuration>
+					<source>${jdk.version}</source>
+					<target>${jdk.version}</target>
+					<compilerVersion>${jdk.version}</compilerVersion>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-resources-plugin</artifactId>
+				<version>2.5</version>
+				<executions>
+					<execution>
+						<id>copy-resources</id>
+						<phase>validate</phase>
+						<goals>
+							<goal>copy-resources</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>${basedir}/target/classes/com/liferay/alloy/tools/builder/templates</outputDirectory>
+							<resources>          
+								<resource>
+									<directory>${basedir}/generator/src/com/liferay/alloy/tools/builder/templates</directory>
+								</resource>
+							</resources>              
+						</configuration>            
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+
 </project>
