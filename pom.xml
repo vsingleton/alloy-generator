@@ -64,6 +64,7 @@
 	</properties>
 	<build>
 		<sourceDirectory>${basedir}/generator/src</sourceDirectory>
+		<outputDirectory>build/classes</outputDirectory>
 		<plugins>
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
@@ -86,7 +87,7 @@
 							<goal>copy-resources</goal>
 						</goals>
 						<configuration>
-							<outputDirectory>${basedir}/target/classes/com/liferay/alloy/tools/builder/templates</outputDirectory>
+							<outputDirectory>${basedir}/build/classes/com/liferay/alloy/tools/builder/templates</outputDirectory>
 							<resources>
 								<resource>
 									<directory>${basedir}/generator/src/com/liferay/alloy/tools/builder/templates</directory>
