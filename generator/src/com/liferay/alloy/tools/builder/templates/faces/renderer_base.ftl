@@ -60,7 +60,7 @@ public abstract class ${component.getCamelizedName()}RendererBase extends AUIRen
 		<#if attribute.isGettable()>
 		if(${component.getUncapitalizedName()}.get${attribute.getCapitalizedName()}() != null)
 		{
-		
+
 			responseWriter.write("${attribute.getUncapitalizedName()}: ");
 			responseWriter.write(StringPool.APOSTROPHE);
 			responseWriter.write(${component.getUncapitalizedName()}.get${attribute.getCapitalizedName()}().toString());
@@ -68,7 +68,7 @@ public abstract class ${component.getCamelizedName()}RendererBase extends AUIRen
 			responseWriter.write(StringPool.COMMA);
 			responseWriter.write(StringPool.NEW_LINE);
 		}
-		
+
 		</#if>
 		</#list>
 		responseWriter.write(StringPool.NEW_LINE);
