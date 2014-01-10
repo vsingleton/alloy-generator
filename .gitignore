@@ -4,7 +4,6 @@
 
 build.*.properties
 
-bin/*
-build/*
-generator/classes/*
-target/*
+/bin
+/build
+/target
