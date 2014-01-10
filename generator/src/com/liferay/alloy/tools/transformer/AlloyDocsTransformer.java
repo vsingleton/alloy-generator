@@ -18,6 +18,7 @@ import com.liferay.alloy.tools.model.Attribute;
 import com.liferay.alloy.tools.model.Component;
 import com.liferay.alloy.util.DefaultValueUtil;
 import com.liferay.alloy.util.JSONUtil;
+import com.liferay.alloy.util.PropsUtil;
 import com.liferay.alloy.util.StringUtil;
 import com.liferay.alloy.util.TypeUtil;
 
@@ -56,9 +57,9 @@ import org.json.JSONObject;
 public class AlloyDocsTransformer {
 
 	public static void main(String[] args) throws Exception {
-		String inputJSON = System.getProperty("transformer.input.json");
-		String outputXML = System.getProperty("transformer.output.xml");
-		String componentExcluded = System.getProperty(
+		String inputJSON = PropsUtil.getString("transformer.input.json");
+		String outputXML = PropsUtil.getString("transformer.output.xml");
+		String componentExcluded = PropsUtil.getString(
 			"transformer.components.excluded");
 
 		new AlloyDocsTransformer(inputJSON, outputXML, componentExcluded);
