@@ -54,15 +54,16 @@ public class Attribute extends BaseModel {
 
 		if (TypeUtil.isPrimitiveType(inputJavaType)) {
 			//possible check if we have enough of a string
-			
-			if(inputJavaType.equals("int")) {
+
+			if (inputJavaType.equals("int")) {
 				inputJavaType = "Integer";
-			} else {
-				inputJavaType =
-						inputJavaType.substring(0, 1).toUpperCase() +
-						inputJavaType.substring(1);
 			}
-			
+			else {
+				inputJavaType =
+					inputJavaType.substring(0, 1).toUpperCase() +
+					inputJavaType.substring(1);
+			}
+
 			return "java.lang." + inputJavaType;
 		}
 		else {

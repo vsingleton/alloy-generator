@@ -102,7 +102,7 @@ public class AlloyDocsTransformer {
 				_classMapJSON, className);
 
 			String name = JSONUtil.getString(componentJSON, "name");
-			
+
 			name = _cleanName(name);
 
 			boolean bodyContent = Convert.toBoolean(
@@ -154,20 +154,20 @@ public class AlloyDocsTransformer {
 	}
 
 	private String _cleanName(String name) {
-		
+
 		if (name.startsWith(_ALLOY_CLASS_PREFIX)) {
 			name = name.replace(_ALLOY_CLASS_PREFIX, StringPool.EMPTY);
 		}
 		else if (name.startsWith(_PLUGIN_CLASS_PREFIX)) {
 			name = name.replace(_PLUGIN_CLASS_PREFIX, StringPool.EMPTY);
-		} 
+		}
 		else if (name.startsWith(_DATA_TYPE_PREFIX)) {
 			name = name.replace(_DATA_TYPE_PREFIX, StringPool.EMPTY);
 		}
-		
+
 		return name;
 	}
-	
+
 	private void _create() throws Exception {
 		_createXML();
 	}
@@ -422,7 +422,7 @@ public class AlloyDocsTransformer {
 	}
 
 	private static final String _ALLOY_CLASS_PREFIX = "A.";
-	
+
 	private static final String _DATA_TYPE_PREFIX = "DataType.";
 
 	private static final String _DEFAULT_NAMESPACE = "alloy";
