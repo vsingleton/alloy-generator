@@ -24,6 +24,7 @@ import com.liferay.alloy.util.TypeUtil;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -33,14 +34,17 @@ import java.util.List;
 import java.util.Set;
 
 import jodd.typeconverter.Convert;
+
 import jodd.util.StringPool;
 
 import org.apache.commons.io.FileUtils;
+
 import org.dom4j.Document;
 import org.dom4j.DocumentFactory;
 import org.dom4j.Element;
 import org.dom4j.io.OutputFormat;
 import org.dom4j.io.XMLWriter;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
