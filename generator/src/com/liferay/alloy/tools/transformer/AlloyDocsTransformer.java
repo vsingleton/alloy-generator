@@ -24,7 +24,6 @@ import com.liferay.alloy.util.TypeUtil;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -34,17 +33,14 @@ import java.util.List;
 import java.util.Set;
 
 import jodd.typeconverter.Convert;
-
 import jodd.util.StringPool;
 
 import org.apache.commons.io.FileUtils;
-
 import org.dom4j.Document;
 import org.dom4j.DocumentFactory;
 import org.dom4j.Element;
 import org.dom4j.io.OutputFormat;
 import org.dom4j.io.XMLWriter;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -102,10 +98,8 @@ public class AlloyDocsTransformer {
 				_classMapJSON, className);
 
 			String name = JSONUtil.getString(componentJSON, "name");
-
-			if (name.startsWith(_ALLOY_CLASS_PREFIX)) {
-				name = name.replace(_ALLOY_CLASS_PREFIX, StringPool.EMPTY);
-			}
+			
+			name = _cleanName(name);
 
 			boolean bodyContent = Convert.toBoolean(
 				JSONUtil.getString(componentJSON, "bodyContent"), true);
@@ -155,6 +149,21 @@ public class AlloyDocsTransformer {
 				_componentExcluded.contains(component.getName()));
 	}
 
+	private String _cleanName(String name) {
+		
+		if (name.startsWith(_ALLOY_CLASS_PREFIX)) {
+			name = name.replace(_ALLOY_CLASS_PREFIX, StringPool.EMPTY);
+		}
+		else if (name.startsWith(_PLUGIN_CLASS_PREFIX)) {
+			name = name.replace(_PLUGIN_CLASS_PREFIX, StringPool.EMPTY);
+		} 
+		else if (name.startsWith(_DATA_TYPE_PREFIX)) {
+			name = name.replace(_DATA_TYPE_PREFIX, StringPool.EMPTY);
+		}
+		
+		return name;
+	}
+	
 	private void _create() throws Exception {
 		_createXML();
 	}
@@ -409,6 +418,8 @@ public class AlloyDocsTransformer {
 	}
 
 	private static final String _ALLOY_CLASS_PREFIX = "A.";
+	
+	private static final String _DATA_TYPE_PREFIX = "DataType.";
 
 	private static final String _DEFAULT_NAMESPACE = "alloy";
 
@@ -424,6 +435,8 @@ public class AlloyDocsTransformer {
 	private static final String _HTML_COMMENT_END = "-->";
 
 	private static final String _HTML_COMMENT_START = "<!--";
+
+	private static final String _PLUGIN_CLASS_PREFIX = "Plugin.";
 
 	private static final String AUI_PREFIX = "aui-";
 
