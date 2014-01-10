@@ -77,6 +77,11 @@ public abstract class BaseBuilder {
 						e.printStackTrace();
 					}
 				}
+				else {
+					System.out.println(
+						"Couldn't load components definitions from '" +
+						componentsFile.getAbsolutePath() + "'.");
+				}
 			}
 		}
 

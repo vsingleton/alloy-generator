@@ -65,6 +65,9 @@ public class FacesBuilder extends BaseBuilder {
 		}
 
 		_buildTaglibsXML();
+
+		System.out.println(
+			"Finished looping over " + components.size() + " components.");
 	}
 
 	@Override
