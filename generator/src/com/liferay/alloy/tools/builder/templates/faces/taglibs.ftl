@@ -17,7 +17,7 @@
 <#list components as component>
 	<tag>
 		<description>${component.getDescription()}</description>
-		<tag-name>${component.getCamelizedName()}</tag-name>
+		<tag-name>${component.getUncapitalizedName()}</tag-name>
 		<component>
 			<component-type>${packagePath}.${component.getUncamelizedName(BLANK)}.${component.getCamelizedName()}</component-type>
 			<renderer-type>${packagePath}.${component.getUncamelizedName(BLANK)}.${component.getCamelizedName()}Renderer</renderer-type>

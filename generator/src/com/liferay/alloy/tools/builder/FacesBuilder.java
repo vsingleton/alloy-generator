@@ -127,7 +127,7 @@ public class FacesBuilder extends BaseBuilder {
 		String componentContent = processTemplate(_tplComponent, context);
 
 		File componentFile = new File(
-			path.concat(component.getSafeName().concat(_JAVA_EXT)));
+			path.concat(component.getCamelizedName().concat(_JAVA_EXT)));
 
 		writeFile(componentFile, componentContent, false);
 	}
@@ -144,7 +144,7 @@ public class FacesBuilder extends BaseBuilder {
 		StringBuilder fileNameSb = new StringBuilder(4);
 
 		fileNameSb.append(path);
-		fileNameSb.append(component.getSafeName());
+		fileNameSb.append(component.getCamelizedName());
 		fileNameSb.append(_BASE_CLASS_SUFFIX);
 		fileNameSb.append(_JAVA_EXT);
 
@@ -164,7 +164,7 @@ public class FacesBuilder extends BaseBuilder {
 		StringBuilder fileNameSb = new StringBuilder(4);
 
 		fileNameSb.append(path);
-		fileNameSb.append(component.getSafeName());
+		fileNameSb.append(component.getCamelizedName());
 		fileNameSb.append(_RENDERER_CLASS_SUFFIX);
 		fileNameSb.append(_JAVA_EXT);
 
@@ -184,7 +184,7 @@ public class FacesBuilder extends BaseBuilder {
 		StringBuilder fileNameSb = new StringBuilder(5);
 
 		fileNameSb.append(path);
-		fileNameSb.append(component.getSafeName());
+		fileNameSb.append(component.getCamelizedName());
 		fileNameSb.append(_RENDERER_CLASS_SUFFIX);
 		fileNameSb.append(_BASE_CLASS_SUFFIX);
 		fileNameSb.append(_JAVA_EXT);
@@ -212,7 +212,7 @@ public class FacesBuilder extends BaseBuilder {
 			File rendererFile = new File(
 				path.concat(shortName).concat(_XML_EXT));
 
-			writeFile(rendererFile, rendererContent, false);
+			writeFile(rendererFile, rendererContent, true);
 		}
 	}
 
