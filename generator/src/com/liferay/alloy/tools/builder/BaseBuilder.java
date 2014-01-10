@@ -17,6 +17,7 @@ package com.liferay.alloy.tools.builder;
 import com.liferay.alloy.tools.model.Attribute;
 import com.liferay.alloy.tools.model.Component;
 import com.liferay.alloy.util.FreeMarkerUtil;
+import com.liferay.alloy.util.PropsUtil;
 import com.liferay.alloy.util.StringUtil;
 import com.liferay.alloy.util.xml.SAXReaderUtil;
 
@@ -84,8 +85,8 @@ public abstract class BaseBuilder {
 
 	public List<String> getComponentDefinitionsList() {
 		if (_componentsDefinitionList == null) {
-			String componentsDefinitionList = System.getProperty(
-					"builder.components.definitions");
+			String componentsDefinitionList = PropsUtil.getString(
+				"builder.components.definitions");
 
 			_componentsDefinitionList = Arrays.asList(
 				componentsDefinitionList.split(StringPool.COMMA));

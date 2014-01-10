@@ -15,6 +15,7 @@
 package com.liferay.alloy.tools.builder;
 
 import com.liferay.alloy.tools.model.Component;
+import com.liferay.alloy.util.PropsUtil;
 import com.liferay.alloy.util.xml.SAXReaderUtil;
 import com.liferay.alloy.util.xml.xpath.AlloyGeneratorNamespaceContext;
 
@@ -41,15 +42,16 @@ import org.jaxen.NamespaceContext;
 public class TagBuilder extends BaseBuilder {
 
 	public static void main(String[] args) throws Exception {
-		String componentsXML = System.getProperty(
+		String componentsXML = PropsUtil.getString(
 			"builder.taglibs.components.definitions");
-		String docrootDir = System.getProperty("builder.taglibs.docroot.dir");
-		String javaDir = System.getProperty("builder.taglibs.java.dir");
-		String javaPackage = System.getProperty("builder.taglibs.java.package");
-		String jspCommonInitPath = System.getProperty(
+		String docrootDir = PropsUtil.getString("builder.taglibs.docroot.dir");
+		String javaDir = PropsUtil.getString("builder.taglibs.java.dir");
+		String javaPackage = PropsUtil.getString(
+			"builder.taglibs.java.package");
+		String jspCommonInitPath = PropsUtil.getString(
 			"builder.taglibs.jsp.common.init.path");
-		String jspDir = System.getProperty("builder.taglibs.jsp.dir");
-		String tldDir = System.getProperty("builder.taglibs.tld.dir");
+		String jspDir = PropsUtil.getString("builder.taglibs.jsp.dir");
+		String tldDir = PropsUtil.getString("builder.taglibs.tld.dir");
 
 		new TagBuilder(
 			componentsXML, javaDir, docrootDir, javaPackage, jspDir,

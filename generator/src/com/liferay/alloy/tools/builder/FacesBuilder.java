@@ -15,6 +15,7 @@
 package com.liferay.alloy.tools.builder;
 
 import com.liferay.alloy.tools.model.Component;
+import com.liferay.alloy.util.PropsUtil;
 
 import java.io.File;
 
@@ -30,8 +31,8 @@ import org.dom4j.Element;
 public class FacesBuilder extends BaseBuilder {
 
 	public static void main(String[] args) throws Exception {
-		String baseOutputDir = System.getProperty("builder.faces.output.dir");
-		String version = System.getProperty("builder.faces.version");
+		String baseOutputDir = PropsUtil.getString("builder.faces.output.dir");
+		String version = PropsUtil.getString("builder.faces.output.dir");
 
 		new FacesBuilder(baseOutputDir, version);
 	}
