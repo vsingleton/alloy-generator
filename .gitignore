@@ -1,7 +1,10 @@
-build.*.properties
+.classpath
+.project
+.settings
 
-*.class
+build.*.properties
 
 bin/*
 build/*
 generator/classes/*
+target/*
