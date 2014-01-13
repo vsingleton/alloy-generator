@@ -59,20 +59,19 @@ public class AlloyDocsTransformer {
 	public static void main(String[] args) throws Exception {
 		String inputJSON = PropsUtil.getString("transformer.input.json");
 		String outputXML = PropsUtil.getString("transformer.output.xml");
-		String componentExcluded = PropsUtil.getString(
+		String[] componentExcluded = PropsUtil.getStringArray(
 			"transformer.components.excluded");
 
 		new AlloyDocsTransformer(inputJSON, outputXML, componentExcluded);
 	}
 
 	public AlloyDocsTransformer(
-			String inputJSON, String outputXML, String componentExcluded)
+			String inputJSON, String outputXML, String[] componentExcluded)
 		throws Exception {
 
 		_inputJSON = inputJSON;
 		_outputXML = outputXML;
-		_componentExcluded = Arrays.asList(
-			componentExcluded.split(StringPool.COMMA));
+		_componentExcluded = Arrays.asList(componentExcluded);
 
 		_fileJSON = new File(_inputJSON);
 

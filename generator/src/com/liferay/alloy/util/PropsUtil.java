@@ -18,15 +18,22 @@ import com.germinus.easyconf.ComponentConfiguration;
 import com.germinus.easyconf.ComponentProperties;
 import com.germinus.easyconf.EasyConf;
 
-import jodd.util.StringPool;
 public class PropsUtil {
 
 	public static String getString(String key) {
-		return getString(key, StringPool.EMPTY);
+		return _getProperties().getString(key);
 	}
 
 	public static String getString(String key, String defaultValue) {
 		return _getProperties().getString(key, defaultValue);
+	}
+	
+	public static String[] getStringArray(String key) {
+		return  _getProperties().getStringArray(key);
+	}
+	
+	public static String[] getStringArray(String key, String[] defaultValue) {
+		return _getProperties().getStringArray(key, defaultValue);
 	}
 
 	private static ComponentProperties _getProperties() {
