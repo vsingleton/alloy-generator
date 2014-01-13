@@ -17,7 +17,6 @@ package com.liferay.alloy.util;
 import com.germinus.easyconf.ComponentConfiguration;
 import com.germinus.easyconf.ComponentProperties;
 import com.germinus.easyconf.EasyConf;
-
 public class PropsUtil {
 
 	public static String getString(String key) {
@@ -27,11 +26,11 @@ public class PropsUtil {
 	public static String getString(String key, String defaultValue) {
 		return _getProperties().getString(key, defaultValue);
 	}
-	
+
 	public static String[] getStringArray(String key) {
-		return  _getProperties().getStringArray(key);
+		return _getProperties().getStringArray(key);
 	}
-	
+
 	public static String[] getStringArray(String key, String[] defaultValue) {
 		return _getProperties().getStringArray(key, defaultValue);
 	}

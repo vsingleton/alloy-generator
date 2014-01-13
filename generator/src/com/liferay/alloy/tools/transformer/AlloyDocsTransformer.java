@@ -71,7 +71,7 @@ public class AlloyDocsTransformer {
 
 		_inputJSON = inputJSON;
 		_outputXML = outputXML;
-		_componentExcluded = Arrays.asList(componentExcluded);
+		_componentExcluded = componentExcluded;
 
 		_fileJSON = new File(_inputJSON);
 
@@ -148,9 +148,10 @@ public class AlloyDocsTransformer {
 
 	public boolean isExcludedComponent(Component component) {
 		String module = component.getModule();
+		List<String> excludedComponentsList = Arrays.asList(_componentExcluded);
 
 		return (!module.startsWith(AUI_PREFIX) ||
-				_componentExcluded.contains(component.getName()));
+				excludedComponentsList.contains(component.getName()));
 	}
 
 	private String _cleanName(String name) {
@@ -446,7 +447,7 @@ public class AlloyDocsTransformer {
 
 	private JSONArray _classItemsJSONArray;
 	private JSONObject _classMapJSON;
-	private List<String> _componentExcluded;
+	private String[] _componentExcluded;
 	private File _fileJSON;
 	private String _inputJSON;
 	private JSONObject _json;
