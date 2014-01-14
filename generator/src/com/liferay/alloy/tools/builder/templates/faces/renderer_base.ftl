@@ -13,6 +13,7 @@ import com.liferay.faces.alloy.component.base.AUIRenderer;
 import com.liferay.faces.alloy.renderkit.BufferedResponseWriter;
 import com.liferay.faces.util.lang.StringPool;
 
+
 /**
 <#list component.getAuthors() as author>
  * @author ${author}
@@ -46,23 +47,16 @@ public abstract class ${component.getCamelizedName()}RendererBase extends AUIRen
 		bufferedResponseWriter.write("var ${component.getUncapitalizedName()} = new Y.${component.getCamelizedName()}");
 		bufferedResponseWriter.write(StringPool.OPEN_PARENTHESIS);
 		bufferedResponseWriter.write(StringPool.OPEN_CURLY_BRACE);
-		bufferedResponseWriter.write(StringPool.NEW_LINE);
 
 		<#list component.getAttributes() as attribute>
 		<#if attribute.isGettable()>
-		if (${component.getUncapitalizedName()}.get${attribute.getCapitalizedName()}() != null) {
-
-			bufferedResponseWriter.write("${attribute.getUncapitalizedName()}: ");
-			bufferedResponseWriter.write(StringPool.APOSTROPHE);
-			bufferedResponseWriter.write(${component.getUncapitalizedName()}.get${attribute.getCapitalizedName()}().toString());
-			bufferedResponseWriter.write(StringPool.APOSTROPHE);
-			bufferedResponseWriter.write(StringPool.COMMA);
-			bufferedResponseWriter.write(StringPool.NEW_LINE);
-		}
-
+		render${attribute.getCapitalizedName()}(responseWriter, ${component.getUncapitalizedName()});
+		</#if>
+		<#if attribute_has_next>
+		responseWriter.write(StringPool.COMMA);
 		</#if>
 		</#list>
-		bufferedResponseWriter.write(StringPool.NEW_LINE);
+
 		bufferedResponseWriter.write(StringPool.CLOSE_CURLY_BRACE);
 		bufferedResponseWriter.write(StringPool.CLOSE_PARENTHESIS);
 		bufferedResponseWriter.write(StringPool.SEMICOLON);
@@ -78,4 +72,12 @@ public abstract class ${component.getCamelizedName()}RendererBase extends AUIRen
 		return AUI_MODULE_NAME;
 	}
 
+	<#list component.getAttributes() as attribute>
+	<#if attribute.isGettable()>
+	protected void render${attribute.getCapitalizedName()}(ResponseWriter responseWriter, ${component.getCamelizedName()} ${component.getUncapitalizedName()}) throws IOException {
+		render${attribute.getJavaScriptType()}(responseWriter, "${attribute.getUncapitalizedName()}", ${component.getUncapitalizedName()}.get${attribute.getCapitalizedName()}());
+	}
+
+	</#if>
+	</#list>
 }
