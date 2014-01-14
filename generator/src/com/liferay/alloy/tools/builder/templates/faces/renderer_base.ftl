@@ -40,7 +40,8 @@ public abstract class ${component.getCamelizedName()}RendererBase extends AUIRen
 
 		ResponseWriter backupResponseWriter = facesContext.getResponseWriter();
 
-		BufferedResponseWriter bufferedResponseWriter = (BufferedResponseWriter) facesContext.getResponseWriter();
+		BufferedResponseWriter bufferedResponseWriter = new BufferedResponseWriter();
+		facesContext.setResponseWriter(bufferedResponseWriter);
 
 		beginJavaScript(facesContext, ${component.getUncapitalizedName()});
 
@@ -50,10 +51,10 @@ public abstract class ${component.getCamelizedName()}RendererBase extends AUIRen
 
 		<#list component.getAttributes() as attribute>
 		<#if attribute.isGettable()>
-		render${attribute.getCapitalizedName()}(responseWriter, ${component.getUncapitalizedName()});
+		render${attribute.getCapitalizedName()}(bufferedResponseWriter, ${component.getUncapitalizedName()});
 		</#if>
 		<#if attribute_has_next>
-		responseWriter.write(StringPool.COMMA);
+		bufferedResponseWriter.write(StringPool.COMMA);
 		</#if>
 		</#list>
 
