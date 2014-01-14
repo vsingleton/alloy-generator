@@ -89,6 +89,14 @@ public class TypeUtil {
 		return _instance._getInputJavaType(type, removeGenericsType);
 	}
 
+	public static String getJavaScriptType(String type) {
+		if (_instance == null) {
+			_instance = new TypeUtil();
+		}
+
+		return _instance._getJavaScriptType(type);
+	}
+
 	public static String getOutputJavaType(
 		String type, boolean removeGenericsType) {
 
@@ -107,6 +115,7 @@ public class TypeUtil {
 
 	private TypeUtil() {
 		_INPUT_TYPES = new HashMap<String, String>();
+		_JAVASCRIPT_TYPES = new HashMap<String, String>();
 		_OUTPUT_TYPES = new HashMap<String, String>();
 
 		_registerTypes(_INPUT_TYPES, ARRAYS, Object.class.getName());
@@ -119,6 +128,23 @@ public class TypeUtil {
 		_registerTypes(_INPUT_TYPES, NUMBERS, Object.class.getName());
 		_registerTypes(_INPUT_TYPES, OBJECTS, Object.class.getName());
 		_registerTypes(_INPUT_TYPES, STRINGS, String.class.getName());
+
+		_registerTypes(_JAVASCRIPT_TYPES, ARRAYS, "Array");
+		_registerTypes(
+			_JAVASCRIPT_TYPES, BOOLEANS, Boolean.class.getSimpleName());
+		_registerTypes(_JAVASCRIPT_TYPES, FLOATS, Number.class.getSimpleName());
+		_registerTypes(
+			_JAVASCRIPT_TYPES, INTEGERS, Number.class.getSimpleName());
+		_registerTypes(
+			_JAVASCRIPT_TYPES, DOUBLES, Number.class.getSimpleName());
+		_registerTypes(_JAVASCRIPT_TYPES, LONGS, Number.class.getSimpleName());
+		_registerTypes(_JAVASCRIPT_TYPES, SHORTS, Number.class.getSimpleName());
+		_registerTypes(
+			_JAVASCRIPT_TYPES, NUMBERS, Number.class.getSimpleName());
+		_registerTypes(
+			_JAVASCRIPT_TYPES, OBJECTS, Object.class.getSimpleName());
+		_registerTypes(
+			_JAVASCRIPT_TYPES, STRINGS, String.class.getSimpleName());
 
 		_registerTypes(_OUTPUT_TYPES, ARRAYS, ArrayList.class.getName());
 		_registerTypes(_OUTPUT_TYPES, BOOLEANS, boolean.class.getName());
@@ -161,6 +187,16 @@ public class TypeUtil {
 		}
 
 		return javaType;
+	}
+
+	private String _getJavaScriptType(String type) {
+		String javaScriptType = _JAVASCRIPT_TYPES.get(type.toLowerCase());
+
+		if (StringUtil.isBlank(javaScriptType)) {
+			javaScriptType = String.class.getSimpleName();
+		}
+
+		return javaScriptType;
 	}
 
 	private String _getOutputJavaType(String type, boolean removeGenericsType) {
@@ -241,6 +277,8 @@ public class TypeUtil {
 	private static TypeUtil _instance = null;
 
 	private static HashMap<String, String> _INPUT_TYPES = null;
+
+	private static HashMap<String, String> _JAVASCRIPT_TYPES = null;
 
 	private static HashMap<String, String> _OUTPUT_TYPES = null;
 

@@ -190,6 +190,8 @@ public abstract class BaseBuilder {
 				attributeNode.elementText("type"), _DEFAULT_TYPE);
 			String inputType = Convert.toString(
 				attributeNode.elementText("inputType"), type);
+			String javaScriptType = Convert.toString(
+				attributeNode.elementText("javaScriptType"), type);
 			String outputType = Convert.toString(
 				attributeNode.elementText("outputType"), type);
 
@@ -206,6 +208,7 @@ public abstract class BaseBuilder {
 			attribute.setDescription(description);
 			attribute.setGettable(gettable);
 			attribute.setInputType(inputType);
+			attribute.setJavaScriptType(javaScriptType);
 			attribute.setName(name);
 			attribute.setOutputType(outputType);
 			attribute.setRequired(required);

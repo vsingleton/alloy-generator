@@ -200,20 +200,23 @@ public class AlloyDocsTransformer {
 
 			for (Attribute attribute : component.getAttributes()) {
 				Element attributeNode = attributesNode.addElement("attribute");
-				Element nameNode = attributeNode.addElement("name");
-				Element inputTypeNode = attributeNode.addElement("inputType");
-				Element outputTypeNode = attributeNode.addElement("outputType");
+
 				Element defaultValueNode = attributeNode.addElement(
 					"defaultValue");
-
 				Element descriptionNode = attributeNode.addElement(
 					"description");
+				Element inputTypeNode = attributeNode.addElement("inputType");
+				Element javaScriptTypeNode = attributeNode.addElement(
+					"javaScriptType");
+				Element nameNode = attributeNode.addElement("name");
+				Element outputTypeNode = attributeNode.addElement("outputType");
 
-				nameNode.setText(attribute.getName());
-				inputTypeNode.setText(attribute.getInputType());
-				outputTypeNode.setText(attribute.getOutputType());
 				defaultValueNode.setText(attribute.getDefaultValue());
 				descriptionNode.addCDATA(_getAttributeDescription(attribute));
+				inputTypeNode.setText(attribute.getInputType());
+				javaScriptTypeNode.setText(attribute.getJavaScriptType());
+				nameNode.setText(attribute.getName());
+				outputTypeNode.setText(attribute.getOutputType());
 			}
 
 			for (Attribute event : component.getEvents()) {
@@ -348,16 +351,15 @@ public class AlloyDocsTransformer {
 
 					String name = attributeJSON.getString("name");
 
-					String inputType = Convert.toString(
+					String javaScriptType = Convert.toString(
 						JSONUtil.getString(attributeJSON, "type"),
-						_DEFAULT_TYPE);
+						_DEFAULT_JAVASCRIPT_TYPE);
 
-					String outputType = Convert.toString(
-						JSONUtil.getString(attributeJSON, "type"),
-						_DEFAULT_TYPE);
+					String inputJavaType = TypeUtil.getInputJavaType(
+						javaScriptType, true);
 
 					String outputJavaType = TypeUtil.getOutputJavaType(
-						outputType, true);
+						javaScriptType, true);
 
 					String defaultValue = DefaultValueUtil.getDefaultValue(
 						outputJavaType,
@@ -373,8 +375,9 @@ public class AlloyDocsTransformer {
 					Attribute attribute = new Attribute();
 
 					attribute.setName(name);
-					attribute.setInputType(inputType);
-					attribute.setOutputType(outputType);
+					attribute.setInputType(inputJavaType);
+					attribute.setJavaScriptType(javaScriptType);
+					attribute.setOutputType(outputJavaType);
 					attribute.setDefaultValue(defaultValue);
 					attribute.setDescription(description);
 					attribute.setRequired(required);
@@ -426,6 +429,10 @@ public class AlloyDocsTransformer {
 
 	private static final String _DATA_TYPE_PREFIX = "DataType.";
 
+	private static final String _DEFAULT_JAVA_TYPE = Object.class.getName();
+
+	private static final String _DEFAULT_JAVASCRIPT_TYPE = "String";
+
 	private static final String _DEFAULT_NAMESPACE = "alloy";
 
 	private static final String _DEFAULT_TAGLIB_SHORT_NAME = "alloy";
@@ -434,8 +441,6 @@ public class AlloyDocsTransformer {
 		"http://alloy.liferay.com/tld/alloy";
 
 	private static final String _DEFAULT_TAGLIB_VERSION = "1.0";
-
-	private static final String _DEFAULT_TYPE = Object.class.getName();
 
 	private static final String _HTML_COMMENT_END = "-->";
 

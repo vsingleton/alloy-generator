@@ -49,6 +49,10 @@ public class Attribute extends BaseModel {
 		return getTypeSimpleClassName(getRawInputType());
 	}
 
+	public String getJavaScriptType() {
+		return TypeUtil.getJavaScriptType(_javaScriptType);
+	}
+
 	public String getJSFInputType() {
 		String inputJavaType = TypeUtil.getInputJavaType(_inputType, true);
 
@@ -81,6 +85,10 @@ public class Attribute extends BaseModel {
 
 	public String getRawInputType() {
 		return TypeUtil.getInputJavaType(_inputType, false);
+	}
+
+	public String getRawJavaScriptType() {
+		return _javaScriptType;
 	}
 
 	public String getRawOutputType() {
@@ -155,6 +163,10 @@ public class Attribute extends BaseModel {
 		_inputType = inputType;
 	}
 
+	public void setJavaScriptType(String javaScriptType) {
+		_javaScriptType = javaScriptType;
+	}
+
 	public void setOutputType(String outputType) {
 		_outputType = outputType;
 	}
@@ -171,6 +183,7 @@ public class Attribute extends BaseModel {
 	private String _defaultValue;
 	private boolean _gettable = true;
 	private String _inputType;
+	private String _javaScriptType;
 	private String _outputType;
 	private boolean _required;
 	private boolean _settable = true;
