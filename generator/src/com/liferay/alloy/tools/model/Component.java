@@ -76,6 +76,10 @@ public class Component extends BaseModel {
 	public String getModule() {
 		return _module;
 	}
+	
+	public String getModuleConstantName() {
+		return _module.replaceAll("\\-", "_").toUpperCase();
+	}
 
 	public String getPackage() {
 		return _package;

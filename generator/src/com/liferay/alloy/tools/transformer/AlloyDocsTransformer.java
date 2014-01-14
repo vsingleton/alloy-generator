@@ -113,7 +113,7 @@ public class AlloyDocsTransformer {
 				StringPool.EMPTY);
 
 			String module = Convert.toString(
-				JSONUtil.getString(componentJSON, "module"), name);
+				JSONUtil.getString(componentJSON, "submodule"), name);
 
 			String namespace = Convert.toString(_DEFAULT_NAMESPACE);
 
