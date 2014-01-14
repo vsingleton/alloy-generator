@@ -21,12 +21,13 @@ import com.liferay.faces.util.lang.StringPool;
 public abstract class ${component.getCamelizedName()}RendererBase extends AUIRenderer {
 
 	// Private Constants
-	private static final String  ${component.getModuleConstantName()} = "${component.getModule()}";
+	private static final String AUI_MODULE_NAME = "${component.getModule()}";
 
 	@Override
 	public void encodeBegin(FacesContext facesContext, UIComponent uiComponent) throws IOException {
 
 		super.encodeBegin(facesContext, uiComponent);
+
 		${component.getCamelizedName()} ${component.getUncapitalizedName()} = (${component.getCamelizedName()}) uiComponent;
 		encodeHTML(facesContext, ${component.getUncapitalizedName()});
 		encodeJavaScript(facesContext, ${component.getUncapitalizedName()});
@@ -37,10 +38,10 @@ public abstract class ${component.getCamelizedName()}RendererBase extends AUIRen
 	protected void encodeJavaScript(FacesContext facesContext, ${component.getCamelizedName()} ${component.getUncapitalizedName()}) throws IOException {
 
 		ResponseWriter backupResponseWriter = facesContext.getResponseWriter();
-		
+
 		BufferedResponseWriter bufferedResponseWriter = (BufferedResponseWriter) facesContext.getResponseWriter();
 
-		beginJavaScript(facesContext, ${component.getUncapitalizedName()}, ${component.getModuleConstantName()});
+		beginJavaScript(facesContext, ${component.getUncapitalizedName()});
 
 		bufferedResponseWriter.write("var ${component.getUncapitalizedName()} = new Y.${component.getCamelizedName()}");
 		bufferedResponseWriter.write(StringPool.OPEN_PARENTHESIS);
@@ -49,8 +50,7 @@ public abstract class ${component.getCamelizedName()}RendererBase extends AUIRen
 
 		<#list component.getAttributes() as attribute>
 		<#if attribute.isGettable()>
-		if(${component.getUncapitalizedName()}.get${attribute.getCapitalizedName()}() != null)
-		{
+		if (${component.getUncapitalizedName()}.get${attribute.getCapitalizedName()}() != null) {
 
 			bufferedResponseWriter.write("${attribute.getUncapitalizedName()}: ");
 			bufferedResponseWriter.write(StringPool.APOSTROPHE);
@@ -66,12 +66,16 @@ public abstract class ${component.getCamelizedName()}RendererBase extends AUIRen
 		bufferedResponseWriter.write(StringPool.CLOSE_CURLY_BRACE);
 		bufferedResponseWriter.write(StringPool.CLOSE_PARENTHESIS);
 		bufferedResponseWriter.write(StringPool.SEMICOLON);
-		
+
 		endJavaScript(facesContext);
-		
-		handleBuffer(facesContext, ${component.getUncapitalizedName()}, ${component.getModuleConstantName()});
-		
+
+		handleBuffer(facesContext, ${component.getUncapitalizedName()});
+
 		facesContext.setResponseWriter(backupResponseWriter);
+	}
+
+	protected String getModule() {
+		return AUI_MODULE_NAME;
 	}
 
 }
