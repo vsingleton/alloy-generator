@@ -26,26 +26,11 @@ public abstract class ${component.getCamelizedName()}RendererBase extends AUIRen
 	// Private Constants
 	private static final String AUI_MODULE_NAME = "${component.getModule()}";
 
-	@Override
-	public void encodeBegin(FacesContext facesContext, UIComponent uiComponent) throws IOException {
+	protected void encodeJavaScriptMain(FacesContext facesContext, UIComponent component) throws IOException {
+	
+		${component.getCamelizedName()} ${component.getUncapitalizedName()} = (${component.getCamelizedName()}) component; 
 
-		super.encodeBegin(facesContext, uiComponent);
-
-		${component.getCamelizedName()} ${component.getUncapitalizedName()} = (${component.getCamelizedName()}) uiComponent;
-		encodeHTML(facesContext, ${component.getUncapitalizedName()});
-		encodeJavaScript(facesContext, ${component.getUncapitalizedName()});
-	}
-
-	protected abstract void encodeHTML(FacesContext facesContext, ${component.getCamelizedName()} ${component.getUncapitalizedName()}) throws IOException;
-
-	protected void encodeJavaScript(FacesContext facesContext, ${component.getCamelizedName()} ${component.getUncapitalizedName()}) throws IOException {
-
-		ResponseWriter backupResponseWriter = facesContext.getResponseWriter();
-
-		BufferedResponseWriter bufferedResponseWriter = new BufferedResponseWriter();
-		facesContext.setResponseWriter(bufferedResponseWriter);
-
-		beginJavaScript(facesContext, ${component.getUncapitalizedName()});
+		BufferedResponseWriter bufferedResponseWriter = (BufferedResponseWriter) facesContext.getResponseWriter();
 
 		bufferedResponseWriter.write("var ${component.getUncapitalizedName()} = new A.${component.getCamelizedName()}");
 		bufferedResponseWriter.write(StringPool.OPEN_PARENTHESIS);
@@ -73,12 +58,6 @@ public abstract class ${component.getCamelizedName()}RendererBase extends AUIRen
 		bufferedResponseWriter.write(StringPool.CLOSE_PARENTHESIS);
 		bufferedResponseWriter.write(".render()");
 		bufferedResponseWriter.write(StringPool.SEMICOLON);
-
-		endJavaScript(facesContext);
-
-		handleBuffer(facesContext, ${component.getUncapitalizedName()});
-
-		facesContext.setResponseWriter(backupResponseWriter);
 	}
 
 	protected String getModule() {
