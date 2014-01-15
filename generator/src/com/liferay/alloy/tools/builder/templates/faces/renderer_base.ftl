@@ -45,7 +45,7 @@ public abstract class ${component.getCamelizedName()}RendererBase extends AUIRen
 
 		beginJavaScript(facesContext, ${component.getUncapitalizedName()});
 
-		bufferedResponseWriter.write("var ${component.getUncapitalizedName()} = new Y.${component.getCamelizedName()}");
+		bufferedResponseWriter.write("var ${component.getUncapitalizedName()} = new A.${component.getCamelizedName()}");
 		bufferedResponseWriter.write(StringPool.OPEN_PARENTHESIS);
 		bufferedResponseWriter.write(StringPool.OPEN_CURLY_BRACE);
 
