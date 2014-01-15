@@ -51,7 +51,7 @@ public abstract class ${component.getCamelizedName()}RendererBase extends AUIRen
 		bufferedResponseWriter.write(StringPool.OPEN_PARENTHESIS);
 		bufferedResponseWriter.write(StringPool.OPEN_CURLY_BRACE);
 
-		ArrayList<String> renrederedAttributes = new ArrayList<String>(); 
+		ArrayList<String> renrederedAttributes = new ArrayList<String>();
 
 		<#list component.getAttributes() as attribute>
 		<#if attribute.isGettable()>
