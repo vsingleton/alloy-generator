@@ -35,7 +35,7 @@ public class ReservedAttributeUtil {
 			"previousOut", "parent", "namespacedAttribute",
 			"attributeNamespace", "bodyContent", "class", "dynamicAttribute",
 			"dynamicAttributes", "id", "scriptPosition", "page", "locale",
-			"attributes", "children"
+			"attributes", "children", "clientId"
 		}
 	);
 
