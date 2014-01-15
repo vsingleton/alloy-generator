@@ -51,13 +51,15 @@ public abstract class ${component.getCamelizedName()}RendererBase extends AUIRen
 
 		<#list component.getAttributes() as attribute>
 		<#if attribute.isGettable()>
-		render${attribute.getCapitalizedName()}(bufferedResponseWriter, ${component.getUncapitalizedName()});
-		</#if>
-		<#if attribute_has_next>
-		bufferedResponseWriter.write(StringPool.COMMA);
+		if (${component.getUncapitalizedName()}.get${attribute.getCapitalizedName()}() != null) {
+			render${attribute.getCapitalizedName()}(bufferedResponseWriter, ${component.getUncapitalizedName()});
+			<#if attribute_has_next>
+			bufferedResponseWriter.write(StringPool.COMMA);
+			</#if>
+		}
+
 		</#if>
 		</#list>
-
 		bufferedResponseWriter.write(StringPool.CLOSE_CURLY_BRACE);
 		bufferedResponseWriter.write(StringPool.CLOSE_PARENTHESIS);
 		bufferedResponseWriter.write(StringPool.SEMICOLON);
