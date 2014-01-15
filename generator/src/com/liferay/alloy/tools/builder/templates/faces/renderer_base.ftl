@@ -4,6 +4,8 @@
 package ${packagePath}.${component.getUncamelizedName(BLANK)};
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Iterator;
 
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
@@ -49,19 +51,27 @@ public abstract class ${component.getCamelizedName()}RendererBase extends AUIRen
 		bufferedResponseWriter.write(StringPool.OPEN_PARENTHESIS);
 		bufferedResponseWriter.write(StringPool.OPEN_CURLY_BRACE);
 
+		ArrayList<String> renrederedAttributes = new ArrayList<String>(); 
+
 		<#list component.getAttributes() as attribute>
 		<#if attribute.isGettable()>
-		if (${component.getUncapitalizedName()}.get${attribute.getCapitalizedName()}() != null) {
-			render${attribute.getCapitalizedName()}(bufferedResponseWriter, ${component.getUncapitalizedName()});
-			<#if attribute_has_next>
-			bufferedResponseWriter.write(StringPool.COMMA);
-			</#if>
-		}
-
+		render${attribute.getCapitalizedName()}(renrederedAttributes, ${component.getUncapitalizedName()});
 		</#if>
 		</#list>
+
+		Iterator<String> it = renrederedAttributes.iterator();
+
+		while (it.hasNext()) {
+			bufferedResponseWriter.write(it.next());
+
+			if (it.hasNext()) {
+				bufferedResponseWriter.write(StringPool.COMMA);
+			}
+		}
+
 		bufferedResponseWriter.write(StringPool.CLOSE_CURLY_BRACE);
 		bufferedResponseWriter.write(StringPool.CLOSE_PARENTHESIS);
+		bufferedResponseWriter.write(".render()");
 		bufferedResponseWriter.write(StringPool.SEMICOLON);
 
 		endJavaScript(facesContext);
@@ -77,8 +87,10 @@ public abstract class ${component.getCamelizedName()}RendererBase extends AUIRen
 
 	<#list component.getAttributes() as attribute>
 	<#if attribute.isGettable()>
-	protected void render${attribute.getCapitalizedName()}(ResponseWriter responseWriter, ${component.getCamelizedName()} ${component.getUncapitalizedName()}) throws IOException {
-		render${attribute.getJavaScriptType()}(responseWriter, "${attribute.getUncapitalizedName()}", ${component.getUncapitalizedName()}.get${attribute.getCapitalizedName()}());
+	protected void render${attribute.getCapitalizedName()}(ArrayList<String> renrederedAttributes, ${component.getCamelizedName()} ${component.getUncapitalizedName()}) throws IOException {
+		if (${component.getUncapitalizedName()}.get${attribute.getCapitalizedName()}() != null) {
+			renrederedAttributes.add(render${attribute.getJavaScriptType()}("${attribute.getUncapitalizedName()}", ${component.getUncapitalizedName()}.get${attribute.getCapitalizedName()}()));
+		}
 	}
 
 	</#if>
