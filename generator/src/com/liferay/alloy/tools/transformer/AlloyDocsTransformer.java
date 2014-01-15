@@ -320,7 +320,8 @@ public class AlloyDocsTransformer {
 					String itemClassName = item.getString("class");
 					String itemType = item.getString("itemtype");
 
-					if (itemClassName.equals(classname) &&
+					if ((itemClassName.equals(classname) ||
+						 itemClassName.equals(_cleanName(classname))) &&
 						itemType.equals(type)) {
 
 						items.add(item);
@@ -407,6 +408,11 @@ public class AlloyDocsTransformer {
 		try {
 			JSONObject componentJSON = JSONUtil.getJSONObject(
 				_classMapJSON, className);
+
+			if (componentJSON == null) {
+				componentJSON = JSONUtil.getJSONObject(
+					_classMapJSON, _cleanName(className));
+			}
 
 			if (componentJSON != null) {
 				hierarchy.add(className);
