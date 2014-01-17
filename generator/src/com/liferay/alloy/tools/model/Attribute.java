@@ -130,7 +130,7 @@ public class Attribute extends BaseModel {
 	}
 
 	public boolean isEvent() {
-		List<Attribute> events = _component.getEvents();
+		List<Event> events = _component.getEvents();
 
 		return events.contains(this);
 	}

@@ -16,6 +16,7 @@ package com.liferay.alloy.tools.transformer;
 
 import com.liferay.alloy.tools.model.Attribute;
 import com.liferay.alloy.tools.model.Component;
+import com.liferay.alloy.tools.model.Event;
 import com.liferay.alloy.util.DefaultValueUtil;
 import com.liferay.alloy.util.JSONUtil;
 import com.liferay.alloy.util.PropsUtil;
@@ -122,7 +123,7 @@ public class AlloyDocsTransformer {
 
 			List<Attribute> attributes = getComponentAttributes(className);
 
-			List<Attribute> events = _getAttributesEvents(attributes);
+			List<Event> events = _getAttributesEvents(attributes);
 
 			Component component = new Component();
 
@@ -287,13 +288,13 @@ public class AlloyDocsTransformer {
 		return sb.toString();
 	}
 
-	private List<Attribute> _getAttributesEvents(List<Attribute> attributes) {
-		ArrayList<Attribute> events = new ArrayList<Attribute>();
+	private List<Event> _getAttributesEvents(List<Attribute> attributes) {
+		List<Event> events = new ArrayList<Event>();
 
 		for (Attribute attribute : attributes) {
 			String name = attribute.getName();
 
-			Attribute event = new Attribute();
+			Event event = new Event(attribute);
 
 			event.setName(name + "Change");
 			event.setInputType("String");
@@ -437,8 +438,6 @@ public class AlloyDocsTransformer {
 	private static final String _ALLOY_CLASS_PREFIX = "A.";
 
 	private static final String _DATA_TYPE_PREFIX = "DataType.";
-
-	private static final String _DEFAULT_JAVA_TYPE = Object.class.getName();
 
 	private static final String _DEFAULT_JAVASCRIPT_TYPE = "String";
 

@@ -15,7 +15,6 @@ import javax.faces.context.ResponseWriter;
 import com.liferay.faces.alloy.component.base.RendererBase;
 import com.liferay.faces.util.lang.StringPool;
 
-
 /**
 <#list component.getAuthors() as author>
  * @author ${author}
@@ -45,16 +44,55 @@ public abstract class ${component.getCamelizedName()}RendererBase extends Render
 		</#if>
 		</#list>
 
-		Iterator<String> it = renderedAttributes.iterator();
+		for (String renderedAttribute : renderedAttributes) {
+			responseWriter.write(renderedAttribute);
+			responseWriter.write(StringPool.COMMA);
+		}
 
-		while (it.hasNext()) {
-			responseWriter.write(it.next());
+		responseWriter.write("after");
+		responseWriter.write(StringPool.COLON);
+		responseWriter.write(StringPool.OPEN_CURLY_BRACE);
 
-			if (it.hasNext()) {
+		List<String> renderedAfterEvents = new ArrayList<String>();
+
+		<#list component.getAfterEvents() as event>
+		render${event.getCapitalizedName()}(renderedAfterEvents, ${component.getUncapitalizedName()});
+		</#list>
+
+		Iterator<String> afterEventsIterator = renderedAfterEvents.iterator();
+
+		while (afterEventsIterator.hasNext()) {
+			responseWriter.write(afterEventsIterator.next());
+
+			if (afterEventsIterator.hasNext()) {
 				responseWriter.write(StringPool.COMMA);
 			}
 		}
 
+		responseWriter.write(StringPool.CLOSE_CURLY_BRACE);
+		responseWriter.write(StringPool.COMMA);
+
+		responseWriter.write("on");
+		responseWriter.write(StringPool.COLON);
+		responseWriter.write(StringPool.OPEN_CURLY_BRACE);
+
+		List<String> renderedOnEvents = new ArrayList<String>();
+
+		<#list component.getOnEvents() as event>
+		render${event.getCapitalizedName()}(renderedOnEvents, ${component.getUncapitalizedName()});
+		</#list>
+
+		Iterator<String> onEventsIterator = renderedOnEvents.iterator();
+
+		while (onEventsIterator.hasNext()) {
+			responseWriter.write(onEventsIterator.next());
+
+			if (onEventsIterator.hasNext()) {
+				responseWriter.write(StringPool.COMMA);
+			}
+		}
+
+		responseWriter.write(StringPool.CLOSE_CURLY_BRACE);
 		responseWriter.write(StringPool.CLOSE_CURLY_BRACE);
 		responseWriter.write(StringPool.CLOSE_PARENTHESIS);
 		responseWriter.write(".render()");
@@ -66,7 +104,6 @@ public abstract class ${component.getCamelizedName()}RendererBase extends Render
 	}
 
 	<#list component.getAttributes() as attribute>
-	<#if attribute.isGettable()>
 	protected void render${attribute.getCapitalizedName()}(List<String> renderedAttributes, ${component.getCamelizedName()} ${component.getUncapitalizedName()}) throws IOException {
 		${attribute.getJSFInputType()} ${attribute.getJavaSafeName()} = ${component.getUncapitalizedName()}.get${attribute.getCapitalizedName()}();
 
@@ -75,6 +112,15 @@ public abstract class ${component.getCamelizedName()}RendererBase extends Render
 		}
 	}
 
-	</#if>
+	</#list>
+	<#list component.getEvents() as event>
+	protected void render${event.getCapitalizedName()}(List<String> renderedAttributes, ${component.getCamelizedName()} ${component.getUncapitalizedName()}) throws IOException {
+		${event.getJSFInputType()} ${event.getSafeName()} = ${component.getUncapitalizedName()}.get${event.getCapitalizedName()}();
+
+		if (${event.getSafeName()} != null) {
+			renderedAttributes.add(render${event.getJavaScriptType()}(${component.getCamelizedName()}.${event.getConstantName()}, ${event.getSafeName()}));
+		}
+	}
+
 	</#list>
 }
