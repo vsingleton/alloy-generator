@@ -27,8 +27,8 @@ public abstract class ${component.getCamelizedName()}RendererBase extends AUIRen
 	private static final String AUI_MODULE_NAME = "${component.getModule()}";
 
 	protected void encodeJavaScriptMain(FacesContext facesContext, UIComponent component) throws IOException {
-	
-		${component.getCamelizedName()} ${component.getUncapitalizedName()} = (${component.getCamelizedName()}) component; 
+
+		${component.getCamelizedName()} ${component.getUncapitalizedName()} = (${component.getCamelizedName()}) component;
 
 		BufferedResponseWriter bufferedResponseWriter = (BufferedResponseWriter) facesContext.getResponseWriter();
 
