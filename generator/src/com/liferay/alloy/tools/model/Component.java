@@ -22,6 +22,18 @@ import java.util.List;
 import jodd.util.StringPool;
 public class Component extends BaseModel {
 
+	public List<Event> getAfterEvents() {
+		List<Event> afterEvents = new ArrayList<Event>();
+
+		for (Event event : getEvents()) {
+			if (event.isAfter()) {
+				afterEvents.add(event);
+			}
+		}
+
+		return afterEvents;
+	}
+
 	public String getAttributeNamespace() {
 		StringBuilder sb = new StringBuilder();
 
@@ -65,7 +77,7 @@ public class Component extends BaseModel {
 		return className;
 	}
 
-	public List<Attribute> getEvents() {
+	public List<Event> getEvents() {
 		return _events;
 	}
 
@@ -75,6 +87,18 @@ public class Component extends BaseModel {
 
 	public String getModule() {
 		return _module;
+	}
+
+	public List<Event> getOnEvents() {
+		List<Event> onEvents = new ArrayList<Event>();
+
+		for (Event event : getEvents()) {
+			if (event.isOn()) {
+				onEvents.add(event);
+			}
+		}
+
+		return onEvents;
 	}
 
 	public String getPackage() {
@@ -165,7 +189,7 @@ public class Component extends BaseModel {
 		_dynamicAttributes = dynamicAttributes;
 	}
 
-	public void setEvents(List<Attribute> events) {
+	public void setEvents(List<Event> events) {
 		_events = events;
 
 		for (Attribute event : events) {
@@ -202,7 +226,7 @@ public class Component extends BaseModel {
 	private String _className;
 	private String _componentInterface;
 	private boolean _dynamicAttributes;
-	private List<Attribute> _events;
+	private List<Event> _events;
 	private String _module;
 	private String _package;
 	private String _parentClass;

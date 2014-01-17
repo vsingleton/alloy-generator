@@ -16,6 +16,7 @@ package com.liferay.alloy.tools.builder;
 
 import com.liferay.alloy.tools.model.Attribute;
 import com.liferay.alloy.tools.model.Component;
+import com.liferay.alloy.tools.model.Event;
 import com.liferay.alloy.util.FreeMarkerUtil;
 import com.liferay.alloy.util.PropsUtil;
 import com.liferay.alloy.util.StringUtil;
@@ -303,7 +304,7 @@ public abstract class BaseBuilder {
 
 			String[] authors = getAuthorList(node);
 			List<Attribute> attributes = getAttributes(node);
-			List<Attribute> events = getPrefixedEvents(node);
+			List<Event> events = getPrefixedEvents(node);
 
 			Component component = new Component();
 
@@ -358,16 +359,15 @@ public abstract class BaseBuilder {
 		return null;
 	}
 
-	protected List<Attribute> getPrefixedEvents(Element componentNode) {
+	protected List<Event> getPrefixedEvents(Element componentNode) {
+		List<Event> prefixedEvents = new ArrayList<Event>();
+
 		List<Attribute> afterEvents = getAttributes(
 			componentNode, "events", "event");
 
-		List<Attribute> onEvents = getAttributes(
-			componentNode, "events", "event");
+		for (Attribute afterEvent : afterEvents) {
+			Event event = new Event(afterEvent, true);
 
-		List<Attribute> prefixedEvents = new ArrayList<Attribute>();
-
-		for (Attribute event : afterEvents) {
 			String name = _AFTER.concat(
 				StringUtil.capitalize(event.getSafeName()));
 
@@ -376,7 +376,12 @@ public abstract class BaseBuilder {
 			prefixedEvents.add(event);
 		}
 
-		for (Attribute event : onEvents) {
+		List<Attribute> onEvents = getAttributes(
+			componentNode, "events", "event");
+
+		for (Attribute onEvent : onEvents) {
+			Event event = new Event(onEvent, false);
+
 			String name = _ON.concat(
 				StringUtil.capitalize(event.getSafeName()));
 
