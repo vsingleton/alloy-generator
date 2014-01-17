@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import javax.faces.application.ResourceDependency;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
@@ -21,6 +22,7 @@ import com.liferay.faces.util.lang.StringPool;
 </#list>
  * @generated
  */
+@ResourceDependency(library = "aui", name = "aui.js")
 public abstract class ${component.getCamelizedName()}RendererBase extends RendererBase {
 
 	// Private Constants
