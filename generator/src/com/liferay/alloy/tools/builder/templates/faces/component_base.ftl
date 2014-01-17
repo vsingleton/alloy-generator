@@ -18,7 +18,7 @@ package ${packagePath}.${component.getUncamelizedName(BLANK)};
 public abstract class ${component.getCamelizedName()}Base extends ${component.getParentClass()} {
 
 	<#list component.getAttributesAndEvents() as attribute>
-	public static final String ${attribute.getConstantName()} = "${attribute.getSafeName()}";
+	public static final String ${attribute.getConstantName()} = "${attribute.getName()}";
 	</#list>
 
 	<#list component.getAttributesAndEvents() as attribute>

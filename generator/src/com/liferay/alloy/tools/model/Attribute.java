@@ -57,7 +57,7 @@ public class Attribute extends BaseModel {
 		String inputJavaType = TypeUtil.getInputJavaType(_inputType, true);
 
 		if (TypeUtil.isPrimitiveType(inputJavaType)) {
-			//possible check if we have enough of a string
+			//possibly check if we have enough of a string
 
 			if (inputJavaType.equals("int")) {
 				inputJavaType = "Integer";
@@ -123,10 +123,6 @@ public class Attribute extends BaseModel {
 		}
 
 		return StringPool.EMPTY;
-	}
-
-	public String getUncapitalizedName() {
-		return StringUtil.uncapitalize(getSafeName());
 	}
 
 	public boolean isEvent() {
