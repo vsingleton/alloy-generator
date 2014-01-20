@@ -31,7 +31,7 @@ public class FacesBuilder extends BaseBuilder {
 	public static void main(String[] args) throws Exception {
 		String baseOutputDir = PropsUtil.getString("builder.faces.output.dir");
 		String taglibXMLOutputDir = PropsUtil.getString("builder.faces.taglib.xml.output.dir");
-		String version = PropsUtil.getString("builder.faces.output.dir");
+		String version = PropsUtil.getString("builder.faces.version");
 
 		new FacesBuilder(baseOutputDir, taglibXMLOutputDir, version);
 	}
