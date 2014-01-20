@@ -52,7 +52,7 @@ public class Attribute extends BaseModel {
 	public String getJavaSafeName() {
 		return ReservedAttributeUtil.getJavaSafeName(this);
 	}
-	
+
 	public String getJavaScriptType() {
 		return TypeUtil.getJavaScriptType(_javaScriptType);
 	}
@@ -61,6 +61,7 @@ public class Attribute extends BaseModel {
 		String inputJavaType = TypeUtil.getInputJavaType(_inputType, true);
 
 		if (TypeUtil.isPrimitiveType(inputJavaType)) {
+
 			// Possibly check if we have enough of a string
 
 			if (inputJavaType.equals("int")) {

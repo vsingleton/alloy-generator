@@ -58,21 +58,17 @@ public class ReservedAttributeUtil {
 		}
 	);
 
-	public static boolean isJavaReserved(Attribute attribute) {
-		return JAVA_RESERVED_WORDS_SET.contains(attribute.getName());
-	}
-	
 	public static String getJavaSafeName(Attribute attribute) {
 		String name = attribute.getName();
-		
+
 		name = getSafeName(attribute);
-		
+
 		String componentUncapitalizedName = attribute.getComponent().getUncapitalizedName();
-		
+
 		if (isJavaReserved(attribute) || name.equals(componentUncapitalizedName)) {
 			name = name.concat(StringPool.UNDERSCORE);
 		}
-		
+
 		return name;
 	}
 
@@ -92,8 +88,8 @@ public class ReservedAttributeUtil {
 
 	public static String getSafeName(Attribute attribute) {
 		String name = attribute.getName();
-		
-		if(isReserved(attribute)) {
+
+		if (isReserved(attribute)) {
 			Component component = attribute.getComponent();
 
 			String componentUncapitalizedName =
@@ -103,6 +99,10 @@ public class ReservedAttributeUtil {
 		}
 
 		return name;
+	}
+
+	public static boolean isJavaReserved(Attribute attribute) {
+		return JAVA_RESERVED_WORDS_SET.contains(attribute.getName());
 	}
 
 	public static boolean isReserved(Attribute attribute) {
