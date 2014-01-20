@@ -363,7 +363,7 @@ public class TagBuilder extends BaseBuilder {
 			String uri = Convert.toString(
 				root.attributeValue("uri"), _DEFAULT_TAGLIB_URI);
 
-			context.put("alloyComponent", shortName.equals(_DEFAULT_NAMESPACE));
+			context.put("alloyComponent", shortName.equals(_DEFAULT_ATTRIBUTE_NAMESPACE));
 			context.put("components", getComponents(doc));
 			context.put("shortName", shortName);
 			context.put("uri", uri);
@@ -399,7 +399,7 @@ public class TagBuilder extends BaseBuilder {
 	private static final String _COMPONENT_DEFAULT_PARENT_CLASS =
 		"com.liferay.taglib.util.IncludeTag";
 
-	private static final String _DEFAULT_NAMESPACE = "alloy";
+	private static final String _DEFAULT_ATTRIBUTE_NAMESPACE = "alloy";
 
 	private static final String _DEFAULT_TAGLIB_SHORT_NAME = "alloy";
 

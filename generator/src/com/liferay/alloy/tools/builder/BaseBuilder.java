@@ -397,7 +397,7 @@ public abstract class BaseBuilder {
 		Map<String, Object> context = getDefaultTemplateContext();
 
 		context.put("component", component);
-		context.put("namespace", component.getAttributeNamespace());
+		context.put("attribute-namespace", component.getAttributeNamespace());
 
 		return context;
 	}
