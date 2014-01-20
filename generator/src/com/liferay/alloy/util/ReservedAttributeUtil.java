@@ -63,9 +63,13 @@ public class ReservedAttributeUtil {
 
 		name = getSafeName(attribute);
 
-		String componentUncapitalizedName = attribute.getComponent().getUncapitalizedName();
+		Component component = attribute.getComponent();
 
-		if (isJavaReserved(attribute) || name.equals(componentUncapitalizedName)) {
+		String componentUncapitalizedName = component.getUncapitalizedName();
+
+		if (isJavaReserved(attribute) ||
+			name.equals(componentUncapitalizedName)) {
+
 			name = name.concat(StringPool.UNDERSCORE);
 		}
 
