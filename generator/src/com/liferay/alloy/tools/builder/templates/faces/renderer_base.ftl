@@ -42,7 +42,10 @@ public abstract class ${component.getCamelizedName()}RendererBase extends Render
 
 		<#list component.getAttributes() as attribute>
 		<#if attribute.isGettable()>
-		render${attribute.getCapitalizedName()}(renderedAttributes, ${component.getUncapitalizedName()});
+		if (${component.getUncapitalizedName()}.get${attribute.getCapitalizedName()}() != null) {
+			render${attribute.getCapitalizedName()}(renderedAttributes, ${component.getUncapitalizedName()});
+		}
+		
 		</#if>
 		</#list>
 
@@ -58,7 +61,10 @@ public abstract class ${component.getCamelizedName()}RendererBase extends Render
 		List<String> renderedAfterEvents = new ArrayList<String>();
 
 		<#list component.getAfterEvents() as event>
-		render${event.getCapitalizedName()}(renderedAfterEvents, ${component.getUncapitalizedName()});
+		if (${component.getUncapitalizedName()}.get${event.getCapitalizedName()}() != null) {
+			render${event.getCapitalizedName()}(renderedAfterEvents, ${component.getUncapitalizedName()});
+		}
+		
 		</#list>
 
 		Iterator<String> afterEventsIterator = renderedAfterEvents.iterator();
@@ -81,7 +87,10 @@ public abstract class ${component.getCamelizedName()}RendererBase extends Render
 		List<String> renderedOnEvents = new ArrayList<String>();
 
 		<#list component.getOnEvents() as event>
-		render${event.getCapitalizedName()}(renderedOnEvents, ${component.getUncapitalizedName()});
+		if (${component.getUncapitalizedName()}.get${event.getCapitalizedName()}() != null) {
+			render${event.getCapitalizedName()}(renderedOnEvents, ${component.getUncapitalizedName()});
+		}
+		
 		</#list>
 
 		Iterator<String> onEventsIterator = renderedOnEvents.iterator();
@@ -108,20 +117,14 @@ public abstract class ${component.getCamelizedName()}RendererBase extends Render
 	<#list component.getAttributes() as attribute>
 	protected void render${attribute.getCapitalizedName()}(List<String> renderedAttributes, ${component.getCamelizedName()} ${component.getUncapitalizedName()}) throws IOException {
 		${attribute.getJSFInputType()} ${attribute.getJavaSafeName()} = ${component.getUncapitalizedName()}.get${attribute.getCapitalizedName()}();
-
-		if (${attribute.getJavaSafeName()} != null) {
-			renderedAttributes.add(render${attribute.getJavaScriptType()}(${component.getCamelizedName()}.${attribute.getConstantName()}, ${attribute.getJavaSafeName()}));
-		}
+		renderedAttributes.add(render${attribute.getJavaScriptType()}(${component.getCamelizedName()}.${attribute.getConstantName()}, ${attribute.getJavaSafeName()}));
 	}
 
 	</#list>
 	<#list component.getEvents() as event>
 	protected void render${event.getCapitalizedName()}(List<String> renderedAttributes, ${component.getCamelizedName()} ${component.getUncapitalizedName()}) throws IOException {
 		${event.getJSFInputType()} ${event.getSafeName()} = ${component.getUncapitalizedName()}.get${event.getCapitalizedName()}();
-
-		if (${event.getSafeName()} != null) {
-			renderedAttributes.add(render${event.getJavaScriptType()}(${component.getCamelizedName()}.${event.getConstantName()}, ${event.getSafeName()}));
-		}
+		renderedAttributes.add(render${event.getJavaScriptType()}(${component.getCamelizedName()}.${event.getConstantName()}, ${event.getSafeName()}));
 	}
 
 	</#list>
