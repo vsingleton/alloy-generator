@@ -18,12 +18,10 @@ import com.liferay.alloy.tools.model.Component;
 import com.liferay.alloy.util.PropsUtil;
 
 import java.io.File;
-
 import java.util.List;
 import java.util.Map;
 
 import jodd.typeconverter.Convert;
-
 import jodd.util.StringPool;
 
 import org.dom4j.Document;
@@ -32,13 +30,15 @@ public class FacesBuilder extends BaseBuilder {
 
 	public static void main(String[] args) throws Exception {
 		String baseOutputDir = PropsUtil.getString("builder.faces.output.dir");
+		String taglibXMLOutputDir = PropsUtil.getString("builder.faces.taglib.xml.output.dir");
 		String version = PropsUtil.getString("builder.faces.output.dir");
 
-		new FacesBuilder(baseOutputDir, version);
+		new FacesBuilder(baseOutputDir, taglibXMLOutputDir, version);
 	}
 
-	public FacesBuilder(String baseOutputDir, String version) throws Exception {
+	public FacesBuilder(String baseOutputDir, String taglibXMLOutputDir, String version) throws Exception {
 		_baseOutputDir = baseOutputDir;
+		_taglibXMLOutputDir = taglibXMLOutputDir;
 
 		_tplComponent = getTemplatesDir() + "component.ftl";
 		_tplComponentBase = getTemplatesDir() + "component_base.ftl";
@@ -109,11 +109,10 @@ public class FacesBuilder extends BaseBuilder {
 	}
 
 	protected String getTaglibsXMLOutputDir() {
-		StringBuilder sb = new StringBuilder(3);
+		StringBuilder sb = new StringBuilder(2);
 
-		sb.append(_baseOutputDir);
+		sb.append(_taglibXMLOutputDir);
 		sb.append(StringPool.SLASH);
-		sb.append(_TAGLIB_XML_DIR);
 
 		return sb.toString();
 	}
@@ -200,8 +199,8 @@ public class FacesBuilder extends BaseBuilder {
 		for (Document doc : getComponentDefinitionDocs()) {
 			Element root = doc.getRootElement();
 
-			String shortName = Convert.toString(
-				root.attributeValue("short-name"));
+			String namespace = Convert.toString(
+				root.attributeValue("namespace"));
 
 			context.put("components", getComponents(doc));
 
@@ -210,7 +209,7 @@ public class FacesBuilder extends BaseBuilder {
 			String path = getTaglibsXMLOutputDir();
 
 			File rendererFile = new File(
-				path.concat(shortName).concat(_XML_EXT));
+				path.concat(namespace).concat(_TAGLIB_XML_EXT));
 
 			writeFile(rendererFile, rendererContent, true);
 		}
@@ -228,14 +227,13 @@ public class FacesBuilder extends BaseBuilder {
 
 	private static final String _RENDERER_CLASS_SUFFIX = "Renderer";
 
-	private static final String _TAGLIB_XML_DIR = "com/liferay/faces/alloy/";
-
 	private static final String _TEMPLATES_DIR =
 		"com/liferay/alloy/tools/builder/templates/faces/";
 
-	private static final String _XML_EXT = ".xml";
+	private static final String _TAGLIB_XML_EXT = ".taglib.xml";
 
 	private String _baseOutputDir;
+	private String _taglibXMLOutputDir;
 	private String _tplComponent;
 	private String _tplComponentBase;
 	private String _tplRenderer;

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<components extends="./target/alloy-generator/data.xml" namespace="aui"> 
+  <component name="Popover">
+    <attributes>
+      <attribute>
+        <defaultValue></defaultValue>
+        <description></description>
+        <inputType>java.lang.String</inputType>
+        <javaScriptType>String</javaScriptType>
+        <name>for</name>
+        <outputType>java.lang.String</outputType>
+      </attribute>
+    </attributes>
+  </component>
+</components>

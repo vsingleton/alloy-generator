@@ -401,11 +401,35 @@ public abstract class BaseBuilder {
 
 		return context;
 	}
+	
+	protected Element mergeAttributes(Element element1, Element element2) {
+		Element element2copy = element2.createCopy();
+
+		if (element1 != null) {
+			Iterator<Object> attributesIterator =
+					element1.attributeIterator();
+
+			while (attributesIterator.hasNext()) {
+				org.dom4j.Attribute attribute =
+					(org.dom4j.Attribute)attributesIterator.next();
+				
+				if(attribute.getName().equals("extends")) {
+					continue;
+				}
+				
+				element2copy.addAttribute(
+					attribute.getName(), attribute.getValue());
+			}
+			
+		}
+		
+		return element2copy;
+	}
 
 	protected Document mergeXMLAttributes(Document doc1, Document doc2) {
 		Element doc2Root = doc2.getRootElement();
 
-		Element docRoot = doc2Root.createCopy();
+		Element docRoot = mergeAttributes(doc1.getRootElement(), doc2Root);
 		docRoot.clearContent();
 
 		DocumentFactory factory = SAXReaderUtil.getDocumentFactory();
@@ -416,23 +440,13 @@ public abstract class BaseBuilder {
 		List<Element> doc2Components = doc2Root.elements(_COMPONENT);
 
 		for (Element doc2Component : doc2Components) {
-			Element component = doc2Component.createCopy();
-
 			String name = doc2Component.attributeValue("name");
 
 			Element doc1Component = getComponentNode(doc1, name);
+			
+			Element component = mergeAttributes(doc1Component, doc2Component);
 
 			if (doc1Component != null) {
-				Iterator<Object> attributesIterator =
-					doc1Component.attributeIterator();
-
-				while (attributesIterator.hasNext()) {
-					org.dom4j.Attribute attribute =
-						(org.dom4j.Attribute)attributesIterator.next();
-
-					component.addAttribute(
-						attribute.getName(), attribute.getValue());
-				}
 
 				Element doc1AttributesNode = doc1Component.element(_ATTRIBUTES);
 
