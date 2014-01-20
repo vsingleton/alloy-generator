@@ -54,10 +54,6 @@ import org.xml.sax.InputSource;
  */
 public abstract class BaseBuilder {
 
-	public static final String[] DEFAULT_AUTHORS = new String[] {
-		"Eduardo Lundgren", "Bruno Basto", "Nathan Cavanaugh"
-	};
-
 	public abstract void build() throws Exception;
 
 	public List<Document> getComponentDefinitionDocs() {
@@ -237,7 +233,9 @@ public abstract class BaseBuilder {
 		}
 
 		if (authors.isEmpty()) {
-			return DEFAULT_AUTHORS;
+			String[] propertiesAuthors = PropsUtil.getStringArray("builder.authors");
+			
+			return propertiesAuthors;
 		}
 		else {
 			return authors.toArray(new String[authors.size()]);
