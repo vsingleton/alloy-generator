@@ -15,15 +15,16 @@
 package com.liferay.alloy.util;
 
 import com.liferay.alloy.tools.model.Attribute;
+import com.liferay.alloy.tools.model.Component;
 
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.apache.commons.lang.StringUtils;
-
 import jodd.util.StringPool;
+
+import org.apache.commons.lang.StringUtils;
 
 /**
  * @author Eduardo Lundgren
@@ -31,18 +32,18 @@ import jodd.util.StringPool;
  */
 public class ReservedAttributeUtil {
 
-	public static final Set<String> JAVA_RESERVED_WORDS_SET = 
+	public static final Set<String> JAVA_RESERVED_WORDS_SET =
 		new HashSet<String>(Arrays.asList(
 			new String[] {
 				"abstract", "assert", "boolean", "break", "byte", "case",
-				"catch", "char", "class", "const", "continue", "default",
-				"do", "double", "else", "enum", "extends", "final",
-				"finally", "float", "for", "goto", "if", "implements",
-				"import", "instanceof", "int", "interface", "long",
-				"native", "new", "package", "private", "protected",
-				"public", "return", "short", "static", "strictfp", "super",
-				"switch", "synchronized", "this", "throw", "throws",
-				"transient", "try", "void", "volatile", "while" 
+				"catch", "char", "class", "const", "continue", "default", "do",
+				"double", "else", "enum", "extends", "final", "finally",
+				"float", "for", "goto", "if", "implements", "import",
+				"instanceof", "int", "interface", "long", "native", "new",
+				"package", "private", "protected", "public", "return", "short",
+				"static", "strictfp", "super", "switch", "synchronized", "this",
+				"throw", "throws", "transient", "try", "void", "volatile",
+				"while"
 			}
 		));
 
@@ -56,10 +57,6 @@ public class ReservedAttributeUtil {
 			"attributes", "children", "clientId"
 		}
 	);
-
-	public static boolean isJavaReserved(Attribute attribute) {
-		return JAVA_RESERVED_WORDS_SET.contains(attribute.getName());
-	}
 
 	public static String getOriginalName(
 		String componentName, String attributeName) {
@@ -77,17 +74,24 @@ public class ReservedAttributeUtil {
 
 	public static String getSafeName(Attribute attribute) {
 		String name = attribute.getName();
-		
+
 		if (isJavaReserved(attribute)) {
 			name = name.concat(StringPool.UNDERSCORE);
 		}
-		else if(isReserved(attribute)) {
-			String componentUncapitalizedName = attribute.getComponent().getUncapitalizedName();
+		else if (isReserved(attribute)) {
+			Component component = attribute.getComponent();
+
+			String componentUncapitalizedName =
+				component.getUncapitalizedName();
 			String capitalizedAttributeName = StringUtils.capitalize(name);
 			name = componentUncapitalizedName.concat(capitalizedAttributeName);
 		}
 
 		return name;
+	}
+
+	public static boolean isJavaReserved(Attribute attribute) {
+		return JAVA_RESERVED_WORDS_SET.contains(attribute.getName());
 	}
 
 	public static boolean isReserved(Attribute attribute) {
