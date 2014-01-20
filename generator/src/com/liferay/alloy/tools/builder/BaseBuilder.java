@@ -234,7 +234,7 @@ public abstract class BaseBuilder {
 
 		if (authors.isEmpty()) {
 			String[] propertiesAuthors = PropsUtil.getStringArray("builder.authors");
-			
+
 			return propertiesAuthors;
 		}
 		else {
