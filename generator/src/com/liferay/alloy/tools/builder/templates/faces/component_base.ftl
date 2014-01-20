@@ -29,8 +29,8 @@ public abstract class ${component.getCamelizedName()}Base extends ${component.ge
 	</#if>
 
 	<#if attribute.isSettable()>
-	public void set${attribute.getCapitalizedName()}(${attribute.getJSFInputType()} ${attribute.getSafeName()}) {
-		getStateHelper().put(${attribute.getConstantName()}, ${attribute.getSafeName()});
+	public void set${attribute.getCapitalizedName()}(${attribute.getJSFInputType()} ${attribute.getJavaSafeName()}) {
+		getStateHelper().put(${attribute.getConstantName()}, ${attribute.getJavaSafeName()});
 	}
 
 	</#if>

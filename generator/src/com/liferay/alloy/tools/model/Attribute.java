@@ -49,6 +49,10 @@ public class Attribute extends BaseModel {
 		return getTypeSimpleClassName(getRawInputType());
 	}
 
+	public String getJavaSafeName() {
+		return ReservedAttributeUtil.getJavaSafeName(this);
+	}
+	
 	public String getJavaScriptType() {
 		return TypeUtil.getJavaScriptType(_javaScriptType);
 	}
