@@ -401,28 +401,26 @@ public abstract class BaseBuilder {
 
 		return context;
 	}
-	
+
 	protected Element mergeAttributes(Element element1, Element element2) {
 		Element element2copy = element2.createCopy();
 
 		if (element1 != null) {
-			Iterator<Object> attributesIterator =
-					element1.attributeIterator();
+			Iterator<Object> attributesIterator = element1.attributeIterator();
 
 			while (attributesIterator.hasNext()) {
 				org.dom4j.Attribute attribute =
 					(org.dom4j.Attribute)attributesIterator.next();
-				
-				if(attribute.getName().equals("extends")) {
+
+				if (attribute.getName().equals("extends")) {
 					continue;
 				}
-				
+
 				element2copy.addAttribute(
 					attribute.getName(), attribute.getValue());
 			}
-			
 		}
-		
+
 		return element2copy;
 	}
 
@@ -443,11 +441,10 @@ public abstract class BaseBuilder {
 			String name = doc2Component.attributeValue("name");
 
 			Element doc1Component = getComponentNode(doc1, name);
-			
+
 			Element component = mergeAttributes(doc1Component, doc2Component);
 
 			if (doc1Component != null) {
-
 				Element doc1AttributesNode = doc1Component.element(_ATTRIBUTES);
 
 				Element attributesNode = component.element(_ATTRIBUTES);

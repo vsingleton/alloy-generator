@@ -363,7 +363,10 @@ public class TagBuilder extends BaseBuilder {
 			String uri = Convert.toString(
 				root.attributeValue("uri"), _DEFAULT_TAGLIB_URI);
 
-			context.put("alloyComponent", shortName.equals(_DEFAULT_ATTRIBUTE_NAMESPACE));
+			boolean isAlloyComponent = shortName.equals(
+				_DEFAULT_ATTRIBUTE_NAMESPACE);
+
+			context.put("alloyComponent", isAlloyComponent);
 			context.put("components", getComponents(doc));
 			context.put("shortName", shortName);
 			context.put("uri", uri);

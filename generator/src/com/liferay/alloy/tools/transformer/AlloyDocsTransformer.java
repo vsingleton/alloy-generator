@@ -119,7 +119,8 @@ public class AlloyDocsTransformer {
 			String submodule = Convert.toString(
 				JSONUtil.getString(componentJSON, "submodule"), module);
 
-			String attributeNamespace = Convert.toString(_DEFAULT_ATTRIBUTE_NAMESPACE);
+			String attributeNamespace = Convert.toString(
+				_DEFAULT_ATTRIBUTE_NAMESPACE);
 
 			List<Attribute> attributes = getComponentAttributes(className);
 
@@ -439,9 +440,9 @@ public class AlloyDocsTransformer {
 
 	private static final String _DATA_TYPE_PREFIX = "DataType.";
 
-	private static final String _DEFAULT_JAVASCRIPT_TYPE = "String";
-
 	private static final String _DEFAULT_ATTRIBUTE_NAMESPACE = "alloy";
+
+	private static final String _DEFAULT_JAVASCRIPT_TYPE = "String";
 
 	private static final String _DEFAULT_TAGLIB_SHORT_NAME = "alloy";
 

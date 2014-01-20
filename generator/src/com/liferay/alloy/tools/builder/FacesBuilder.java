@@ -18,10 +18,12 @@ import com.liferay.alloy.tools.model.Component;
 import com.liferay.alloy.util.PropsUtil;
 
 import java.io.File;
+
 import java.util.List;
 import java.util.Map;
 
 import jodd.typeconverter.Convert;
+
 import jodd.util.StringPool;
 
 import org.dom4j.Document;
@@ -30,13 +32,16 @@ public class FacesBuilder extends BaseBuilder {
 
 	public static void main(String[] args) throws Exception {
 		String baseOutputDir = PropsUtil.getString("builder.faces.output.dir");
-		String taglibXMLOutputDir = PropsUtil.getString("builder.faces.taglib.xml.output.dir");
+		String taglibXMLOutputDir = PropsUtil.getString(
+			"builder.faces.taglib.xml.output.dir");
 		String version = PropsUtil.getString("builder.faces.version");
 
 		new FacesBuilder(baseOutputDir, taglibXMLOutputDir, version);
 	}
 
-	public FacesBuilder(String baseOutputDir, String taglibXMLOutputDir, String version) throws Exception {
+	public FacesBuilder(
+			String baseOutputDir, String taglibXMLOutputDir, String version)
+		throws Exception {
 		_baseOutputDir = baseOutputDir;
 		_taglibXMLOutputDir = taglibXMLOutputDir;
 
@@ -227,10 +232,10 @@ public class FacesBuilder extends BaseBuilder {
 
 	private static final String _RENDERER_CLASS_SUFFIX = "Renderer";
 
+	private static final String _TAGLIB_XML_EXT = ".taglib.xml";
+
 	private static final String _TEMPLATES_DIR =
 		"com/liferay/alloy/tools/builder/templates/faces/";
-
-	private static final String _TAGLIB_XML_EXT = ".taglib.xml";
 
 	private String _baseOutputDir;
 	private String _taglibXMLOutputDir;
