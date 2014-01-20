@@ -58,6 +58,24 @@ public class ReservedAttributeUtil {
 		}
 	);
 
+	public static String getJavaSafeName(Attribute attribute) {
+		String name = attribute.getName();
+
+		name = getSafeName(attribute);
+
+		Component component = attribute.getComponent();
+
+		String componentUncapitalizedName = component.getUncapitalizedName();
+
+		if (isJavaReserved(attribute) ||
+			name.equals(componentUncapitalizedName)) {
+
+			name = name.concat(StringPool.UNDERSCORE);
+		}
+
+		return name;
+	}
+
 	public static String getOriginalName(
 		String componentName, String attributeName) {
 
@@ -75,10 +93,7 @@ public class ReservedAttributeUtil {
 	public static String getSafeName(Attribute attribute) {
 		String name = attribute.getName();
 
-		if (isJavaReserved(attribute)) {
-			name = name.concat(StringPool.UNDERSCORE);
-		}
-		else if (isReserved(attribute)) {
+		if (isReserved(attribute)) {
 			Component component = attribute.getComponent();
 
 			String componentUncapitalizedName =

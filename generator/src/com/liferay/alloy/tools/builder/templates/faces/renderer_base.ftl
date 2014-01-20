@@ -107,10 +107,10 @@ public abstract class ${component.getCamelizedName()}RendererBase extends Render
 
 	<#list component.getAttributes() as attribute>
 	protected void render${attribute.getCapitalizedName()}(List<String> renderedAttributes, ${component.getCamelizedName()} ${component.getUncapitalizedName()}) throws IOException {
-		${attribute.getJSFInputType()} ${attribute.getSafeName()} = ${component.getUncapitalizedName()}.get${attribute.getCapitalizedName()}();
+		${attribute.getJSFInputType()} ${attribute.getJavaSafeName()} = ${component.getUncapitalizedName()}.get${attribute.getCapitalizedName()}();
 
-		if (${attribute.getSafeName()} != null) {
-			renderedAttributes.add(render${attribute.getJavaScriptType()}(${component.getCamelizedName()}.${attribute.getConstantName()}, ${attribute.getSafeName()}));
+		if (${attribute.getJavaSafeName()} != null) {
+			renderedAttributes.add(render${attribute.getJavaScriptType()}(${component.getCamelizedName()}.${attribute.getConstantName()}, ${attribute.getJavaSafeName()}));
 		}
 	}
 
