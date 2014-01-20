@@ -45,7 +45,7 @@ public abstract class ${component.getCamelizedName()}RendererBase extends Render
 		if (${component.getUncapitalizedName()}.get${attribute.getCapitalizedName()}() != null) {
 			render${attribute.getCapitalizedName()}(renderedAttributes, ${component.getUncapitalizedName()});
 		}
-		
+
 		</#if>
 		</#list>
 
@@ -64,7 +64,7 @@ public abstract class ${component.getCamelizedName()}RendererBase extends Render
 		if (${component.getUncapitalizedName()}.get${event.getCapitalizedName()}() != null) {
 			render${event.getCapitalizedName()}(renderedAfterEvents, ${component.getUncapitalizedName()});
 		}
-		
+
 		</#list>
 
 		Iterator<String> afterEventsIterator = renderedAfterEvents.iterator();
@@ -90,7 +90,7 @@ public abstract class ${component.getCamelizedName()}RendererBase extends Render
 		if (${component.getUncapitalizedName()}.get${event.getCapitalizedName()}() != null) {
 			render${event.getCapitalizedName()}(renderedOnEvents, ${component.getUncapitalizedName()});
 		}
-		
+
 		</#list>
 
 		Iterator<String> onEventsIterator = renderedOnEvents.iterator();
