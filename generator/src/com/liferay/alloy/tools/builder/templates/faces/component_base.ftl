@@ -50,7 +50,7 @@ public abstract class ${component.getCamelizedName()}Base extends ${component.ge
 	}
 
 	public String getCssClass() {
-		return (String) getSateHelper().eval(CSS_CLASS, null);
+		return (String) getStateHelper().eval(CSS_CLASS, null);
 	}
 
 	public void setCssClass(String cssClass) {
@@ -58,7 +58,7 @@ public abstract class ${component.getCamelizedName()}Base extends ${component.ge
 	}
 
 	public String getStyleClass() {
-		return (String) getSateHelper().eval(STYLE_CLASS, null);
+		return (String) getStateHelper().eval(STYLE_CLASS, null);
 	}
 
 	public void setStyleClass(String styleClass) {
