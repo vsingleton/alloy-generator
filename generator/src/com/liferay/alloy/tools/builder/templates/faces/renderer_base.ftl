@@ -4,9 +4,6 @@
 package ${packagePath}.${component.getUncamelizedName(BLANK)};
 
 import java.io.IOException;
-import java.util.List;
-import java.util.ArrayList;
-import java.util.Iterator;
 
 import javax.faces.application.ResourceDependency;
 import javax.faces.component.UIComponent;
@@ -46,72 +43,64 @@ public abstract class ${component.getCamelizedName()}RendererBase extends Render
 		responseWriter.write("= new A.${component.getCamelizedName()}");
 		responseWriter.write(StringPool.OPEN_PARENTHESIS);
 		responseWriter.write(StringPool.OPEN_CURLY_BRACE);
+		responseWriter.write(StringPool.NEW_LINE);
 
-		List<String> renderedAttributes = new ArrayList<String>();
+		boolean isFirst = true;
 
 		<#list component.getAttributes() as attribute>
 		<#if attribute.isGettable()>
-		if (${component.getUncapitalizedName()}.get${attribute.getCapitalizedName()}() != null) {
-			render${attribute.getCapitalizedName()}(renderedAttributes, ${component.getUncapitalizedName()});
+		${attribute.getJSFInputType()} ${attribute.getJavaSafeName()} = ${component.getUncapitalizedName()}.get${attribute.getCapitalizedName()}();
+		
+		if (${attribute.getJavaSafeName()} != null) {
+
+			render${attribute.getCapitalizedName()}(responseWriter, ${component.getUncapitalizedName()}, ${attribute.getJavaSafeName()}, isFirst);
+			isFirst = false;
 		}
 
 		</#if>
 		</#list>
-
-		for (String renderedAttribute : renderedAttributes) {
-			responseWriter.write(renderedAttribute);
-			responseWriter.write(StringPool.COMMA);
-		}
+		responseWriter.write(StringPool.COMMA);
+		responseWriter.write(StringPool.NEW_LINE);
 
 		responseWriter.write("after");
 		responseWriter.write(StringPool.COLON);
 		responseWriter.write(StringPool.OPEN_CURLY_BRACE);
+		responseWriter.write(StringPool.NEW_LINE);
 
-		List<String> renderedAfterEvents = new ArrayList<String>();
+		isFirst = true;
 
 		<#list component.getAfterEvents() as event>
-		if (${component.getUncapitalizedName()}.get${event.getCapitalizedName()}() != null) {
-			render${event.getCapitalizedName()}(renderedAfterEvents, ${component.getUncapitalizedName()});
+		${event.getJSFInputType()} ${event.getJavaSafeName()} = ${component.getUncapitalizedName()}.get${event.getCapitalizedName()}();
+
+		if (${event.getJavaSafeName()} != null) {
+
+			render${event.getCapitalizedName()}(responseWriter, ${component.getUncapitalizedName()}, ${event.getJavaSafeName()}, isFirst);
+			isFirst = false;
 		}
 
 		</#list>
-
-		Iterator<String> afterEventsIterator = renderedAfterEvents.iterator();
-
-		while (afterEventsIterator.hasNext()) {
-			responseWriter.write(afterEventsIterator.next());
-
-			if (afterEventsIterator.hasNext()) {
-				responseWriter.write(StringPool.COMMA);
-			}
-		}
-
+		responseWriter.write(StringPool.NEW_LINE);
 		responseWriter.write(StringPool.CLOSE_CURLY_BRACE);
 		responseWriter.write(StringPool.COMMA);
+		responseWriter.write(StringPool.NEW_LINE);
 
 		responseWriter.write("on");
 		responseWriter.write(StringPool.COLON);
 		responseWriter.write(StringPool.OPEN_CURLY_BRACE);
+		responseWriter.write(StringPool.NEW_LINE);
 
-		List<String> renderedOnEvents = new ArrayList<String>();
+		isFirst = true;
 
 		<#list component.getOnEvents() as event>
-		if (${component.getUncapitalizedName()}.get${event.getCapitalizedName()}() != null) {
-			render${event.getCapitalizedName()}(renderedOnEvents, ${component.getUncapitalizedName()});
+		${event.getJSFInputType()} ${event.getJavaSafeName()} = ${component.getUncapitalizedName()}.get${event.getCapitalizedName()}();
+
+		if (${event.getJavaSafeName()} != null) {
+
+			render${event.getCapitalizedName()}(responseWriter, ${component.getUncapitalizedName()}, ${event.getJavaSafeName()}, isFirst);
+			isFirst = false;
 		}
 
 		</#list>
-
-		Iterator<String> onEventsIterator = renderedOnEvents.iterator();
-
-		while (onEventsIterator.hasNext()) {
-			responseWriter.write(onEventsIterator.next());
-
-			if (onEventsIterator.hasNext()) {
-				responseWriter.write(StringPool.COMMA);
-			}
-		}
-
 		responseWriter.write("}}).render();} return ");
 		responseWriter.write(${component.getUncapitalizedName()}.getWidgetVar());
 		responseWriter.write(";}); LF.component('");
@@ -124,16 +113,14 @@ public abstract class ${component.getCamelizedName()}RendererBase extends Render
 	}
 
 	<#list component.getAttributes() as attribute>
-	protected void render${attribute.getCapitalizedName()}(List<String> renderedAttributes, ${component.getCamelizedName()} ${component.getUncapitalizedName()}) throws IOException {
-		${attribute.getJSFInputType()} ${attribute.getJavaSafeName()} = ${component.getUncapitalizedName()}.get${attribute.getCapitalizedName()}();
-		renderedAttributes.add(render${attribute.getJavaScriptType()}(${component.getCamelizedName()}.${attribute.getConstantName()}, ${attribute.getJavaSafeName()}));
+	protected void render${attribute.getCapitalizedName()}(ResponseWriter responseWriter, ${component.getCamelizedName()} ${component.getUncapitalizedName()}, ${attribute.getJSFInputType()} ${attribute.getJavaSafeName()}, boolean isFirst) throws IOException {
+		render${attribute.getJavaScriptType()}(responseWriter, ${component.getCamelizedName()}.${attribute.getConstantName()}, ${attribute.getJavaSafeName()}, isFirst);
 	}
 
 	</#list>
 	<#list component.getEvents() as event>
-	protected void render${event.getCapitalizedName()}(List<String> renderedAttributes, ${component.getCamelizedName()} ${component.getUncapitalizedName()}) throws IOException {
-		${event.getJSFInputType()} ${event.getSafeName()} = ${component.getUncapitalizedName()}.get${event.getCapitalizedName()}();
-		renderedAttributes.add(render${event.getJavaScriptType()}(${component.getCamelizedName()}.${event.getConstantName()}, ${event.getSafeName()}));
+	protected void render${event.getCapitalizedName()}(ResponseWriter responseWriter, ${component.getCamelizedName()} ${component.getUncapitalizedName()}, ${event.getJSFInputType()} ${event.getJavaSafeName()}, boolean isFirst) throws IOException {
+		render${event.getJavaScriptType()}(responseWriter, ${component.getCamelizedName()}.${event.getConstantName()}, ${event.getJavaSafeName()}, isFirst);
 	}
 
 	</#list>
