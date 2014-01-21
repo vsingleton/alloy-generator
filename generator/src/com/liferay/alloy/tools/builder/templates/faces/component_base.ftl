@@ -9,17 +9,21 @@
 
 package ${packagePath}.${component.getUncamelizedName(BLANK)};
 
+import com.liferay.faces.util.component.Widget;
+
 /**
 <#list component.getAuthors() as author>
  * @author ${author}
 </#list>
  * @generated
  */
-public abstract class ${component.getCamelizedName()}Base extends ${component.getParentClass()} {
+public abstract class ${component.getCamelizedName()}Base extends ${component.getParentClass()} implements Widget {
 
 	<#list component.getAttributesAndEvents() as attribute>
 	public static final String ${attribute.getConstantName()} = "${attribute.getName()}";
 	</#list>
+
+	public static final String WIDGET_VAR = "widgetVar";
 
 	<#list component.getAttributesAndEvents() as attribute>
 	<#if attribute.isGettable()>
@@ -35,4 +39,11 @@ public abstract class ${component.getCamelizedName()}Base extends ${component.ge
 
 	</#if>
 	</#list>
+	public String getWidgetVar() {
+		return (String) getStateHelper().eval(WIDGET_VAR, null);
+	}
+
+	public void setWidgetVar(String widgetVar) {
+		getStateHelper().put(WIDGET_VAR, widgetVar);
+	}
 }
