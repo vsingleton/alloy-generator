@@ -22,7 +22,7 @@ import com.liferay.faces.util.lang.StringPool;
 </#list>
  * @generated
  */
-@ResourceDependency(library = "aui", name = "aui.js")
+@ResourceDependency(library = "aui", name = "liferay-faces.js")
 public abstract class ${component.getCamelizedName()}RendererBase extends RendererBase {
 
 	// Private Constants
@@ -34,7 +34,16 @@ public abstract class ${component.getCamelizedName()}RendererBase extends Render
 
 		ResponseWriter responseWriter = facesContext.getResponseWriter();
 
-		responseWriter.write("var ${component.getUncapitalizedName()} = new A.${component.getCamelizedName()}");
+		responseWriter.write("var ");
+		responseWriter.write(${component.getUncapitalizedName()}.getWidgetVar());
+		responseWriter.write(StringPool.SEMICOLON);
+		responseWriter.write("LF.component('");
+		responseWriter.write(${component.getUncapitalizedName()}.getWidgetVar());
+		responseWriter.write("', function() { if (!");
+		responseWriter.write(${component.getUncapitalizedName()}.getWidgetVar());
+		responseWriter.write(") {");
+		responseWriter.write(${component.getUncapitalizedName()}.getWidgetVar());
+		responseWriter.write("= new A.${component.getCamelizedName()}");
 		responseWriter.write(StringPool.OPEN_PARENTHESIS);
 		responseWriter.write(StringPool.OPEN_CURLY_BRACE);
 
@@ -103,11 +112,11 @@ public abstract class ${component.getCamelizedName()}RendererBase extends Render
 			}
 		}
 
-		responseWriter.write(StringPool.CLOSE_CURLY_BRACE);
-		responseWriter.write(StringPool.CLOSE_CURLY_BRACE);
-		responseWriter.write(StringPool.CLOSE_PARENTHESIS);
-		responseWriter.write(".render()");
-		responseWriter.write(StringPool.SEMICOLON);
+		responseWriter.write("}}).render();} return ");
+		responseWriter.write(${component.getUncapitalizedName()}.getWidgetVar());
+		responseWriter.write(";}); LF.component('");
+		responseWriter.write(${component.getUncapitalizedName()}.getWidgetVar());
+		responseWriter.write("');");
 	}
 
 	protected String getModule() {
