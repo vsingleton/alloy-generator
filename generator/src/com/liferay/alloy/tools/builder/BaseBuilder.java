@@ -274,10 +274,10 @@ public abstract class BaseBuilder {
 			String name = node.attributeValue("name");
 
 			boolean alloyComponent = Convert.toBoolean(
-				node.attributeValue("alloyComponent"));
+				node.attributeValue("alloyComponent"), true);
 
 			boolean bodyContent = Convert.toBoolean(
-				node.attributeValue("bodyContent"));
+				node.attributeValue("bodyContent"), false);
 
 			String className = Convert.toString(
 				node.attributeValue("className"));
@@ -292,7 +292,7 @@ public abstract class BaseBuilder {
 			boolean dynamicAttributes = Convert.toBoolean(
 				node.attributeValue("dynamicAttributes"), true);
 
-			String module = Convert.toString(node.attributeValue("module"));
+			String module = Convert.toString(node.attributeValue("module"), null);
 
 			String parentClass = Convert.toString(
 				node.attributeValue("parentClass"),
@@ -401,11 +401,15 @@ public abstract class BaseBuilder {
 		return context;
 	}
 
-	protected Element mergeAttributes(Element element1, Element element2) {
-		Element element2copy = element2.createCopy();
+	protected Document mergeXMLAttributes(Document doc1, Document doc2) {
+		Element doc2Root = doc2.getRootElement();
+		Element doc1Root = doc1.getRootElement();
+		Element docRoot = doc2Root.createCopy();
+		
+		if (doc1Root != null) {
 
-		if (element1 != null) {
-			Iterator<Object> attributesIterator = element1.attributeIterator();
+			Iterator<Object> attributesIterator =
+					doc1Root.attributeIterator();
 
 			while (attributesIterator.hasNext()) {
 				org.dom4j.Attribute attribute =
@@ -415,18 +419,11 @@ public abstract class BaseBuilder {
 					continue;
 				}
 
-				element2copy.addAttribute(
+				docRoot.addAttribute(
 					attribute.getName(), attribute.getValue());
 			}
 		}
 
-		return element2copy;
-	}
-
-	protected Document mergeXMLAttributes(Document doc1, Document doc2) {
-		Element doc2Root = doc2.getRootElement();
-
-		Element docRoot = mergeAttributes(doc1.getRootElement(), doc2Root);
 		docRoot.clearContent();
 
 		DocumentFactory factory = SAXReaderUtil.getDocumentFactory();
@@ -437,13 +434,24 @@ public abstract class BaseBuilder {
 		List<Element> doc2Components = doc2Root.elements(_COMPONENT);
 
 		for (Element doc2Component : doc2Components) {
+			Element component = doc2Component.createCopy();
+
 			String name = doc2Component.attributeValue("name");
 
 			Element doc1Component = getComponentNode(doc1, name);
 
-			Element component = mergeAttributes(doc1Component, doc2Component);
-
 			if (doc1Component != null) {
+				Iterator<Object> attributesIterator =
+					doc1Component.attributeIterator();
+
+				while (attributesIterator.hasNext()) {
+					org.dom4j.Attribute attribute =
+						(org.dom4j.Attribute)attributesIterator.next();
+
+					component.addAttribute(
+						attribute.getName(), attribute.getValue());
+				}
+
 				Element doc1AttributesNode = doc1Component.element(_ATTRIBUTES);
 
 				Element attributesNode = component.element(_ATTRIBUTES);
@@ -490,6 +498,22 @@ public abstract class BaseBuilder {
 			}
 
 			doc.getRootElement().add(component);
+		}
+		
+		if (doc1Root != null) {
+			List<Element> doc1Components = doc1Root.elements(_COMPONENT);
+
+			for (Element doc1Component : doc1Components) {
+				Element component = doc1Component.createCopy();
+
+				String name = doc1Component.attributeValue("name");
+
+				Element doc2Component = getComponentNode(doc2, name);
+				
+				if (doc2Component == null) {
+					doc.getRootElement().add(component);
+				}
+			}
 		}
 
 		return doc;
