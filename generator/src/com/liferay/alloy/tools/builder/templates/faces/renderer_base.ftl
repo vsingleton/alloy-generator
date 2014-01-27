@@ -50,7 +50,7 @@ public abstract class ${component.getCamelizedName()}RendererBase extends Render
 		<#list component.getAttributes() as attribute>
 		<#if attribute.isGettable()>
 		${attribute.getJSFInputType()} ${attribute.getJavaSafeName()} = ${component.getUncapitalizedName()}.get${attribute.getCapitalizedName()}();
-		
+
 		if (${attribute.getJavaSafeName()} != null) {
 
 			render${attribute.getCapitalizedName()}(responseWriter, ${component.getUncapitalizedName()}, ${attribute.getJavaSafeName()}, isFirst);
