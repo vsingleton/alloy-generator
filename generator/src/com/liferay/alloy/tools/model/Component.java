@@ -88,11 +88,12 @@ public class Component extends BaseModel {
 	public String getModule() {
 		return _module;
 	}
-	
+
 	public String getModuleString() {
 		if (_module == null) {
 			return "null";
-		} else {
+		}
+		else {
 			return StringPool.QUOTE.concat(_module).concat(StringPool.QUOTE);
 		}
 	}

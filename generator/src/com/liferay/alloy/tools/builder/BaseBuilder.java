@@ -292,7 +292,8 @@ public abstract class BaseBuilder {
 			boolean dynamicAttributes = Convert.toBoolean(
 				node.attributeValue("dynamicAttributes"), true);
 
-			String module = Convert.toString(node.attributeValue("module"), null);
+			String module = Convert.toString(
+				node.attributeValue("module"), null);
 
 			String parentClass = Convert.toString(
 				node.attributeValue("parentClass"),
@@ -405,11 +406,9 @@ public abstract class BaseBuilder {
 		Element doc2Root = doc2.getRootElement();
 		Element doc1Root = doc1.getRootElement();
 		Element docRoot = doc2Root.createCopy();
-		
-		if (doc1Root != null) {
 
-			Iterator<Object> attributesIterator =
-					doc1Root.attributeIterator();
+		if (doc1Root != null) {
+			Iterator<Object> attributesIterator = doc1Root.attributeIterator();
 
 			while (attributesIterator.hasNext()) {
 				org.dom4j.Attribute attribute =
@@ -419,8 +418,7 @@ public abstract class BaseBuilder {
 					continue;
 				}
 
-				docRoot.addAttribute(
-					attribute.getName(), attribute.getValue());
+				docRoot.addAttribute(attribute.getName(), attribute.getValue());
 			}
 		}
 
@@ -499,7 +497,7 @@ public abstract class BaseBuilder {
 
 			doc.getRootElement().add(component);
 		}
-		
+
 		if (doc1Root != null) {
 			List<Element> doc1Components = doc1Root.elements(_COMPONENT);
 
@@ -509,7 +507,7 @@ public abstract class BaseBuilder {
 				String name = doc1Component.attributeValue("name");
 
 				Element doc2Component = getComponentNode(doc2, name);
-				
+
 				if (doc2Component == null) {
 					doc.getRootElement().add(component);
 				}
