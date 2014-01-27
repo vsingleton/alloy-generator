@@ -25,7 +25,7 @@ public abstract class ${component.getCamelizedName()}Base extends ${component.ge
 	</#list>
 	public static final String WIDGET_VAR = "widgetVar";
 	public static final String CSS_CLASS = "cssClass";
-	public static final String STYLE_CLASS = "styleClass";	
+	public static final String STYLE_CLASS = "styleClass";
 
 	<#list component.getAttributesAndEvents() as attribute>
 	<#if attribute.isGettable()>
@@ -64,5 +64,5 @@ public abstract class ${component.getCamelizedName()}Base extends ${component.ge
 	public void setStyleClass(String styleClass) {
 		getStateHelper().put(STYLE_CLASS, styleClass);
 	}
-	
+
 }
