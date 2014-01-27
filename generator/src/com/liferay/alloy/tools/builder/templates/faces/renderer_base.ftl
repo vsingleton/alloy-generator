@@ -10,8 +10,10 @@ import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 
-import com.liferay.faces.alloy.component.base.RendererBase;
+import com.liferay.faces.util.component.ComponentUtil;
+import com.liferay.faces.util.component.Widget;
 import com.liferay.faces.util.lang.StringPool;
+import com.liferay.faces.util.render.RendererBase;
 
 /**
 <#list component.getAuthors() as author>
@@ -19,7 +21,7 @@ import com.liferay.faces.util.lang.StringPool;
 </#list>
  * @generated
  */
-@ResourceDependency(library = "aui", name = "liferay-faces.js")
+@ResourceDependency(library = "liferay-faces", name = "liferay-faces.js")
 public abstract class ${component.getCamelizedName()}RendererBase extends RendererBase {
 
 	// Private Constants
@@ -31,15 +33,23 @@ public abstract class ${component.getCamelizedName()}RendererBase extends Render
 
 		ResponseWriter responseWriter = facesContext.getResponseWriter();
 
+		String widgetVar = ComponentUtil.resolveWidgetVar(facesContext, (Widget) ${component.getUncapitalizedName()});
+
 		responseWriter.write("var ");
-		responseWriter.write(${component.getUncapitalizedName()}.getWidgetVar());
+		responseWriter.write(widgetVar);
 		responseWriter.write(StringPool.SEMICOLON);
+		responseWriter.write(StringPool.NEW_LINE);
 		responseWriter.write("LF.component('");
-		responseWriter.write(${component.getUncapitalizedName()}.getWidgetVar());
-		responseWriter.write("', function() { if (!");
-		responseWriter.write(${component.getUncapitalizedName()}.getWidgetVar());
-		responseWriter.write(") {");
-		responseWriter.write(${component.getUncapitalizedName()}.getWidgetVar());
+		responseWriter.write(widgetVar);
+		responseWriter.write("', function() {");
+		responseWriter.write(StringPool.NEW_LINE);
+		responseWriter.write("if (!");
+		responseWriter.write(widgetVar);
+		responseWriter.write(StringPool.CLOSE_PARENTHESIS);
+		responseWriter.write(StringPool.SPACE);
+		responseWriter.write(StringPool.OPEN_CURLY_BRACE);
+		responseWriter.write(StringPool.NEW_LINE);
+		responseWriter.write(widgetVar);
 		responseWriter.write("= new A.${component.getCamelizedName()}");
 		responseWriter.write(StringPool.OPEN_PARENTHESIS);
 		responseWriter.write(StringPool.OPEN_CURLY_BRACE);
@@ -50,16 +60,19 @@ public abstract class ${component.getCamelizedName()}RendererBase extends Render
 		<#list component.getAttributes() as attribute>
 		<#if attribute.isGettable()>
 		${attribute.getJSFInputType()} ${attribute.getJavaSafeName()} = ${component.getUncapitalizedName()}.get${attribute.getCapitalizedName()}();
-
+		
 		if (${attribute.getJavaSafeName()} != null) {
 
-			render${attribute.getCapitalizedName()}(responseWriter, ${component.getUncapitalizedName()}, ${attribute.getJavaSafeName()}, isFirst);
+			encode${attribute.getCapitalizedName()}(responseWriter, ${component.getUncapitalizedName()}, ${attribute.getJavaSafeName()}, isFirst);
 			isFirst = false;
 		}
 
 		</#if>
 		</#list>
-		responseWriter.write(StringPool.COMMA);
+		if (!isFirst) {
+			responseWriter.write(StringPool.COMMA);
+		}
+
 		responseWriter.write(StringPool.NEW_LINE);
 
 		responseWriter.write("after");
@@ -74,7 +87,7 @@ public abstract class ${component.getCamelizedName()}RendererBase extends Render
 
 		if (${event.getJavaSafeName()} != null) {
 
-			render${event.getCapitalizedName()}(responseWriter, ${component.getUncapitalizedName()}, ${event.getJavaSafeName()}, isFirst);
+			encode${event.getCapitalizedName()}(responseWriter, ${component.getUncapitalizedName()}, ${event.getJavaSafeName()}, isFirst);
 			isFirst = false;
 		}
 
@@ -96,16 +109,28 @@ public abstract class ${component.getCamelizedName()}RendererBase extends Render
 
 		if (${event.getJavaSafeName()} != null) {
 
-			render${event.getCapitalizedName()}(responseWriter, ${component.getUncapitalizedName()}, ${event.getJavaSafeName()}, isFirst);
+			encode${event.getCapitalizedName()}(responseWriter, ${component.getUncapitalizedName()}, ${event.getJavaSafeName()}, isFirst);
 			isFirst = false;
 		}
 
 		</#list>
-		responseWriter.write("}}).render();} return ");
-		responseWriter.write(${component.getUncapitalizedName()}.getWidgetVar());
-		responseWriter.write(";}); LF.component('");
-		responseWriter.write(${component.getUncapitalizedName()}.getWidgetVar());
+		responseWriter.write(StringPool.NEW_LINE);
+		responseWriter.write(StringPool.CLOSE_CURLY_BRACE);
+		responseWriter.write(StringPool.NEW_LINE);
+		responseWriter.write("}).render();");
+		responseWriter.write(StringPool.NEW_LINE);
+		responseWriter.write(StringPool.CLOSE_CURLY_BRACE);
+		responseWriter.write(StringPool.NEW_LINE);
+		responseWriter.write("return ");
+		responseWriter.write(widgetVar);
+		responseWriter.write(StringPool.SEMICOLON);
+		responseWriter.write(StringPool.NEW_LINE);
+		responseWriter.write("});");
+		responseWriter.write(StringPool.NEW_LINE);
+		responseWriter.write("LF.component('");
+		responseWriter.write(widgetVar);
 		responseWriter.write("');");
+		responseWriter.write(StringPool.NEW_LINE);
 	}
 
 	protected String getModule() {
@@ -113,14 +138,14 @@ public abstract class ${component.getCamelizedName()}RendererBase extends Render
 	}
 
 	<#list component.getAttributes() as attribute>
-	protected void render${attribute.getCapitalizedName()}(ResponseWriter responseWriter, ${component.getCamelizedName()} ${component.getUncapitalizedName()}, ${attribute.getJSFInputType()} ${attribute.getJavaSafeName()}, boolean isFirst) throws IOException {
-		render${attribute.getJavaScriptType()}(responseWriter, ${component.getCamelizedName()}.${attribute.getConstantName()}, ${attribute.getJavaSafeName()}, isFirst);
+	protected void encode${attribute.getCapitalizedName()}(ResponseWriter responseWriter, ${component.getCamelizedName()} ${component.getUncapitalizedName()}, ${attribute.getJSFInputType()} ${attribute.getJavaSafeName()}, boolean isFirst) throws IOException {
+		encode${attribute.getJavaScriptType()}(responseWriter, ${component.getCamelizedName()}.${attribute.getConstantName()}, ${attribute.getJavaSafeName()}, isFirst);
 	}
 
 	</#list>
 	<#list component.getEvents() as event>
-	protected void render${event.getCapitalizedName()}(ResponseWriter responseWriter, ${component.getCamelizedName()} ${component.getUncapitalizedName()}, ${event.getJSFInputType()} ${event.getJavaSafeName()}, boolean isFirst) throws IOException {
-		render${event.getJavaScriptType()}(responseWriter, ${component.getCamelizedName()}.${event.getConstantName()}, ${event.getJavaSafeName()}, isFirst);
+	protected void encode${event.getCapitalizedName()}(ResponseWriter responseWriter, ${component.getCamelizedName()} ${component.getUncapitalizedName()}, ${event.getJSFInputType()} ${event.getJavaSafeName()}, boolean isFirst) throws IOException {
+		encode${event.getJavaScriptType()}(responseWriter, ${component.getCamelizedName()}.${event.getConstantName()}, ${event.getJavaSafeName()}, isFirst);
 	}
 
 	</#list>

@@ -64,5 +64,4 @@ public abstract class ${component.getCamelizedName()}Base extends ${component.ge
 	public void setStyleClass(String styleClass) {
 		getStateHelper().put(STYLE_CLASS, styleClass);
 	}
-
 }
