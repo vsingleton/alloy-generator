@@ -89,6 +89,15 @@ public class Component extends BaseModel {
 		return _module;
 	}
 
+	public String getModuleString() {
+		if (_module == null) {
+			return "null";
+		}
+		else {
+			return StringPool.QUOTE.concat(_module).concat(StringPool.QUOTE);
+		}
+	}
+
 	public List<Event> getOnEvents() {
 		List<Event> onEvents = new ArrayList<Event>();
 

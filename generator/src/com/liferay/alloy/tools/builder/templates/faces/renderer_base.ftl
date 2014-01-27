@@ -23,7 +23,7 @@ import com.liferay.faces.util.lang.StringPool;
 public abstract class ${component.getCamelizedName()}RendererBase extends RendererBase {
 
 	// Private Constants
-	private static final String AUI_MODULE_NAME = "${component.getModule()}";
+	private static final String AUI_MODULE_NAME = ${component.getModuleString()};
 
 	protected void encodeJavaScriptMain(FacesContext facesContext, UIComponent uiComponent) throws IOException {
 

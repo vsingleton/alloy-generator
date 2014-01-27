@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<components extends="./target/alloy-generator/data.xml" namespace="aui"> 
+<components extends="./components.xml" namespace="aui"> 
   <component name="Popover">
     <attributes>
       <attribute>

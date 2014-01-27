@@ -42,6 +42,7 @@ public class FacesBuilder extends BaseBuilder {
 	public FacesBuilder(
 			String baseOutputDir, String taglibXMLOutputDir, String version)
 		throws Exception {
+
 		_baseOutputDir = baseOutputDir;
 		_taglibXMLOutputDir = taglibXMLOutputDir;
 
