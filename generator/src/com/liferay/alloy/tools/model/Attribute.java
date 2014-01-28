@@ -41,13 +41,6 @@ public class Attribute extends BaseModel {
 		return _defaultValue;
 	}
 
-	protected String getInferredNamePrefix(String name) {
-
-		// Section 8.8
-		// http://download.oracle.com/otn-pub/jcp/7224-javabeans-1.01-fr-spec-oth-JSpec/beans.101.pdf
-		return name.substring(0, 2);
-	}
-
 	public String getInputType() {
 		return TypeUtil.getInputJavaType(_inputType, true);
 	}
@@ -57,12 +50,13 @@ public class Attribute extends BaseModel {
 	}
 
 	public String getJavaBeanPropertyName() {
-
 		String javaBeanPropertyName = getSafeName();
 
-		if (javaBeanPropertyName.length() == 1 || 
-				StringUtils.isAllLowerCase(getInferredNamePrefix(javaBeanPropertyName))) {				
-				javaBeanPropertyName = getCapitalizedName();
+		if ((javaBeanPropertyName.length() == 1) ||
+			StringUtils.isAllLowerCase(
+				getInferredNamePrefix(javaBeanPropertyName))) {
+
+			javaBeanPropertyName = getCapitalizedName();
 		}
 
 		return javaBeanPropertyName;
@@ -197,6 +191,14 @@ public class Attribute extends BaseModel {
 
 	public void setSettable(boolean settable) {
 		_settable = settable;
+	}
+
+	/**
+	 * http://download.oracle.com/otn-pub/jcp/7224-javabeans-1.01-fr-spec-oth-JSpec/beans.101.pdf
+	 * See section 8.8 (Capitalization of inferred names.)
+	 */
+	protected String getInferredNamePrefix(String name) {
+		return name.substring(0, 2);
 	}
 
 	private Component _component;
