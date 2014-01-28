@@ -47,16 +47,9 @@ public class ReservedAttributeUtil {
 			}
 		));
 
-	public static final List<String> RESERVED_ATTRIBUTES = Arrays.asList(
-		new String[] {
-			"values", "value", "servletRequest", "servletResponse",
-			"servletContext", "scopedAttribute", "scopedAttributes",
-			"previousOut", "parent", "namespacedAttribute",
-			"attributeNamespace", "bodyContent", "class", "dynamicAttribute",
-			"dynamicAttributes", "id", "scriptPosition", "page", "locale",
-			"attributes", "children", "clientId", "cssClass", "styleClass"
-		}
-	);
+	public static final List<String> RESERVED_ATTRIBUTES = 
+			Arrays.asList(PropsUtil.getStringArray(
+					"builder.reserved.attributes"));
 
 	public static String getJavaSafeName(Attribute attribute) {
 		String name = attribute.getName();
