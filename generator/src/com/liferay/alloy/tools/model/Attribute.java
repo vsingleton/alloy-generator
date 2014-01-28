@@ -41,12 +41,31 @@ public class Attribute extends BaseModel {
 		return _defaultValue;
 	}
 
+	protected String getInferredNamePrefix(String name) {
+
+		// Section 8.8
+		// http://download.oracle.com/otn-pub/jcp/7224-javabeans-1.01-fr-spec-oth-JSpec/beans.101.pdf
+		return name.substring(0, 2);
+	}
+
 	public String getInputType() {
 		return TypeUtil.getInputJavaType(_inputType, true);
 	}
 
 	public String getInputTypeSimpleClassName() {
 		return getTypeSimpleClassName(getRawInputType());
+	}
+
+	public String getJavaBeanPropertyName() {
+
+		String javaBeanPropertyName = getSafeName();
+
+		if (javaBeanPropertyName.length() == 1 || 
+				StringUtils.isAllLowerCase(getInferredNamePrefix(javaBeanPropertyName))) {				
+				javaBeanPropertyName = getCapitalizedName();
+		}
+
+		return javaBeanPropertyName;
 	}
 
 	public String getJavaSafeName() {

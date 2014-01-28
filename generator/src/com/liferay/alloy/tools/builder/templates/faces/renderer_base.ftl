@@ -59,7 +59,7 @@ public abstract class ${component.getCamelizedName()}RendererBase extends Render
 
 		<#list component.getAttributes() as attribute>
 		<#if attribute.isGettable()>
-		${attribute.getJSFInputType()} ${attribute.getJavaSafeName()} = ${component.getUncapitalizedName()}.get${attribute.getCapitalizedName()}();
+		${attribute.getJSFInputType()} ${attribute.getJavaSafeName()} = ${component.getUncapitalizedName()}.get${attribute.getJavaBeanPropertyName()}();
 
 		if (${attribute.getJavaSafeName()} != null) {
 
@@ -83,7 +83,7 @@ public abstract class ${component.getCamelizedName()}RendererBase extends Render
 		isFirst = true;
 
 		<#list component.getAfterEvents() as event>
-		${event.getJSFInputType()} ${event.getJavaSafeName()} = ${component.getUncapitalizedName()}.get${event.getCapitalizedName()}();
+		${event.getJSFInputType()} ${event.getJavaSafeName()} = ${component.getUncapitalizedName()}.get${event.getJavaBeanPropertyName()}();
 
 		if (${event.getJavaSafeName()} != null) {
 
@@ -105,7 +105,7 @@ public abstract class ${component.getCamelizedName()}RendererBase extends Render
 		isFirst = true;
 
 		<#list component.getOnEvents() as event>
-		${event.getJSFInputType()} ${event.getJavaSafeName()} = ${component.getUncapitalizedName()}.get${event.getCapitalizedName()}();
+		${event.getJSFInputType()} ${event.getJavaSafeName()} = ${component.getUncapitalizedName()}.get${event.getJavaBeanPropertyName()}();
 
 		if (${event.getJavaSafeName()} != null) {
 

@@ -29,13 +29,13 @@ public abstract class ${component.getCamelizedName()}Base extends ${component.ge
 
 	<#list component.getAttributesAndEvents() as attribute>
 	<#if attribute.isGettable()>
-	public ${attribute.getJSFInputType()} get${attribute.getCapitalizedName()}() {
+	public ${attribute.getJSFInputType()} get${attribute.getJavaBeanPropertyName()}() {
 		return (${attribute.getJSFInputType()}) getStateHelper().eval(${attribute.getConstantName()}, null);
 	}
 	</#if>
 
 	<#if attribute.isSettable()>
-	public void set${attribute.getCapitalizedName()}(${attribute.getJSFInputType()} ${attribute.getJavaSafeName()}) {
+	public void set${attribute.getJavaBeanPropertyName()}(${attribute.getJSFInputType()} ${attribute.getJavaSafeName()}) {
 		getStateHelper().put(${attribute.getConstantName()}, ${attribute.getJavaSafeName()});
 	}
 
