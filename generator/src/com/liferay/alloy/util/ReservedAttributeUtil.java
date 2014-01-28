@@ -18,9 +18,7 @@ import com.liferay.alloy.tools.model.Attribute;
 import com.liferay.alloy.tools.model.Component;
 
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import jodd.util.StringPool;
 
@@ -32,24 +30,11 @@ import org.apache.commons.lang.StringUtils;
  */
 public class ReservedAttributeUtil {
 
-	public static final Set<String> JAVA_RESERVED_WORDS_SET =
-		new HashSet<String>(Arrays.asList(
-			new String[] {
-				"abstract", "assert", "boolean", "break", "byte", "case",
-				"catch", "char", "class", "const", "continue", "default", "do",
-				"double", "else", "enum", "extends", "final", "finally",
-				"float", "for", "goto", "if", "implements", "import",
-				"instanceof", "int", "interface", "long", "native", "new",
-				"package", "private", "protected", "public", "return", "short",
-				"static", "strictfp", "super", "switch", "synchronized", "this",
-				"throw", "throws", "transient", "try", "void", "volatile",
-				"while"
-			}
-		));
+	public static final List<String> JAVA_RESERVED_WORDS = Arrays.asList(
+		PropsUtil.getStringArray("builder.java.reserved.words"));
 
-	public static final List<String> RESERVED_ATTRIBUTES = 
-			Arrays.asList(PropsUtil.getStringArray(
-					"builder.reserved.attributes"));
+	public static final List<String> RESERVED_ATTRIBUTES = Arrays.asList(
+		PropsUtil.getStringArray("builder.reserved.attributes"));
 
 	public static String getJavaSafeName(Attribute attribute) {
 		String name = attribute.getName();
@@ -99,7 +84,7 @@ public class ReservedAttributeUtil {
 	}
 
 	public static boolean isJavaReserved(Attribute attribute) {
-		return JAVA_RESERVED_WORDS_SET.contains(attribute.getName());
+		return JAVA_RESERVED_WORDS.contains(attribute.getName());
 	}
 
 	public static boolean isReserved(Attribute attribute) {
