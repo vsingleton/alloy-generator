@@ -55,21 +55,21 @@ public abstract class ${component.getCamelizedName()}RendererBase extends Render
 		responseWriter.write(StringPool.OPEN_CURLY_BRACE);
 		responseWriter.write(StringPool.NEW_LINE);
 
-		boolean isFirst = true;
+		boolean first = true;
 
 		<#list component.getAttributes() as attribute>
 		<#if attribute.isGettable()>
-		${attribute.getJSFInputType()} ${attribute.getJavaSafeName()} = ${component.getUncapitalizedName()}.get${attribute.getJavaBeanPropertyName()}();
+		${attribute.getJSFInputType()} ${attribute.getJavaSafeName()} = ${component.getUncapitalizedName()}.${attribute.getGetterMethodPrefix()}${attribute.getJavaBeanPropertyName()}();
 
 		if (${attribute.getJavaSafeName()} != null) {
 
-			encode${attribute.getCapitalizedName()}(responseWriter, ${component.getUncapitalizedName()}, ${attribute.getJavaSafeName()}, isFirst);
-			isFirst = false;
+			encode${attribute.getCapitalizedName()}(responseWriter, ${component.getUncapitalizedName()}, ${attribute.getJavaSafeName()}, first);
+			first = false;
 		}
 
 		</#if>
 		</#list>
-		if (!isFirst) {
+		if (!first) {
 			responseWriter.write(StringPool.COMMA);
 		}
 
@@ -80,15 +80,15 @@ public abstract class ${component.getCamelizedName()}RendererBase extends Render
 		responseWriter.write(StringPool.OPEN_CURLY_BRACE);
 		responseWriter.write(StringPool.NEW_LINE);
 
-		isFirst = true;
+		first = true;
 
 		<#list component.getAfterEvents() as event>
-		${event.getJSFInputType()} ${event.getJavaSafeName()} = ${component.getUncapitalizedName()}.get${event.getJavaBeanPropertyName()}();
+		${event.getJSFInputType()} ${event.getJavaSafeName()} = ${component.getUncapitalizedName()}.${event.getGetterMethodPrefix()}${event.getJavaBeanPropertyName()}();
 
 		if (${event.getJavaSafeName()} != null) {
 
-			encode${event.getCapitalizedName()}(responseWriter, ${component.getUncapitalizedName()}, ${event.getJavaSafeName()}, isFirst);
-			isFirst = false;
+			encode${event.getCapitalizedName()}(responseWriter, ${component.getUncapitalizedName()}, ${event.getJavaSafeName()}, first);
+			first = false;
 		}
 
 		</#list>
@@ -102,15 +102,15 @@ public abstract class ${component.getCamelizedName()}RendererBase extends Render
 		responseWriter.write(StringPool.OPEN_CURLY_BRACE);
 		responseWriter.write(StringPool.NEW_LINE);
 
-		isFirst = true;
+		first = true;
 
 		<#list component.getOnEvents() as event>
-		${event.getJSFInputType()} ${event.getJavaSafeName()} = ${component.getUncapitalizedName()}.get${event.getJavaBeanPropertyName()}();
+		${event.getJSFInputType()} ${event.getJavaSafeName()} = ${component.getUncapitalizedName()}.${event.getGetterMethodPrefix()}${event.getJavaBeanPropertyName()}();
 
 		if (${event.getJavaSafeName()} != null) {
 
-			encode${event.getCapitalizedName()}(responseWriter, ${component.getUncapitalizedName()}, ${event.getJavaSafeName()}, isFirst);
-			isFirst = false;
+			encode${event.getCapitalizedName()}(responseWriter, ${component.getUncapitalizedName()}, ${event.getJavaSafeName()}, first);
+			first = false;
 		}
 
 		</#list>
@@ -138,14 +138,14 @@ public abstract class ${component.getCamelizedName()}RendererBase extends Render
 	}
 
 	<#list component.getAttributes() as attribute>
-	protected void encode${attribute.getCapitalizedName()}(ResponseWriter responseWriter, ${component.getCamelizedName()} ${component.getUncapitalizedName()}, ${attribute.getJSFInputType()} ${attribute.getJavaSafeName()}, boolean isFirst) throws IOException {
-		encode${attribute.getJavaScriptType()}(responseWriter, ${component.getCamelizedName()}.${attribute.getConstantName()}, ${attribute.getJavaSafeName()}, isFirst);
+	protected void encode${attribute.getCapitalizedName()}(ResponseWriter responseWriter, ${component.getCamelizedName()} ${component.getUncapitalizedName()}, ${attribute.getJSFInputType()} ${attribute.getJavaSafeName()}, boolean first) throws IOException {
+		encode${attribute.getJavaScriptType()}(responseWriter, ${component.getCamelizedName()}.${attribute.getConstantName()}, ${attribute.getJavaSafeName()}, first);
 	}
 
 	</#list>
 	<#list component.getEvents() as event>
-	protected void encode${event.getCapitalizedName()}(ResponseWriter responseWriter, ${component.getCamelizedName()} ${component.getUncapitalizedName()}, ${event.getJSFInputType()} ${event.getJavaSafeName()}, boolean isFirst) throws IOException {
-		encode${event.getJavaScriptType()}(responseWriter, ${component.getCamelizedName()}.${event.getConstantName()}, ${event.getJavaSafeName()}, isFirst);
+	protected void encode${event.getCapitalizedName()}(ResponseWriter responseWriter, ${component.getCamelizedName()} ${component.getUncapitalizedName()}, ${event.getJSFInputType()} ${event.getJavaSafeName()}, boolean first) throws IOException {
+		encode${event.getJavaScriptType()}(responseWriter, ${component.getCamelizedName()}.${event.getConstantName()}, ${event.getJavaSafeName()}, first);
 	}
 
 	</#list>

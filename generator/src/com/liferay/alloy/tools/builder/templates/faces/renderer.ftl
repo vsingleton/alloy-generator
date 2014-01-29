@@ -3,6 +3,7 @@
 
 package ${packagePath}.${component.getUncamelizedName(BLANK)};
 
+import javax.faces.component.UIPanel;
 import javax.faces.render.FacesRenderer;
 
 <#compress>
@@ -15,7 +16,7 @@ import javax.faces.render.FacesRenderer;
 </#list>
  */
 @FacesRenderer(
-	componentFamily = "javax.faces.Panel", rendererType = "${packagePath}.${component.getUncamelizedName(BLANK)}.${component.getCamelizedName()}Renderer"
+	componentFamily = UIPanel.COMPONENT_FAMILY, rendererType = "${packagePath}.${component.getUncamelizedName(BLANK)}.${component.getCamelizedName()}Renderer"
 )
 public class ${component.getCamelizedName()}Renderer extends ${component.getCamelizedName()}RendererBase${(componentInterface?? && (componentInterface != BLANK))?string(' implements ' + componentInterface, BLANK)} {
 }

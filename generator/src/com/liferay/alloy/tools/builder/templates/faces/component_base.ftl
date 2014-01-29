@@ -20,6 +20,7 @@ import com.liferay.faces.util.component.Widget;
  */
 public abstract class ${component.getCamelizedName()}Base extends ${component.getParentClass()} implements Styleable, Widget {
 
+	// Public Constants
 	<#list component.getAttributesAndEvents() as attribute>
 	public static final String ${attribute.getConstantName()} = "${attribute.getName()}";
 	</#list>
@@ -29,7 +30,7 @@ public abstract class ${component.getCamelizedName()}Base extends ${component.ge
 
 	<#list component.getAttributesAndEvents() as attribute>
 	<#if attribute.isGettable()>
-	public ${attribute.getJSFInputType()} get${attribute.getJavaBeanPropertyName()}() {
+	public ${attribute.getJSFInputType()} ${attribute.getGetterMethodPrefix()}${attribute.getJavaBeanPropertyName()}() {
 		return (${attribute.getJSFInputType()}) getStateHelper().eval(${attribute.getConstantName()}, null);
 	}
 	</#if>

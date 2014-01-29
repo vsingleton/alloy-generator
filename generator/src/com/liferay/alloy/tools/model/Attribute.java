@@ -25,6 +25,17 @@ import jodd.util.StringPool;
 import org.apache.commons.lang.StringUtils;
 public class Attribute extends BaseModel {
 
+	public String getGetterMethodPrefix() {
+
+		String getterMethodPrefix = "get";
+
+		if (getJSFInputType().equals("Boolean")) {
+			getterMethodPrefix = "is";
+		}
+
+		return getterMethodPrefix;
+	}
+
 	public String getCapitalizedName() {
 		return StringUtils.capitalize(getSafeName());
 	}
@@ -75,22 +86,18 @@ public class Attribute extends BaseModel {
 
 		if (TypeUtil.isPrimitiveType(inputJavaType)) {
 
-			// Possibly check if we have enough of a string
-
 			if (inputJavaType.equals("int")) {
 				inputJavaType = "Integer";
 			}
 			else {
-				inputJavaType =
-					inputJavaType.substring(0, 1).toUpperCase() +
-					inputJavaType.substring(1);
+				inputJavaType = StringUtil.capitalize(inputJavaType);
 			}
+		}
+		else if (inputJavaType.startsWith("java.lang.")){
+			inputJavaType = inputJavaType.substring("java.lang.".length());
+		}
 
-			return "java.lang." + inputJavaType;
-		}
-		else {
-			return inputJavaType;
-		}
+		return inputJavaType;
 	}
 
 	public String getOutputType() {
