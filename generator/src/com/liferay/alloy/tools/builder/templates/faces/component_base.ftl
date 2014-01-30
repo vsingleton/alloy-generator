@@ -11,6 +11,7 @@ package ${packagePath}.${component.getUncamelizedName(BLANK)};
 
 import com.liferay.faces.util.component.Styleable;
 import com.liferay.faces.util.component.Widget;
+import ${component.getParentClass()};
 
 /**
 <#list component.getAuthors() as author>
@@ -18,7 +19,7 @@ import com.liferay.faces.util.component.Widget;
 </#list>
  * @generated
  */
-public abstract class ${component.getCamelizedName()}Base extends ${component.getParentClass()} implements Styleable, Widget {
+public abstract class ${component.getCamelizedName()}Base extends ${component.getUnqualifiedParentClass()} implements Styleable, Widget {
 
 	// Public Constants
 	<#list component.getAttributesAndEvents() as attribute>
