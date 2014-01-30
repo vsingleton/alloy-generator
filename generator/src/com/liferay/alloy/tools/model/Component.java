@@ -117,6 +117,10 @@ public class Component extends BaseModel {
 	public String getParentClass() {
 		return _parentClass;
 	}
+	
+	public String getUnqualifiedParentClass() {
+		return _parentClass.substring(_parentClass.lastIndexOf(StringPool.DOT) + 1);
+	}
 
 	public String getSafeName() {
 		return StringUtil.replace(getName(), StringPool.DOT, StringPool.EMPTY);
