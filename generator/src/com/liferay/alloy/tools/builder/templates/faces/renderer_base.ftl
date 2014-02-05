@@ -26,6 +26,11 @@ public abstract class ${component.getCamelizedName()}RendererBase extends Render
 
 	// Private Constants
 	private static final String AUI_MODULE_NAME = ${component.getModuleString()};
+	<#list component.getOnEvents() as event>
+	<#if event.createConstant()>
+	private static final String ${event.getConstantUnprefixedName()} = "${event.getUnprefixedName()}";
+	</#if>
+	</#list>
 
 	protected void encodeJavaScriptMain(FacesContext facesContext, UIComponent uiComponent) throws IOException {
 
@@ -145,7 +150,7 @@ public abstract class ${component.getCamelizedName()}RendererBase extends Render
 	</#list>
 	<#list component.getEvents() as event>
 	protected void encode${event.getCapitalizedName()}(ResponseWriter responseWriter, ${component.getCamelizedName()} ${component.getUncapitalizedName()}, ${event.getJSFInputType()} ${event.getJavaSafeName()}, boolean first) throws IOException {
-		encode${event.getJavaScriptType()}(responseWriter, ${component.getCamelizedName()}.${event.getConstantName()}, ${event.getJavaSafeName()}, first);
+		encodeEvent(responseWriter, ${event.getConstantUnprefixedName()}, ${event.getJavaSafeName()}, first);
 	}
 
 	</#list>

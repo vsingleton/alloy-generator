@@ -368,6 +368,7 @@ public abstract class BaseBuilder {
 		for (Attribute afterEvent : afterEvents) {
 			Event event = new Event(afterEvent, true);
 
+			event.setUnprefixedName(event.getSafeName());
 			String name = _AFTER.concat(
 				StringUtil.capitalize(event.getSafeName()));
 
@@ -382,6 +383,7 @@ public abstract class BaseBuilder {
 		for (Attribute onEvent : onEvents) {
 			Event event = new Event(onEvent, false);
 
+			event.setUnprefixedName(event.getSafeName());
 			String name = _ON.concat(
 				StringUtil.capitalize(event.getSafeName()));
 
@@ -475,7 +477,7 @@ public abstract class BaseBuilder {
 
 				Element doc1EventsNode = doc1Component.element(_EVENTS);
 
-				Element eventsNode = doc2Component.element(_EVENTS);
+				Element eventsNode = component.element(_EVENTS);
 
 				if ((doc1EventsNode != null) && (eventsNode != null)) {
 					List<Element> doc1Events = doc1EventsNode.elements(_EVENT);

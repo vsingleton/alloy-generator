@@ -14,6 +14,8 @@
 
 package com.liferay.alloy.tools.model;
 
+import com.liferay.alloy.util.StringUtil;
+
 public class Event extends Attribute {
 
 	public Event(Attribute attribute) {
@@ -43,9 +45,21 @@ public class Event extends Attribute {
 		return _isOn;
 	}
 
+	public String getUnprefixedName() {
+		return _unprefixedName;
+	}
+	
+	public boolean createConstant() {
+		return _isOn;
+	}
+
 	public void setAfter(boolean after) {
 		_isAfter = after;
 		_isOn = !after;
+	}
+
+	public String getConstantUnprefixedName() {
+		return StringUtil.fromCamelCase(_unprefixedName, '_').toUpperCase();
 	}
 
 	public void setOn(boolean on) {
@@ -53,7 +67,12 @@ public class Event extends Attribute {
 		_isOn = on;
 	}
 
+	public void setUnprefixedName(String unprefixedName) {
+		this._unprefixedName = unprefixedName;
+	}
+
 	private boolean _isAfter = false;
 	private boolean _isOn = false;
+	private String _unprefixedName;
 
 }
