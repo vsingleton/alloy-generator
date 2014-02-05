@@ -122,7 +122,7 @@ public abstract class ${component.getCamelizedName()}RendererBase extends Render
 		responseWriter.write(StringPool.NEW_LINE);
 		responseWriter.write(StringPool.CLOSE_CURLY_BRACE);
 		responseWriter.write(StringPool.NEW_LINE);
-		responseWriter.write("}).render();");
+		responseWriter.write("});");
 		responseWriter.write(StringPool.NEW_LINE);
 		responseWriter.write(StringPool.CLOSE_CURLY_BRACE);
 		responseWriter.write(StringPool.NEW_LINE);
