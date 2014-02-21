@@ -12,4 +12,20 @@ import javax.faces.component.FacesComponent;
  */
 @FacesComponent(value = "${packagePath}.${component.getUncamelizedName(BLANK)}.${component.getCamelizedName()}")
 public class ${component.getCamelizedName()} extends ${component.getCamelizedName()}Base {
+
+	// Public Constants
+	public static final String COMPONENT_FAMILY = "${packagePath}.${component.getUncamelizedName(BLANK)}";
+	public static final String COMPONENT_TYPE = "${packagePath}.${component.getUncamelizedName(BLANK)}.${component.getCamelizedName()}";
+
+	// Private Constants
+	private static final String RENDERER_TYPE = "${packagePath}.${component.getUncamelizedName(BLANK)}.${component.getCamelizedName()}Renderer";
+	
+	public ${component.getCamelizedName()}() {
+		super();
+		setRendererType(RENDERER_TYPE);
+	}
+
+	public String getFamily() {
+		return COMPONENT_FAMILY;
+	}
 }

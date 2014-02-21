@@ -16,7 +16,8 @@ import javax.faces.render.FacesRenderer;
 </#list>
  */
 @FacesRenderer(
-	componentFamily = ${component.getUnqualifiedParentClass()}.COMPONENT_FAMILY, rendererType = "${packagePath}.${component.getUncamelizedName(BLANK)}.${component.getCamelizedName()}Renderer"
+	componentFamily = ${component.getUnqualifiedParentClass()}.COMPONENT_FAMILY,
+	rendererType = "${packagePath}.${component.getUncamelizedName(BLANK)}.${component.getCamelizedName()}Renderer"
 )
 public class ${component.getCamelizedName()}Renderer extends ${component.getCamelizedName()}RendererBase${(componentInterface?? && (componentInterface != BLANK))?string(' implements ' + componentInterface, BLANK)} {
 }
