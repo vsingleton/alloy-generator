@@ -25,6 +25,7 @@ import com.liferay.faces.util.render.RendererBase;
 public abstract class ${component.getCamelizedName()}RendererBase extends RendererBase {
 
 	// Private Constants
+	private static final String A_CLASS_NAME = "A.${component.getCamelizedName()}";
 	private static final String AUI_MODULE_NAME = ${component.getModuleString()};
 	<#list component.getOnEvents() as event>
 	<#if event.createConstant()>
@@ -40,22 +41,39 @@ public abstract class ${component.getCamelizedName()}RendererBase extends Render
 
 		String widgetVar = ComponentUtil.resolveWidgetVar(facesContext, (Widget) ${component.getUncapitalizedName()});
 
-		responseWriter.write("var ");
+		responseWriter.write(VAR);
+		responseWriter.write(StringPool.SPACE);
 		responseWriter.write(widgetVar);
 		responseWriter.write(StringPool.SEMICOLON);
 		responseWriter.write(StringPool.NEW_LINE);
-		responseWriter.write("LF.component('");
+		responseWriter.write(LF_COMPONENT);
+		responseWriter.write(StringPool.OPEN_PARENTHESIS);
+		responseWriter.write(StringPool.APOSTROPHE);
 		responseWriter.write(widgetVar);
-		responseWriter.write("', function() {");
+		responseWriter.write(StringPool.APOSTROPHE);
+		responseWriter.write(StringPool.COMMA);
+		responseWriter.write(StringPool.SPACE);
+		responseWriter.write(FUNCTION);
+		responseWriter.write(StringPool.OPEN_PARENTHESIS);
+		responseWriter.write(StringPool.CLOSE_PARENTHESIS);
+		responseWriter.write(StringPool.SPACE);
+		responseWriter.write(StringPool.OPEN_CURLY_BRACE);
 		responseWriter.write(StringPool.NEW_LINE);
-		responseWriter.write("if (!");
+		responseWriter.write(IF);
+		responseWriter.write(StringPool.SPACE);
+		responseWriter.write(StringPool.OPEN_PARENTHESIS);
+		responseWriter.write(StringPool.EXCLAMATION);
 		responseWriter.write(widgetVar);
 		responseWriter.write(StringPool.CLOSE_PARENTHESIS);
 		responseWriter.write(StringPool.SPACE);
 		responseWriter.write(StringPool.OPEN_CURLY_BRACE);
 		responseWriter.write(StringPool.NEW_LINE);
 		responseWriter.write(widgetVar);
-		responseWriter.write("= new A.${component.getCamelizedName()}");
+		responseWriter.write(StringPool.EQUAL);
+		responseWriter.write(StringPool.SPACE);
+		responseWriter.write(NEW);
+		responseWriter.write(StringPool.SPACE);
+		responseWriter.write(A_CLASS_NAME);
 		responseWriter.write(StringPool.OPEN_PARENTHESIS);
 		responseWriter.write(StringPool.OPEN_CURLY_BRACE);
 		responseWriter.write(StringPool.NEW_LINE);
@@ -80,7 +98,7 @@ public abstract class ${component.getCamelizedName()}RendererBase extends Render
 
 		responseWriter.write(StringPool.NEW_LINE);
 
-		responseWriter.write("after");
+		responseWriter.write(AFTER);
 		responseWriter.write(StringPool.COLON);
 		responseWriter.write(StringPool.OPEN_CURLY_BRACE);
 		responseWriter.write(StringPool.NEW_LINE);
@@ -102,7 +120,7 @@ public abstract class ${component.getCamelizedName()}RendererBase extends Render
 		responseWriter.write(StringPool.COMMA);
 		responseWriter.write(StringPool.NEW_LINE);
 
-		responseWriter.write("on");
+		responseWriter.write(ON);
 		responseWriter.write(StringPool.COLON);
 		responseWriter.write(StringPool.OPEN_CURLY_BRACE);
 		responseWriter.write(StringPool.NEW_LINE);
@@ -122,19 +140,28 @@ public abstract class ${component.getCamelizedName()}RendererBase extends Render
 		responseWriter.write(StringPool.NEW_LINE);
 		responseWriter.write(StringPool.CLOSE_CURLY_BRACE);
 		responseWriter.write(StringPool.NEW_LINE);
-		responseWriter.write("});");
+		responseWriter.write(StringPool.CLOSE_CURLY_BRACE);
+		responseWriter.write(StringPool.CLOSE_PARENTHESIS);
+		responseWriter.write(StringPool.SEMICOLON);
 		responseWriter.write(StringPool.NEW_LINE);
 		responseWriter.write(StringPool.CLOSE_CURLY_BRACE);
 		responseWriter.write(StringPool.NEW_LINE);
-		responseWriter.write("return ");
+		responseWriter.write(RETURN);
+		responseWriter.write(StringPool.SPACE);
 		responseWriter.write(widgetVar);
 		responseWriter.write(StringPool.SEMICOLON);
 		responseWriter.write(StringPool.NEW_LINE);
-		responseWriter.write("});");
+		responseWriter.write(StringPool.CLOSE_CURLY_BRACE);
+		responseWriter.write(StringPool.CLOSE_PARENTHESIS);
+		responseWriter.write(StringPool.SEMICOLON);
 		responseWriter.write(StringPool.NEW_LINE);
-		responseWriter.write("LF.component('");
+		responseWriter.write(LF_COMPONENT);
+		responseWriter.write(StringPool.OPEN_PARENTHESIS);
+		responseWriter.write(StringPool.APOSTROPHE);
 		responseWriter.write(widgetVar);
-		responseWriter.write("');");
+		responseWriter.write(StringPool.APOSTROPHE);
+		responseWriter.write(StringPool.CLOSE_PARENTHESIS);
+		responseWriter.write(StringPool.SEMICOLON);
 		responseWriter.write(StringPool.NEW_LINE);
 	}
 
