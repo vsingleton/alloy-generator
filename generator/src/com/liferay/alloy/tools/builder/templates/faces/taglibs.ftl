@@ -14,6 +14,12 @@
 		<function-class>com.liferay.faces.alloy.util.AlloyUtil</function-class>
 		<function-signature>java.lang.String escapeClientId(java.lang.String)</function-signature>
 	</function>
+	<function>
+		<description>Returns the client ID associated with the specified expression.</description>
+		<function-name>findClientId</function-name>
+		<function-class>com.liferay.faces.util.component.ComponentUtil</function-class>
+		<function-signature>java.lang.String findClientId(java.lang.String)</function-signature>
+	</function>
 <#list components as component>
 	<tag>
 		<description>${component.getDescription()}</description>
