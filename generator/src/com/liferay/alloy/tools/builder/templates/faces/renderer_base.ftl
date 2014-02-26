@@ -10,10 +10,10 @@ import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 
+import com.liferay.faces.alloy.util.AUIRendererBase;
 import com.liferay.faces.util.component.ComponentUtil;
 import com.liferay.faces.util.component.Widget;
 import com.liferay.faces.util.lang.StringPool;
-import com.liferay.faces.util.render.RendererBase;
 
 /**
 <#list component.getAuthors() as author>
@@ -22,7 +22,7 @@ import com.liferay.faces.util.render.RendererBase;
  * @generated
  */
 @ResourceDependency(library = "liferay-faces", name = "liferay-faces.js")
-public abstract class ${component.getCamelizedName()}RendererBase extends RendererBase {
+public abstract class ${component.getCamelizedName()}RendererBase extends AUIRendererBase {
 
 	// Private Constants
 	private static final String A_CLASS_NAME = "A.${component.getCamelizedName()}";
