@@ -43,7 +43,7 @@ public class FacesComponent extends Component {
 	}
 
 	public boolean hasDefaultParentClass() {
-		return getParentClass().equals(_COMPONENT_DEFAULT_PARENT_CLASS);
+		return getParentClass().equals(_FACES_COMPONENT_DEFAULT_PARENT_CLASS);
 	}
 	
 	public boolean hasDefaultRendererParentClass() {
