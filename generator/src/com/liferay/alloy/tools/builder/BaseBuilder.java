@@ -259,75 +259,59 @@ public abstract class BaseBuilder {
 		return null;
 	}
 
-	protected List<Component> getComponents(Document doc) throws Exception {
-		Element root = doc.getRootElement();
+	protected void setComponentBaseAttributes(Element componentNode, Component component, String defaultPackage) {
 
-		List<Component> components = new ArrayList<Component>();
+		String componentPackage = Convert.toString(
+			componentNode.attributeValue("package"), defaultPackage);
 
-		String defaultPackage = root.attributeValue("short-name");
-		List<Element> allComponentNodes = root.elements("component");
+		String name = componentNode.attributeValue("name");
 
-		for (Element node : allComponentNodes) {
-			String componentPackage = Convert.toString(
-				node.attributeValue("package"), defaultPackage);
+		boolean alloyComponent = Convert.toBoolean(
+			componentNode.attributeValue("alloyComponent"), true);
 
-			String name = node.attributeValue("name");
+		boolean bodyContent = Convert.toBoolean(
+			componentNode.attributeValue("bodyContent"), false);
 
-			boolean alloyComponent = Convert.toBoolean(
-				node.attributeValue("alloyComponent"), true);
+		String className = Convert.toString(
+			componentNode.attributeValue("className"));
 
-			boolean bodyContent = Convert.toBoolean(
-				node.attributeValue("bodyContent"), false);
+		String componentInterface = Convert.toString(
+			componentNode.attributeValue("componentInterface"),
+			getComponentDefaultInterface());
 
-			String className = Convert.toString(
-				node.attributeValue("className"));
+		String description = Convert.toString(
+			componentNode.attributeValue("description"), StringPool.EMPTY);
 
-			String componentInterface = Convert.toString(
-				node.attributeValue("componentInterface"),
-				getComponentDefaultInterface());
+		boolean dynamicAttributes = Convert.toBoolean(
+			componentNode.attributeValue("dynamicAttributes"), true);
 
-			String description = Convert.toString(
-				node.attributeValue("description"), StringPool.EMPTY);
+		String module = Convert.toString(
+			componentNode.attributeValue("module"), null);
 
-			boolean dynamicAttributes = Convert.toBoolean(
-				node.attributeValue("dynamicAttributes"), true);
+		String parentClass = Convert.toString(
+			componentNode.attributeValue("parentClass"),
+			getComponentDefaultParentClass());
 
-			String module = Convert.toString(
-				node.attributeValue("module"), null);
+		String[] authors = getAuthorList(componentNode);
+		List<Attribute> attributes = getAttributes(componentNode);
+		List<Event> events = getPrefixedEvents(componentNode);
 
-			String parentClass = Convert.toString(
-				node.attributeValue("parentClass"),
-				getComponentDefaultParentClass());
-
-			boolean writeJSP = Convert.toBoolean(
-				node.attributeValue("writeJSP"), true);
-
-			String[] authors = getAuthorList(node);
-			List<Attribute> attributes = getAttributes(node);
-			List<Event> events = getPrefixedEvents(node);
-
-			Component component = new Component();
-
-			component.setAlloyComponent(alloyComponent);
-			component.setAttributes(attributes);
-			component.setAuthors(authors);
-			component.setBodyContent(bodyContent);
-			component.setClassName(className);
-			component.setDescription(description);
-			component.setDynamicAttributes(dynamicAttributes);
-			component.setEvents(events);
-			component.setInterface(componentInterface);
-			component.setModule(module);
-			component.setName(name);
-			component.setPackage(componentPackage);
-			component.setParentClass(parentClass);
-			component.setWriteJSP(writeJSP);
-
-			components.add(component);
-		}
-
-		return components;
+		component.setAlloyComponent(alloyComponent);
+		component.setAttributes(attributes);
+		component.setAuthors(authors);
+		component.setBodyContent(bodyContent);
+		component.setClassName(className);
+		component.setDescription(description);
+		component.setDynamicAttributes(dynamicAttributes);
+		component.setEvents(events);
+		component.setInterface(componentInterface);
+		component.setModule(module);
+		component.setName(name);
+		component.setPackage(componentPackage);
+		component.setParentClass(parentClass);
 	}
+
+	protected abstract List<Component> getComponents(Document doc) throws Exception;
 
 	protected Document getComponentsDocByShortName(String name) {
 		for (Document doc : getComponentDefinitionDocs()) {

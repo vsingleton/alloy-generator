@@ -14,11 +14,8 @@
 
 package com.liferay.alloy.tools.builder;
 
-import com.liferay.alloy.tools.model.Component;
-import com.liferay.alloy.util.PropsUtil;
-
 import java.io.File;
-
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -28,6 +25,10 @@ import jodd.util.StringPool;
 
 import org.dom4j.Document;
 import org.dom4j.Element;
+
+import com.liferay.alloy.tools.model.Component;
+import com.liferay.alloy.tools.model.FacesComponent;
+import com.liferay.alloy.util.PropsUtil;
 public class FacesBuilder extends BaseBuilder {
 
 	public static void main(String[] args) throws Exception {
@@ -64,10 +65,12 @@ public class FacesBuilder extends BaseBuilder {
 		for (Component component : components) {
 			Map<String, Object> context = getTemplateContext(component);
 
-			_buildComponent(component, context);
-			_buildComponentBase(component, context);
-			_buildRenderer(component, context);
-			_buildRendererBase(component, context);
+			FacesComponent facesComponent = (FacesComponent) component;
+
+			_buildComponent(facesComponent, context);
+			_buildComponentBase(facesComponent, context);
+			_buildRenderer(facesComponent, context);
+			_buildRendererBase(facesComponent, context);
 		}
 
 		_buildTaglibsXML();
@@ -82,23 +85,53 @@ public class FacesBuilder extends BaseBuilder {
 	}
 
 	@Override
+	protected List<Component> getComponents(Document doc) throws Exception {
+		Element root = doc.getRootElement();
+
+		List<Component> facesComponents = new ArrayList<Component>();
+
+		String defaultPackage = root.attributeValue("short-name");
+		List<Element> allComponentNodes = root.elements("component");
+
+		for (Element node : allComponentNodes) {
+			FacesComponent facesComponent = new FacesComponent();
+
+			setComponentBaseAttributes(node, facesComponent, defaultPackage);
+			
+			boolean generateComponentBaseClass = Convert.toBoolean(
+					node.attributeValue("generateComponentBaseClass"), true);
+
+			String rendererParentClass = Convert.toString(
+					node.attributeValue("rendererParentClass"),
+					null);
+
+			facesComponent.setGenerateComponentBaseClass(generateComponentBaseClass);
+			facesComponent.setRendererParentClass(rendererParentClass);
+
+			facesComponents.add(facesComponent);
+		}
+
+		return facesComponents;
+	}
+
+	@Override
 	protected String getComponentDefaultInterface() {
 		return null;
 	}
 
 	@Override
 	protected String getComponentDefaultParentClass() {
-		return _COMPONENT_DEFAULT_PARENT_CLASS;
+		return FacesComponent._FACES_COMPONENT_DEFAULT_PARENT_CLASS;
 	}
 
-	protected String getComponentOutputDir(Component component) {
+	protected String getComponentOutputDir(FacesComponent facesComponent) {
 		StringBuilder sb = new StringBuilder(6);
 
 		sb.append(_baseOutputDir);
 		sb.append(StringPool.SLASH);
 		sb.append(_COMPONENTS_PACKAGE.replaceAll("\\.", StringPool.SLASH));
 		sb.append(StringPool.SLASH);
-		sb.append(component.getUncamelizedName(StringPool.EMPTY));
+		sb.append(facesComponent.getUncamelizedName(StringPool.EMPTY));
 		sb.append(StringPool.SLASH);
 
 		return sb.toString();
@@ -122,26 +155,26 @@ public class FacesBuilder extends BaseBuilder {
 
 		return sb.toString();
 	}
-
+	
 	private void _buildComponent(
-			Component component, Map<String, Object> context)
+			FacesComponent facesComponent, Map<String, Object> context)
 		throws Exception {
 
-		String path = getComponentOutputDir(component);
+		String path = getComponentOutputDir(facesComponent);
 
 		String componentContent = processTemplate(_tplComponent, context);
 
 		File componentFile = new File(
-			path.concat(component.getCamelizedName().concat(_JAVA_EXT)));
+			path.concat(facesComponent.getCamelizedName().concat(_JAVA_EXT)));
 
 		writeFile(componentFile, componentContent, false);
 	}
 
 	private void _buildComponentBase(
-			Component component, Map<String, Object> context)
+			FacesComponent facesComponent, Map<String, Object> context)
 		throws Exception {
 
-		String path = getComponentOutputDir(component);
+		String path = getComponentOutputDir(facesComponent);
 
 		String componentBaseContent = processTemplate(
 			_tplComponentBase, context);
@@ -149,7 +182,7 @@ public class FacesBuilder extends BaseBuilder {
 		StringBuilder fileNameSb = new StringBuilder(4);
 
 		fileNameSb.append(path);
-		fileNameSb.append(component.getCamelizedName());
+		fileNameSb.append(facesComponent.getCamelizedName());
 		fileNameSb.append(_BASE_CLASS_SUFFIX);
 		fileNameSb.append(_JAVA_EXT);
 
@@ -159,17 +192,17 @@ public class FacesBuilder extends BaseBuilder {
 	}
 
 	private void _buildRenderer(
-			Component component, Map<String, Object> context)
+			FacesComponent facesComponent, Map<String, Object> context)
 		throws Exception {
 
-		String path = getComponentOutputDir(component);
+		String path = getComponentOutputDir(facesComponent);
 
 		String rendererContent = processTemplate(_tplRenderer, context);
 
 		StringBuilder fileNameSb = new StringBuilder(4);
 
 		fileNameSb.append(path);
-		fileNameSb.append(component.getCamelizedName());
+		fileNameSb.append(facesComponent.getCamelizedName());
 		fileNameSb.append(_RENDERER_CLASS_SUFFIX);
 		fileNameSb.append(_JAVA_EXT);
 
@@ -179,17 +212,17 @@ public class FacesBuilder extends BaseBuilder {
 	}
 
 	private void _buildRendererBase(
-			Component component, Map<String, Object> context)
+			FacesComponent facesComponent, Map<String, Object> context)
 		throws Exception {
 
-		String path = getComponentOutputDir(component);
+		String path = getComponentOutputDir(facesComponent);
 
 		String rendererBaseContent = processTemplate(_tplRendererBase, context);
 
 		StringBuilder fileNameSb = new StringBuilder(5);
 
 		fileNameSb.append(path);
-		fileNameSb.append(component.getCamelizedName());
+		fileNameSb.append(facesComponent.getCamelizedName());
 		fileNameSb.append(_RENDERER_CLASS_SUFFIX);
 		fileNameSb.append(_BASE_CLASS_SUFFIX);
 		fileNameSb.append(_JAVA_EXT);
@@ -222,9 +255,6 @@ public class FacesBuilder extends BaseBuilder {
 	}
 
 	private static final String _BASE_CLASS_SUFFIX = "Base";
-
-	private static final String _COMPONENT_DEFAULT_PARENT_CLASS =
-		"javax.faces.component.UIPanel";
 
 	private static final String _COMPONENTS_PACKAGE =
 		"com.liferay.faces.alloy.component";

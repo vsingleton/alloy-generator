@@ -21,7 +21,7 @@ import com.liferay.alloy.util.xml.xpath.AlloyGeneratorNamespaceContext;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
-
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -118,6 +118,30 @@ public class TagBuilder extends BaseBuilder {
 	@Override
 	protected String getComponentDefaultParentClass() {
 		return _COMPONENT_DEFAULT_PARENT_CLASS;
+	}
+
+	protected List<Component> getComponents(Document doc) throws Exception {
+		Element root = doc.getRootElement();
+
+		List<Component> components = new ArrayList<Component>();
+
+		String defaultPackage = root.attributeValue("short-name");
+		List<Element> allComponentNodes = root.elements("component");
+
+		for (Element node : allComponentNodes) {
+			Component component = new Component();
+
+			setComponentBaseAttributes(node, component, defaultPackage);
+
+			boolean writeJSP = Convert.toBoolean(
+					node.attributeValue("writeJSP"), true);
+
+			component.setWriteJSP(writeJSP);
+
+			components.add(component);
+		}
+
+		return components;
 	}
 
 	@Override
