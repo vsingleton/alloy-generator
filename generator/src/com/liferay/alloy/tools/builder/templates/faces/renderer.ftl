@@ -3,7 +3,10 @@
 
 package ${packagePath}.${component.getUncamelizedName(BLANK)};
 
-import javax.faces.component.UIPanel;
+<#if !component.hasDefaultRendererParentClass()>
+import ${component.getRendererParentClass()};
+</#if>
+import ${component.getParentClass()};
 import javax.faces.render.FacesRenderer;
 
 <#compress>
@@ -19,5 +22,5 @@ import javax.faces.render.FacesRenderer;
 	componentFamily = ${component.getUnqualifiedParentClass()}.COMPONENT_FAMILY,
 	rendererType = "${packagePath}.${component.getUncamelizedName(BLANK)}.${component.getCamelizedName()}Renderer"
 )
-public class ${component.getCamelizedName()}Renderer extends ${component.getCamelizedName()}RendererBase${(componentInterface?? && (componentInterface != BLANK))?string(' implements ' + componentInterface, BLANK)} {
+public class ${component.getCamelizedName()}Renderer extends ${component.getUnqualifiedRendererParentClass()}${(componentInterface?? && (componentInterface != BLANK))?string(' implements ' + componentInterface, BLANK)} {
 }

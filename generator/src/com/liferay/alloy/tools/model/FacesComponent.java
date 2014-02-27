@@ -14,9 +14,57 @@
 
 package com.liferay.alloy.tools.model;
 
+import jodd.util.StringPool;
 
 public class FacesComponent extends Component {
+
+	public String getDefaultRendererParentClass() {
+		StringBuilder sb = new StringBuilder(4);
+		
+		sb.append(getPackage());
+		sb.append(StringPool.DOT);
+		sb.append(getCamelizedName());
+		sb.append("RendererBase");
+
+		return sb.toString();
+	}
+
+	public String getRendererParentClass() {
+		
+		if (_rendererParentClass == null) {
+			_rendererParentClass = getDefaultRendererParentClass();
+		}
+
+		return _rendererParentClass;
+	}
+	
+	public String getUnqualifiedRendererParentClass() {
+		return getRendererParentClass().substring(_rendererParentClass.lastIndexOf(StringPool.DOT) + 1);
+	}
+
+	public boolean hasDefaultParentClass() {
+		return getParentClass().equals(_COMPONENT_DEFAULT_PARENT_CLASS);
+	}
+	
+	public boolean hasDefaultRendererParentClass() {
+		return getRendererParentClass().equals(getDefaultRendererParentClass());
+	}
+
+	public boolean isGenerateComponentBaseClass() {
+		return _generateComponentBaseClass;
+	}
+
+	public void setGenerateComponentBaseClass(boolean generateComponentBaseClass) {
+		this._generateComponentBaseClass = generateComponentBaseClass;
+	}
+
+	public void setRendererParentClass(String rendererParentClass) {
+		_rendererParentClass = rendererParentClass;
+	}
 	
 	public static final String _FACES_COMPONENT_DEFAULT_PARENT_CLASS =
 			"javax.faces.component.UIPanel";
+
+	private boolean _generateComponentBaseClass;
+	private String _rendererParentClass;
 }

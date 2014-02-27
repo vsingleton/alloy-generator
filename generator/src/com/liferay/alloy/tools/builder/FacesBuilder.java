@@ -63,14 +63,21 @@ public class FacesBuilder extends BaseBuilder {
 		List<Component> components = getAllComponents();
 
 		for (Component component : components) {
-			Map<String, Object> context = getTemplateContext(component);
-
 			FacesComponent facesComponent = (FacesComponent) component;
+			Map<String, Object> context = getTemplateContext(component);
+			
 
 			_buildComponent(facesComponent, context);
-			_buildComponentBase(facesComponent, context);
+
+			if (facesComponent.isGenerateComponentBaseClass()) {
+				_buildComponentBase(facesComponent, context);
+			}
+
 			_buildRenderer(facesComponent, context);
-			_buildRendererBase(facesComponent, context);
+
+			if (facesComponent.hasDefaultRendererParentClass()) {
+				_buildRendererBase(facesComponent, context);
+			}
 		}
 
 		_buildTaglibsXML();
