@@ -67,16 +67,6 @@ public class Component extends BaseModel {
 			getName(), true, StringPool.DASH.charAt(0));
 	}
 
-	public String getClassName() {
-		String className = _className;
-
-		if (StringUtil.isBlank(className)) {
-			className = getSafeName().concat(_CLASS_NAME_SUFFIX);
-		}
-
-		return className;
-	}
-
 	public List<Event> getEvents() {
 		return _events;
 	}
@@ -140,15 +130,6 @@ public class Component extends BaseModel {
 		return StringUtil.uncapitalize(getCamelizedName());
 	}
 
-	public String getUnqualifiedParentClass() {
-		return _parentClass.substring(
-			_parentClass.lastIndexOf(StringPool.DOT) + 1);
-	}
-
-	public boolean getWriteJSP() {
-		return _writeJSP;
-	}
-
 	public boolean isAlloyComponent() {
 		return _alloyComponent;
 	}
@@ -199,10 +180,6 @@ public class Component extends BaseModel {
 		_bodyContent = bodyContent;
 	}
 
-	public void setClassName(String className) {
-		_className = className;
-	}
-
 	public void setDynamicAttributes(boolean dynamicAttributes) {
 		_dynamicAttributes = dynamicAttributes;
 	}
@@ -231,23 +208,15 @@ public class Component extends BaseModel {
 		_parentClass = parentClass;
 	}
 
-	public void setWriteJSP(boolean writeJSP) {
-		_writeJSP = writeJSP;
-	}
-
-	private final static String _CLASS_NAME_SUFFIX = "Tag";
-
 	private boolean _alloyComponent;
 	private List<Attribute> _attributes;
 	private String[] _authors;
 	private boolean _bodyContent;
-	private String _className;
 	private String _componentInterface;
 	private boolean _dynamicAttributes;
 	private List<Event> _events;
 	private String _module;
 	private String _package;
 	private String _parentClass;
-	private boolean _writeJSP;
 
 }

@@ -272,9 +272,6 @@ public abstract class BaseBuilder {
 		boolean bodyContent = Convert.toBoolean(
 			componentNode.attributeValue("bodyContent"), false);
 
-		String className = Convert.toString(
-			componentNode.attributeValue("className"));
-
 		String componentInterface = Convert.toString(
 			componentNode.attributeValue("componentInterface"),
 			getComponentDefaultInterface());
@@ -300,7 +297,6 @@ public abstract class BaseBuilder {
 		component.setAttributes(attributes);
 		component.setAuthors(authors);
 		component.setBodyContent(bodyContent);
-		component.setClassName(className);
 		component.setDescription(description);
 		component.setDynamicAttributes(dynamicAttributes);
 		component.setEvents(events);

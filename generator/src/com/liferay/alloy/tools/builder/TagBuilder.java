@@ -14,11 +14,6 @@
 
 package com.liferay.alloy.tools.builder;
 
-import com.liferay.alloy.tools.model.Component;
-import com.liferay.alloy.util.PropsUtil;
-import com.liferay.alloy.util.xml.SAXReaderUtil;
-import com.liferay.alloy.util.xml.xpath.AlloyGeneratorNamespaceContext;
-
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.util.ArrayList;
@@ -27,9 +22,7 @@ import java.util.List;
 import java.util.Map;
 
 import jodd.io.FileUtil;
-
 import jodd.typeconverter.Convert;
-
 import jodd.util.StringPool;
 
 import org.dom4j.Document;
@@ -37,8 +30,13 @@ import org.dom4j.DocumentFactory;
 import org.dom4j.Element;
 import org.dom4j.Node;
 import org.dom4j.XPath;
-
 import org.jaxen.NamespaceContext;
+
+import com.liferay.alloy.tools.model.Component;
+import com.liferay.alloy.tools.model.TagComponent;
+import com.liferay.alloy.util.PropsUtil;
+import com.liferay.alloy.util.xml.SAXReaderUtil;
+import com.liferay.alloy.util.xml.xpath.AlloyGeneratorNamespaceContext;
 public class TagBuilder extends BaseBuilder {
 
 	public static void main(String[] args) throws Exception {
@@ -87,15 +85,16 @@ public class TagBuilder extends BaseBuilder {
 		List<Component> components = getAllComponents();
 
 		for (Component component : components) {
-			Map<String, Object> context = getTemplateContext(component);
+			TagComponent tagComponent = (TagComponent) component;
+			Map<String, Object> context = getTemplateContext(tagComponent);
 
-			_createBaseTag(component, context);
+			_createBaseTag(tagComponent, context);
 
-			if (component.getWriteJSP()) {
-				_createPageJSP(component, context);
+			if (tagComponent.getWriteJSP()) {
+				_createPageJSP(tagComponent, context);
 			}
 
-			_createTag(component, context);
+			_createTag(tagComponent, context);
 		}
 
 		_createCommonInitJSP();
@@ -129,16 +128,20 @@ public class TagBuilder extends BaseBuilder {
 		List<Element> allComponentNodes = root.elements("component");
 
 		for (Element node : allComponentNodes) {
-			Component component = new Component();
+			TagComponent tagComponent = new TagComponent();
 
-			setComponentBaseAttributes(node, component, defaultPackage);
+			setComponentBaseAttributes(node, tagComponent, defaultPackage);
+
+			String className = Convert.toString(
+					node.attributeValue("className"));
 
 			boolean writeJSP = Convert.toBoolean(
 					node.attributeValue("writeJSP"), true);
 
-			component.setWriteJSP(writeJSP);
+			tagComponent.setClassName(className);
+			tagComponent.setWriteJSP(writeJSP);
 
-			components.add(component);
+			components.add(tagComponent);
 		}
 
 		return components;
@@ -155,53 +158,53 @@ public class TagBuilder extends BaseBuilder {
 		return context;
 	}
 
-	protected String getJavaOutputBaseDir(Component component) {
+	protected String getJavaOutputBaseDir(TagComponent tagComponent) {
 		StringBuilder sb = new StringBuilder();
 
-		sb.append(getJavaOutputDir(component));
+		sb.append(getJavaOutputDir(tagComponent));
 		sb.append(_BASE);
 		sb.append(StringPool.SLASH);
 
 		return sb.toString();
 	}
 
-	protected String getJavaOutputDir(Component component) {
+	protected String getJavaOutputDir(TagComponent tagComponent) {
 		StringBuilder sb = new StringBuilder();
 
 		sb.append(_javaDir);
-		sb.append(component.getPackage());
+		sb.append(tagComponent.getPackage());
 		sb.append(StringPool.SLASH);
 
 		return sb.toString();
 	}
 
-	protected String getJspDir(Component component) {
+	protected String getJspDir(TagComponent tagComponent) {
 		StringBuilder sb = new StringBuilder();
 
 		sb.append(_jspDir);
-		sb.append(component.getPackage());
+		sb.append(tagComponent.getPackage());
 		sb.append(StringPool.SLASH);
 
 		return sb.toString();
 	}
 
-	protected String getJspOutputDir(Component component) {
+	protected String getJspOutputDir(TagComponent tagComponent) {
 		StringBuilder sb = new StringBuilder();
 
 		sb.append(_docrootDir);
 		sb.append(StringPool.SLASH);
 		sb.append(_jspDir);
-		sb.append(component.getPackage());
+		sb.append(tagComponent.getPackage());
 		sb.append(StringPool.SLASH);
 
 		return sb.toString();
 	}
 
-	protected Map<String, Object> getTemplateContext(Component component) {
-		Map<String, Object> context = super.getTemplateContext(component);
+	protected Map<String, Object> getTemplateContext(TagComponent tagComponent) {
+		Map<String, Object> context = super.getTemplateContext(tagComponent);
 
-		String jspRelativePath = getJspDir(component).concat(
-			component.getUncamelizedName(StringPool.UNDERSCORE));
+		String jspRelativePath = getJspDir(tagComponent).concat(
+			tagComponent.getUncamelizedName(StringPool.UNDERSCORE));
 
 		context.put("jspRelativePath", jspRelativePath);
 
@@ -294,14 +297,14 @@ public class TagBuilder extends BaseBuilder {
 	}
 
 	private void _createBaseTag(
-			Component component, Map<String, Object> context)
+			TagComponent tagComponent, Map<String, Object> context)
 		throws Exception {
 
 		StringBuilder sb = new StringBuilder();
 
-		sb.append(getJavaOutputBaseDir(component));
+		sb.append(getJavaOutputBaseDir(tagComponent));
 		sb.append(_BASE_CLASS_PREFIX);
-		sb.append(component.getClassName());
+		sb.append(tagComponent.getClassName());
 		sb.append(_CLASS_SUFFIX);
 
 		String content = processTemplate(_tplTagBase, context);
@@ -329,11 +332,11 @@ public class TagBuilder extends BaseBuilder {
 	}
 
 	private void _createPageJSP(
-			Component component, Map<String, Object> context)
+			TagComponent tagComponent, Map<String, Object> context)
 		throws Exception {
 
-		String pathName = component.getUncamelizedName(StringPool.UNDERSCORE);
-		String path = getJspOutputDir(component).concat(pathName);
+		String pathName = tagComponent.getUncamelizedName(StringPool.UNDERSCORE);
+		String path = getJspOutputDir(tagComponent).concat(pathName);
 
 		String contentJsp = processTemplate(_tplJsp, context);
 		String contentInitJsp = processTemplate(_tplInitJsp, context);
@@ -344,7 +347,7 @@ public class TagBuilder extends BaseBuilder {
 		writeFile(initFile, contentInitJsp);
 		writeFile(initExtFile, StringPool.EMPTY, false);
 
-		if (component.isBodyContent()) {
+		if (tagComponent.isBodyContent()) {
 			String contentStart = processTemplate(_tplStartJsp, context);
 
 			File startFile = new File(path.concat(_START_PAGE));
@@ -358,13 +361,13 @@ public class TagBuilder extends BaseBuilder {
 		}
 	}
 
-	private void _createTag(Component component, Map<String, Object> context)
+	private void _createTag(TagComponent tagComponent, Map<String, Object> context)
 		throws Exception {
 
 		StringBuilder sb = new StringBuilder();
 
-		sb.append(getJavaOutputDir(component));
-		sb.append(component.getClassName());
+		sb.append(getJavaOutputDir(tagComponent));
+		sb.append(tagComponent.getClassName());
 		sb.append(_CLASS_SUFFIX);
 
 		String content = processTemplate(_tplTag, context);
