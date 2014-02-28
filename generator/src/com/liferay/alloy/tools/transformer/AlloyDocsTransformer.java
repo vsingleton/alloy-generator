@@ -200,6 +200,8 @@ public class AlloyDocsTransformer {
 			componentNode.addAttribute(
 				"alloyComponent", String.valueOf(component.isAlloyComponent()));
 
+			componentNode.addAttribute("description", "<![CDATA[" + component.getDescription() + "]]>");
+
 			Element attributesNode = componentNode.addElement("attributes");
 			Element eventsNode = componentNode.addElement("events");
 
