@@ -18,7 +18,7 @@ import jodd.util.StringPool;
 
 public class FacesComponent extends Component {
 
-	public String getDefaultRendererParentClass() {
+	public String getRendererBaseClass() {
 		StringBuilder sb = new StringBuilder(4);
 		
 		sb.append(getPackage());
@@ -30,32 +30,23 @@ public class FacesComponent extends Component {
 	}
 
 	public String getRendererParentClass() {
-		
-		if (_rendererParentClass == null) {
-			_rendererParentClass = getDefaultRendererParentClass();
-		}
-
 		return _rendererParentClass;
 	}
 	
 	public String getUnqualifiedRendererParentClass() {
 		return getRendererParentClass().substring(_rendererParentClass.lastIndexOf(StringPool.DOT) + 1);
 	}
-
-	public boolean hasDefaultParentClass() {
-		return getParentClass().equals(_FACES_COMPONENT_DEFAULT_PARENT_CLASS);
-	}
 	
-	public boolean hasDefaultRendererParentClass() {
-		return getRendererParentClass().equals(getDefaultRendererParentClass());
+	public boolean isRendererBaseClassRequired() {
+		return getRendererParentClass().equals(getRendererBaseClass());
 	}
 
-	public boolean isGenerateComponentBaseClass() {
-		return _generateComponentBaseClass;
+	public boolean isComponentBaseClassRequired() {
+		return _componentBaseClassRequired;
 	}
 
-	public void setGenerateComponentBaseClass(boolean generateComponentBaseClass) {
-		this._generateComponentBaseClass = generateComponentBaseClass;
+	public void setComponentBaseClassRequired(boolean componentBaseClassRequired) {
+		this._componentBaseClassRequired = componentBaseClassRequired;
 	}
 
 	public void setRendererParentClass(String rendererParentClass) {
@@ -65,6 +56,6 @@ public class FacesComponent extends Component {
 	public static final String _FACES_COMPONENT_DEFAULT_PARENT_CLASS =
 			"javax.faces.component.UIPanel";
 
-	private boolean _generateComponentBaseClass;
+	private boolean _componentBaseClassRequired;
 	private String _rendererParentClass;
 }

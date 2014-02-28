@@ -69,13 +69,13 @@ public class FacesBuilder extends BaseBuilder {
 
 			_buildComponent(facesComponent, context);
 
-			if (facesComponent.isGenerateComponentBaseClass()) {
+			if (facesComponent.isComponentBaseClassRequired()) {
 				_buildComponentBase(facesComponent, context);
 			}
 
 			_buildRenderer(facesComponent, context);
 
-			if (facesComponent.hasDefaultRendererParentClass()) {
+			if (facesComponent.isRendererBaseClassRequired()) {
 				_buildRendererBase(facesComponent, context);
 			}
 		}
@@ -106,13 +106,13 @@ public class FacesBuilder extends BaseBuilder {
 			setComponentBaseAttributes(node, facesComponent, defaultPackage);
 			
 			boolean generateComponentBaseClass = Convert.toBoolean(
-					node.attributeValue("generateComponentBaseClass"), true);
+					node.attributeValue("componentBaseClassRequired"), true);
 
 			String rendererParentClass = Convert.toString(
 					node.attributeValue("rendererParentClass"),
-					null);
+					facesComponent.getRendererBaseClass());
 
-			facesComponent.setGenerateComponentBaseClass(generateComponentBaseClass);
+			facesComponent.setComponentBaseClassRequired(generateComponentBaseClass);
 			facesComponent.setRendererParentClass(rendererParentClass);
 
 			facesComponents.add(facesComponent);

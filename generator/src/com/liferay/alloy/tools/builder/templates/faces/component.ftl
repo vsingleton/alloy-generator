@@ -3,7 +3,7 @@
 
 package ${packagePath}.${component.getUncamelizedName(BLANK)};
 
-<#if !component.isGenerateComponentBaseClass()>
+<#if !component.isComponentBaseClassRequired()>
 import ${component.getParentClass()};
 </#if>
 import javax.faces.component.FacesComponent;
@@ -14,12 +14,12 @@ import javax.faces.component.FacesComponent;
 </#list>
  */
 @FacesComponent(value = "${packagePath}.${component.getUncamelizedName(BLANK)}.${component.getCamelizedName()}")
-public class ${component.getCamelizedName()} <#if component.isGenerateComponentBaseClass()>extends ${component.getCamelizedName()}Base <#elseif !component.hasDefaultParentClass()>extends ${component.getUnqualifiedParentClass()} </#if>{
+public class ${component.getCamelizedName()} <#if component.isComponentBaseClassRequired()>extends ${component.getCamelizedName()}Base <#else>extends ${component.getUnqualifiedParentClass()} implements Styleable </#if>{
 
 	// Public Constants
 	public static final String COMPONENT_FAMILY = "${packagePath}.${component.getUncamelizedName(BLANK)}";
 	public static final String COMPONENT_TYPE = "${packagePath}.${component.getUncamelizedName(BLANK)}.${component.getCamelizedName()}";
-	<#if !component.isGenerateComponentBaseClass()>
+	<#if !component.isComponentBaseClassRequired()>
 
 	<#list component.getAttributesAndEvents() as attribute>
 	public static final String ${attribute.getConstantName()} = "${attribute.getName()}";
@@ -40,7 +40,7 @@ public class ${component.getCamelizedName()} <#if component.isGenerateComponentB
 		return COMPONENT_FAMILY;
 	}
 
-	<#if !component.isGenerateComponentBaseClass()>
+	<#if !component.isComponentBaseClassRequired()>
 	<#list component.getAttributesAndEvents() as attribute>
 	<#if attribute.isGettable()>
 	public ${attribute.getJSFInputType()} ${attribute.getGetterMethodPrefix()}${attribute.getJavaBeanPropertyName()}() {

@@ -3,7 +3,7 @@
 
 package ${packagePath}.${component.getUncamelizedName(BLANK)};
 
-<#if !component.hasDefaultRendererParentClass()>
+<#if !component.isRendererBaseClassRequired()>
 import ${component.getRendererParentClass()};
 </#if>
 import ${component.getParentClass()};
