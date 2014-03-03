@@ -16,6 +16,7 @@ package com.liferay.alloy.tools.builder;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -162,6 +163,22 @@ public class FacesBuilder extends BaseBuilder {
 
 		return sb.toString();
 	}
+
+	protected Document mergeExtendedXML(Document mergeDoc, Document extensionDoc) {
+
+		if (extensionDoc != null) {
+
+			List<Element> extensionDocFunctions = extensionDoc.getRootElement().elements("functions");
+	
+			for (Element extensionDocFunction : extensionDocFunctions) {
+				
+				Element function = extensionDocFunction.createCopy();
+				mergeDoc.getRootElement().add(function);
+			}
+		}
+		
+		return mergeDoc;
+	}
 	
 	private void _buildComponent(
 			FacesComponent facesComponent, Map<String, Object> context)
@@ -248,7 +265,42 @@ public class FacesBuilder extends BaseBuilder {
 			String namespace = Convert.toString(
 				root.attributeValue("namespace"));
 
+			String namespaceURI = Convert.toString(
+					root.attributeValue("namespaceURI"));
+
+			String description = Convert.toString(
+					root.attributeValue("description"));
+
+			Element functionsElement = root.element("functions");
+
+			if (functionsElement != null) {
+
+				List<Element> functions = functionsElement.elements("function");
+				List<Map<String, String>> functionsList = new ArrayList<Map<String, String>>();
+	
+				for (Element function : functions) {
+					
+					Map<String, String> functionMap = new HashMap<String, String>();
+	
+					String functionDescription = function.element("description").getText();
+					functionMap.put("description", functionDescription);
+					String functionName = function.element("function-name").getText();
+					functionMap.put("name", functionName);
+					String functionClass = function.element("function-class").getText();
+					functionMap.put("class", functionClass);
+					String functionSignature = function.element("function-signature").getText();
+					functionMap.put("signature", functionSignature);
+					
+					functionsList.add(functionMap);
+				}
+
+				context.put("functions", functionsList);
+			}
+
 			context.put("components", getComponents(doc));
+			context.put("namespaceURI", namespaceURI);
+			context.put("description", description);
+			
 
 			String rendererContent = processTemplate(_tplTaglibsXML, context);
 

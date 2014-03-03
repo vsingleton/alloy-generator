@@ -384,6 +384,10 @@ public abstract class BaseBuilder {
 		return context;
 	}
 
+	protected Document mergeExtendedXML(Document mergeDoc, Document extensionDoc) {
+		return mergeDoc;
+	}
+
 	protected Document mergeXMLAttributes(Document doc1, Document doc2) {
 		Element doc2Root = doc2.getRootElement();
 		Element doc1Root = doc1.getRootElement();
@@ -495,6 +499,8 @@ public abstract class BaseBuilder {
 				}
 			}
 		}
+
+		doc = mergeExtendedXML(doc, doc1);
 
 		return doc;
 	}
