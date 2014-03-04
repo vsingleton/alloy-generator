@@ -4,6 +4,7 @@
 package ${packagePath}.${component.getUncamelizedName(BLANK)};
 
 <#if !component.isComponentBaseClassRequired()>
+import com.liferay.faces.util.component.Styleable;
 import ${component.getParentClass()};
 </#if>
 import javax.faces.component.FacesComponent;
@@ -14,19 +15,11 @@ import javax.faces.component.FacesComponent;
 </#list>
  */
 @FacesComponent(value = "${packagePath}.${component.getUncamelizedName(BLANK)}.${component.getCamelizedName()}")
-public class ${component.getCamelizedName()} <#if component.isComponentBaseClassRequired()>extends ${component.getCamelizedName()}Base <#else>extends ${component.getUnqualifiedParentClass()} implements Styleable </#if>{
+public class ${component.getCamelizedName()} <#if component.isComponentBaseClassRequired()>extends ${component.getCamelizedName()}Base <#else>extends ${component.getUnqualifiedParentClass()} implements Styleable, ${component.getCamelizedName()}Component </#if>{
 
 	// Public Constants
 	public static final String COMPONENT_FAMILY = "${packagePath}.${component.getUncamelizedName(BLANK)}";
 	public static final String COMPONENT_TYPE = "${packagePath}.${component.getUncamelizedName(BLANK)}.${component.getCamelizedName()}";
-	<#if !component.isComponentBaseClassRequired()>
-
-	<#list component.getAttributesAndEvents() as attribute>
-	public static final String ${attribute.getConstantName()} = "${attribute.getName()}";
-	</#list>
-	public static final String CSS_CLASS = "cssClass";
-	public static final String STYLE_CLASS = "styleClass";
-	</#if>
 
 	// Private Constants
 	private static final String RENDERER_TYPE = "${packagePath}.${component.getUncamelizedName(BLANK)}.${component.getCamelizedName()}Renderer";

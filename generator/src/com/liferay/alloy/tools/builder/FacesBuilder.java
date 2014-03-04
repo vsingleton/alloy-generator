@@ -21,7 +21,6 @@ import java.util.List;
 import java.util.Map;
 
 import jodd.typeconverter.Convert;
-
 import jodd.util.StringPool;
 
 import org.dom4j.Document;
@@ -50,6 +49,8 @@ public class FacesBuilder extends BaseBuilder {
 
 		_tplComponent = getTemplatesDir() + "component.ftl";
 		_tplComponentBase = getTemplatesDir() + "component_base.ftl";
+		_tplComponentInterface = getTemplatesDir() + "component_interface.ftl";
+		_tplComponentWrapper = getTemplatesDir() + "component_wrapper.ftl";
 		_tplRenderer = getTemplatesDir() + "renderer.ftl";
 		_tplRendererBase = getTemplatesDir() + "renderer_base.ftl";
 		_tplTaglibsXML = getTemplatesDir() + "taglibs.ftl";
@@ -73,6 +74,9 @@ public class FacesBuilder extends BaseBuilder {
 			if (facesComponent.isComponentBaseClassRequired()) {
 				_buildComponentBase(facesComponent, context);
 			}
+
+			_buildComponentInterface(facesComponent, context);
+			_buildComponentWrapper(facesComponent, context);
 
 			_buildRenderer(facesComponent, context);
 
@@ -215,6 +219,46 @@ public class FacesBuilder extends BaseBuilder {
 		writeFile(componentBaseFile, componentBaseContent);
 	}
 
+	private void _buildComponentInterface(FacesComponent facesComponent,
+			Map<String, Object> context) throws Exception {
+
+		String path = getComponentOutputDir(facesComponent);
+
+		String componentBaseContent = processTemplate(
+			_tplComponentInterface, context);
+
+		StringBuilder fileNameSb = new StringBuilder(4);
+
+		fileNameSb.append(path);
+		fileNameSb.append(facesComponent.getCamelizedName());
+		fileNameSb.append(_INTERFACE_CLASS_SUFFIX);
+		fileNameSb.append(_JAVA_EXT);
+
+		File componentInterfaceFile = new File(fileNameSb.toString());
+
+		writeFile(componentInterfaceFile, componentBaseContent);
+	}
+
+	private void _buildComponentWrapper(FacesComponent facesComponent,
+			Map<String, Object> context) throws Exception {
+
+		String path = getComponentOutputDir(facesComponent);
+
+		String componentWrapperContent = processTemplate(
+			_tplComponentWrapper, context);
+
+		StringBuilder fileNameSb = new StringBuilder(4);
+
+		fileNameSb.append(path);
+		fileNameSb.append(facesComponent.getCamelizedName());
+		fileNameSb.append(_WRAPPER_CLASS_SUFFIX);
+		fileNameSb.append(_JAVA_EXT);
+
+		File componentWrapperFile = new File(fileNameSb.toString());
+
+		writeFile(componentWrapperFile, componentWrapperContent);
+	}
+
 	private void _buildRenderer(
 			FacesComponent facesComponent, Map<String, Object> context)
 		throws Exception {
@@ -315,6 +359,10 @@ public class FacesBuilder extends BaseBuilder {
 
 	private static final String _BASE_CLASS_SUFFIX = "Base";
 
+	private static final String _INTERFACE_CLASS_SUFFIX = "Component";
+
+	private static final String _WRAPPER_CLASS_SUFFIX = "ComponentWrapper";
+
 	private static final String _COMPONENTS_PACKAGE =
 		"com.liferay.faces.alloy.component";
 
@@ -331,6 +379,8 @@ public class FacesBuilder extends BaseBuilder {
 	private String _taglibXMLOutputDir;
 	private String _tplComponent;
 	private String _tplComponentBase;
+	private String _tplComponentInterface;
+	private String _tplComponentWrapper;
 	private String _tplRenderer;
 	private String _tplRendererBase;
 	private String _tplTaglibsXML;

@@ -19,15 +19,7 @@ import ${component.getParentClass()};
 </#list>
  * @generated
  */
-public abstract class ${component.getCamelizedName()}Base extends ${component.getUnqualifiedParentClass()} implements Styleable, Widget {
-
-	// Public Constants
-	<#list component.getAttributesAndEvents() as attribute>
-	public static final String ${attribute.getConstantName()} = "${attribute.getName()}";
-	</#list>
-	public static final String WIDGET_VAR = "widgetVar";
-	public static final String CSS_CLASS = "cssClass";
-	public static final String STYLE_CLASS = "styleClass";
+public abstract class ${component.getCamelizedName()}Base extends ${component.getUnqualifiedParentClass()} implements Styleable, Widget, ${component.getCamelizedName()}Component {
 
 	<#list component.getAttributesAndEvents() as attribute>
 	<#if attribute.isGettable()>
