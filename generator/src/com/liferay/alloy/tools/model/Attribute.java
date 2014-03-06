@@ -149,6 +149,10 @@ public class Attribute extends BaseModel {
 		return StringPool.EMPTY;
 	}
 
+	public boolean isBeanPropertyRequired() {
+		return _beanPropertyRequired;
+	}
+
 	public boolean isEvent() {
 		List<Event> events = _component.getEvents();
 
@@ -165,6 +169,10 @@ public class Attribute extends BaseModel {
 
 	public boolean isSettable() {
 		return _settable;
+	}
+
+	public void setBeanPropertyRequired(boolean beanPropertyRequired) {
+		_beanPropertyRequired = beanPropertyRequired;
 	}
 
 	public void setComponent(Component component) {
@@ -207,6 +215,7 @@ public class Attribute extends BaseModel {
 		return name.substring(0, 2);
 	}
 
+	private boolean _beanPropertyRequired;
 	private Component _component;
 	private String _defaultValue;
 	private boolean _gettable = true;

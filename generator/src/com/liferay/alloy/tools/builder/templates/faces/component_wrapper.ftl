@@ -32,14 +32,14 @@ public class ${component.getCamelizedName()}ComponentWrapper implements ${compon
 	}
 
 	<#list component.getAttributesAndEvents() as attribute>
-	<#if attribute.isGettable()>
+	<#if attribute.isGettable() && attribute.isBeanPropertyRequired()>
 
 	@Override
 	public ${attribute.getJSFInputType()} ${attribute.getGetterMethodPrefix()}${attribute.getJavaBeanPropertyName()}() {
 		return getWrapped().${attribute.getGetterMethodPrefix()}${attribute.getJavaBeanPropertyName()}();
 	}
 	</#if>
-	<#if attribute.isSettable()>
+	<#if attribute.isSettable() && attribute.isBeanPropertyRequired()>
 
 	@Override
 	public void set${attribute.getJavaBeanPropertyName()}(${attribute.getJSFInputType()} ${attribute.getJavaSafeName()}) {

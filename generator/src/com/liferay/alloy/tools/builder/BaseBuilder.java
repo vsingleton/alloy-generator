@@ -198,6 +198,8 @@ public abstract class BaseBuilder {
 				attributeNode.elementText("required"), false);
 			boolean settable = Convert.toBoolean(
 				attributeNode.elementText("settable"), true);
+			boolean beanPropertyRequired = Convert.toBoolean(
+				attributeNode.elementText("beanPropertyRequired"), true);
 
 			Attribute attribute = new Attribute();
 
@@ -210,6 +212,7 @@ public abstract class BaseBuilder {
 			attribute.setOutputType(outputType);
 			attribute.setRequired(required);
 			attribute.setSettable(settable);
+			attribute.setBeanPropertyRequired(beanPropertyRequired);
 
 			attributes.add(attribute);
 		}

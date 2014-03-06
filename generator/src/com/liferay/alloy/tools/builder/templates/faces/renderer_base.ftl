@@ -80,7 +80,7 @@ public abstract class ${component.getCamelizedName()}RendererBase extends AUIRen
 		boolean first = true;
 
 		<#list component.getAttributes() as attribute>
-		<#if attribute.isGettable()>
+		<#if attribute.isGettable() && attribute.isBeanPropertyRequired()>
 		${attribute.getJSFInputType()} ${attribute.getJavaSafeName()} = ${component.getUncapitalizedName()}Component.${attribute.getGetterMethodPrefix()}${attribute.getJavaBeanPropertyName()}();
 
 		if (${attribute.getJavaSafeName()} != null) {
@@ -169,10 +169,12 @@ public abstract class ${component.getCamelizedName()}RendererBase extends AUIRen
 	}
 
 	<#list component.getAttributes() as attribute>
+	<#if attribute.isGettable() && attribute.isBeanPropertyRequired()>
 	protected void encode${attribute.getCapitalizedName()}(ResponseWriter responseWriter, ${component.getCamelizedName()}Component ${component.getUncapitalizedName()}Component, ${attribute.getJSFInputType()} ${attribute.getJavaSafeName()}, boolean first) throws IOException {
 		encode${attribute.getJavaScriptType()}(responseWriter, ${component.getCamelizedName()}Component.${attribute.getConstantName()}, ${attribute.getJavaSafeName()}, first);
 	}
 
+	</#if>
 	</#list>
 	<#list component.getEvents() as event>
 	protected void encode${event.getCapitalizedName()}(ResponseWriter responseWriter, ${component.getCamelizedName()}Component ${component.getUncapitalizedName()}Component, ${event.getJSFInputType()} ${event.getJavaSafeName()}, boolean first) throws IOException {
