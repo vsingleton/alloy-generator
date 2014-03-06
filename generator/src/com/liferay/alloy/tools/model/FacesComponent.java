@@ -52,9 +52,6 @@ public class FacesComponent extends Component {
 	public void setRendererParentClass(String rendererParentClass) {
 		_rendererParentClass = rendererParentClass;
 	}
-	
-	public static final String _FACES_COMPONENT_DEFAULT_PARENT_CLASS =
-			"javax.faces.component.UIPanel";
 
 	private boolean _componentBaseClassRequired;
 	private String _rendererParentClass;

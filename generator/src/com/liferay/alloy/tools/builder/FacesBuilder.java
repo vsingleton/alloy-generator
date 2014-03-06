@@ -133,7 +133,7 @@ public class FacesBuilder extends BaseBuilder {
 
 	@Override
 	protected String getComponentDefaultParentClass() {
-		return FacesComponent._FACES_COMPONENT_DEFAULT_PARENT_CLASS;
+		return _FACES_COMPONENT_DEFAULT_PARENT_CLASS;
 	}
 
 	protected String getComponentOutputDir(FacesComponent facesComponent) {
@@ -358,6 +358,9 @@ public class FacesBuilder extends BaseBuilder {
 	}
 
 	private static final String _BASE_CLASS_SUFFIX = "Base";
+
+	private static final String _FACES_COMPONENT_DEFAULT_PARENT_CLASS =
+			"javax.faces.component.UIPanel";
 
 	private static final String _INTERFACE_CLASS_SUFFIX = "Component";
 
