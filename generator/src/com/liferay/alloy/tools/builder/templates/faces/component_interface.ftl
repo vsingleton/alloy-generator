@@ -15,14 +15,24 @@ public interface ${component.getCamelizedName()}Component {
 	<#list component.getAttributesAndEvents() as attribute>
 	public static final String ${attribute.getConstantName()} = "${attribute.getName()}";
 	</#list>
-	<#list component.getAttributesAndEvents() as attribute>
+	<#list component.getFacesAttributes() as attribute>
 	<#if attribute.isGettable() && attribute.isBeanPropertyRequired()>
 
-	public ${attribute.getJSFInputType()} ${attribute.getGetterMethodPrefix()}${attribute.getJavaBeanPropertyName()}();
+	public ${attribute.getJavaWrapperInputType()} ${attribute.getGetterMethodPrefix()}${attribute.getJavaBeanPropertyName()}();
 	</#if>
 	<#if attribute.isSettable() && attribute.isBeanPropertyRequired()>
 
-	public void set${attribute.getJavaBeanPropertyName()}(${attribute.getJSFInputType()} ${attribute.getJavaSafeName()});
+	public void set${attribute.getJavaBeanPropertyName()}(${attribute.getJavaWrapperInputType()} ${attribute.getJavaSafeName()});
+	</#if>
+	</#list>
+	<#list component.getEvents() as event>
+	<#if event.isGettable()>
+
+	public ${event.getJavaWrapperInputType()} get${event.getJavaBeanPropertyName()}();
+	</#if>
+	<#if event.isSettable()>
+
+	public void set${event.getJavaBeanPropertyName()}(${event.getJavaWrapperInputType()} ${event.getJavaSafeName()});
 	</#if>
 	</#list>
 }

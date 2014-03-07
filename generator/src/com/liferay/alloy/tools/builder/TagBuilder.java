@@ -130,7 +130,7 @@ public class TagBuilder extends BaseBuilder {
 		for (Element node : allComponentNodes) {
 			TagComponent tagComponent = new TagComponent();
 
-			setComponentBaseAttributes(node, tagComponent, defaultPackage);
+			setComponentBaseProperties(node, tagComponent, defaultPackage);
 
 			String className = Convert.toString(
 					node.attributeValue("className"));

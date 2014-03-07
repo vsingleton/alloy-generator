@@ -14,9 +14,23 @@
 
 package com.liferay.alloy.tools.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import jodd.util.StringPool;
 
 public class FacesComponent extends Component {
+
+	public List<FacesAttribute> getFacesAttributes() {
+		List<Attribute> attributes = super.getAttributes();
+		List<FacesAttribute> facesAttributes = new ArrayList<FacesAttribute>();
+
+		for (Attribute attribute : attributes) {
+			facesAttributes.add((FacesAttribute) attribute);
+		}
+		
+		return facesAttributes;
+	}
 
 	public String getRendererBaseClass() {
 		StringBuilder sb = new StringBuilder(4);

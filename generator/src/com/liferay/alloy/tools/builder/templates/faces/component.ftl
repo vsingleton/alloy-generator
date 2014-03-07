@@ -34,16 +34,30 @@ public class ${component.getCamelizedName()} <#if component.isComponentBaseClass
 	}
 
 	<#if !component.isComponentBaseClassRequired()>
-	<#list component.getAttributesAndEvents() as attribute>
+	<#list component.getFacesAttributes() as attribute>
 	<#if attribute.isGettable() && attribute.isBeanPropertyRequired()>
-	public ${attribute.getJSFInputType()} ${attribute.getGetterMethodPrefix()}${attribute.getJavaBeanPropertyName()}() {
-		return (${attribute.getJSFInputType()}) getStateHelper().eval(${attribute.getConstantName()}, null);
+	public ${attribute.getJavaWrapperInputType()} ${attribute.getGetterMethodPrefix()}${attribute.getJavaBeanPropertyName()}() {
+		return (${attribute.getJavaWrapperInputType()}) getStateHelper().eval(${attribute.getConstantName()}, null);
 	}
 	</#if>
 
 	<#if attribute.isSettable() && attribute.isBeanPropertyRequired()>
-	public void set${attribute.getJavaBeanPropertyName()}(${attribute.getJSFInputType()} ${attribute.getJavaSafeName()}) {
+	public void set${attribute.getJavaBeanPropertyName()}(${attribute.getJavaWrapperInputType()} ${attribute.getJavaSafeName()}) {
 		getStateHelper().put(${attribute.getConstantName()}, ${attribute.getJavaSafeName()});
+	}
+
+	</#if>
+	</#list>
+	<#list component.getEvents() as event>
+	<#if event.isGettable()>
+	public ${event.getJavaWrapperInputType()} get${event.getJavaBeanPropertyName()}() {
+		return (${event.getJavaWrapperInputType()}) getStateHelper().eval(${event.getConstantName()}, null);
+	}
+	</#if>
+
+	<#if event.isSettable()>
+	public void set${event.getJavaBeanPropertyName()}(${event.getJavaWrapperInputType()} ${event.getJavaSafeName()}) {
+		getStateHelper().put(${event.getConstantName()}, ${event.getJavaSafeName()});
 	}
 
 	</#if>

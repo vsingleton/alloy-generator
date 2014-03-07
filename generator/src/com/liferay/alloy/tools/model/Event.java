@@ -29,7 +29,6 @@ public class Event extends Attribute {
 		setOutputType(attribute.getOutputType());
 		setRequired(attribute.isRequired());
 		setSettable(attribute.isSettable());
-		setBeanPropertyRequired(true);
 	}
 
 	public Event(Attribute attribute, boolean isAfter) {

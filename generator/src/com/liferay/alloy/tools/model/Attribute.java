@@ -41,17 +41,6 @@ public class Attribute extends BaseModel {
 		return _defaultValue;
 	}
 
-	public String getGetterMethodPrefix() {
-
-		String getterMethodPrefix = "get";
-
-		if (getJSFInputType().equals("Boolean")) {
-			getterMethodPrefix = "is";
-		}
-
-		return getterMethodPrefix;
-	}
-
 	public String getInputType() {
 		return TypeUtil.getInputJavaType(_inputType, true);
 	}
@@ -81,7 +70,7 @@ public class Attribute extends BaseModel {
 		return TypeUtil.getJavaScriptType(_javaScriptType);
 	}
 
-	public String getJSFInputType() {
+	public String getJavaWrapperInputType() {
 		String inputJavaType = TypeUtil.getInputJavaType(_inputType, true);
 
 		if (TypeUtil.isPrimitiveType(inputJavaType)) {
@@ -149,10 +138,6 @@ public class Attribute extends BaseModel {
 		return StringPool.EMPTY;
 	}
 
-	public boolean isBeanPropertyRequired() {
-		return _beanPropertyRequired;
-	}
-
 	public boolean isEvent() {
 		List<Event> events = _component.getEvents();
 
@@ -169,10 +154,6 @@ public class Attribute extends BaseModel {
 
 	public boolean isSettable() {
 		return _settable;
-	}
-
-	public void setBeanPropertyRequired(boolean beanPropertyRequired) {
-		_beanPropertyRequired = beanPropertyRequired;
 	}
 
 	public void setComponent(Component component) {
@@ -215,7 +196,6 @@ public class Attribute extends BaseModel {
 		return name.substring(0, 2);
 	}
 
-	private boolean _beanPropertyRequired;
 	private Component _component;
 	private String _defaultValue;
 	private boolean _gettable = true;

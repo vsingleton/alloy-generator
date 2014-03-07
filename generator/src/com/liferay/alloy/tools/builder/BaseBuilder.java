@@ -166,20 +166,8 @@ public abstract class BaseBuilder {
 		return getAttributes(componentNode, "attributes", "attribute");
 	}
 
-	protected List<Attribute> getAttributes(
-		Element componentNode, String group, String nodeName) {
+	protected void setAttributeBaseProperties(Element attributeNode, Attribute attribute) {
 
-		List<Element> nodes = Collections.emptyList();
-
-		List<Attribute> attributes = new ArrayList<Attribute>();
-
-		Element node = componentNode.element(group);
-
-		if (node != null) {
-			nodes = node.elements(nodeName);
-		}
-
-		for (Element attributeNode : nodes) {
 			String defaultValue = attributeNode.elementText("defaultValue");
 			String description = attributeNode.elementText("description");
 			String name = attributeNode.elementText("name");
@@ -198,10 +186,6 @@ public abstract class BaseBuilder {
 				attributeNode.elementText("required"), false);
 			boolean settable = Convert.toBoolean(
 				attributeNode.elementText("settable"), true);
-			boolean beanPropertyRequired = Convert.toBoolean(
-				attributeNode.elementText("beanPropertyRequired"), true);
-
-			Attribute attribute = new Attribute();
 
 			attribute.setDefaultValue(defaultValue);
 			attribute.setDescription(description);
@@ -212,8 +196,23 @@ public abstract class BaseBuilder {
 			attribute.setOutputType(outputType);
 			attribute.setRequired(required);
 			attribute.setSettable(settable);
-			attribute.setBeanPropertyRequired(beanPropertyRequired);
+	}
 
+	protected List<Attribute> getAttributes(Element componentNode, String group, String nodeName) {
+
+		List<Element> nodes = Collections.emptyList();
+
+		List<Attribute> attributes = new ArrayList<Attribute>();
+
+		Element node = componentNode.element(group);
+
+		if (node != null) {
+			nodes = node.elements(nodeName);
+		}
+		
+		for (Element attributeNode : nodes) {
+			Attribute attribute = new Attribute();
+			setAttributeBaseProperties(attributeNode, attribute);
 			attributes.add(attribute);
 		}
 
@@ -262,7 +261,7 @@ public abstract class BaseBuilder {
 		return null;
 	}
 
-	protected void setComponentBaseAttributes(Element componentNode, Component component, String defaultPackage) {
+	protected void setComponentBaseProperties(Element componentNode, Component component, String defaultPackage) {
 
 		String componentPackage = Convert.toString(
 			componentNode.attributeValue("package"), defaultPackage);

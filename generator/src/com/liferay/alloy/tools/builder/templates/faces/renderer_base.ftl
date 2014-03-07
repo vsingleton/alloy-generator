@@ -81,7 +81,7 @@ public abstract class ${component.getCamelizedName()}RendererBase extends AUIRen
 
 		<#list component.getAttributes() as attribute>
 		<#if attribute.isGettable() && attribute.isBeanPropertyRequired()>
-		${attribute.getJSFInputType()} ${attribute.getJavaSafeName()} = ${component.getUncapitalizedName()}Component.${attribute.getGetterMethodPrefix()}${attribute.getJavaBeanPropertyName()}();
+		${attribute.getJavaWrapperInputType()} ${attribute.getJavaSafeName()} = ${component.getUncapitalizedName()}Component.${attribute.getGetterMethodPrefix()}${attribute.getJavaBeanPropertyName()}();
 
 		if (${attribute.getJavaSafeName()} != null) {
 
@@ -105,7 +105,7 @@ public abstract class ${component.getCamelizedName()}RendererBase extends AUIRen
 		first = true;
 
 		<#list component.getAfterEvents() as event>
-		${event.getJSFInputType()} ${event.getJavaSafeName()} = ${component.getUncapitalizedName()}Component.${event.getGetterMethodPrefix()}${event.getJavaBeanPropertyName()}();
+		${event.getJavaWrapperInputType()} ${event.getJavaSafeName()} = ${component.getUncapitalizedName()}Component.get${event.getJavaBeanPropertyName()}();
 
 		if (${event.getJavaSafeName()} != null) {
 
@@ -127,7 +127,7 @@ public abstract class ${component.getCamelizedName()}RendererBase extends AUIRen
 		first = true;
 
 		<#list component.getOnEvents() as event>
-		${event.getJSFInputType()} ${event.getJavaSafeName()} = ${component.getUncapitalizedName()}Component.${event.getGetterMethodPrefix()}${event.getJavaBeanPropertyName()}();
+		${event.getJavaWrapperInputType()} ${event.getJavaSafeName()} = ${component.getUncapitalizedName()}Component.get${event.getJavaBeanPropertyName()}();
 
 		if (${event.getJavaSafeName()} != null) {
 
@@ -170,14 +170,14 @@ public abstract class ${component.getCamelizedName()}RendererBase extends AUIRen
 
 	<#list component.getAttributes() as attribute>
 	<#if attribute.isGettable() && attribute.isBeanPropertyRequired()>
-	protected void encode${attribute.getCapitalizedName()}(ResponseWriter responseWriter, ${component.getCamelizedName()}Component ${component.getUncapitalizedName()}Component, ${attribute.getJSFInputType()} ${attribute.getJavaSafeName()}, boolean first) throws IOException {
+	protected void encode${attribute.getCapitalizedName()}(ResponseWriter responseWriter, ${component.getCamelizedName()}Component ${component.getUncapitalizedName()}Component, ${attribute.getJavaWrapperInputType()} ${attribute.getJavaSafeName()}, boolean first) throws IOException {
 		encode${attribute.getJavaScriptType()}(responseWriter, ${component.getCamelizedName()}Component.${attribute.getConstantName()}, ${attribute.getJavaSafeName()}, first);
 	}
 
 	</#if>
 	</#list>
 	<#list component.getEvents() as event>
-	protected void encode${event.getCapitalizedName()}(ResponseWriter responseWriter, ${component.getCamelizedName()}Component ${component.getUncapitalizedName()}Component, ${event.getJSFInputType()} ${event.getJavaSafeName()}, boolean first) throws IOException {
+	protected void encode${event.getCapitalizedName()}(ResponseWriter responseWriter, ${component.getCamelizedName()}Component ${component.getUncapitalizedName()}Component, ${event.getJavaWrapperInputType()} ${event.getJavaSafeName()}, boolean first) throws IOException {
 		encodeEvent(responseWriter, ${event.getConstantUnprefixedName()}, ${event.getJavaSafeName()}, first);
 	}
 
