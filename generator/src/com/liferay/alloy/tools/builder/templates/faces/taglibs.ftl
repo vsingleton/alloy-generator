@@ -47,6 +47,18 @@
 			<type>${event.getJavaWrapperInputType()}</type>
 		</attribute>
 		</#list>
+		<attribute>
+			<description>The name of a CSS class that is to be rendered within the class attribute (same as styleClass).</description>
+			<name>cssClass</name>
+			<required>false</required>
+			<type>java.lang.String</type>
+		</attribute>
+		<attribute>
+			<description>The name of a CSS class that is to be rendered within the class attribute.</description>
+			<name>styleClass</name>
+			<required>false</required>
+			<type>java.lang.String</type>
+		</attribute>
 		<tag-extension>
 			<vdldoc:since>4.1.0</vdldoc:since>
 		</tag-extension>
