@@ -55,18 +55,9 @@ public class FacesComponent extends Component {
 		return getRendererParentClass().equals(getRendererBaseClass());
 	}
 
-	public boolean isComponentBaseClassRequired() {
-		return _componentBaseClassRequired;
-	}
-
-	public void setComponentBaseClassRequired(boolean componentBaseClassRequired) {
-		this._componentBaseClassRequired = componentBaseClassRequired;
-	}
-
 	public void setRendererParentClass(String rendererParentClass) {
 		_rendererParentClass = rendererParentClass;
 	}
 
-	private boolean _componentBaseClassRequired;
 	private String _rendererParentClass;
 }
