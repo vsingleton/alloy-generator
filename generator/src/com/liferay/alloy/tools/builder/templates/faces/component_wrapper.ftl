@@ -30,16 +30,15 @@ public class ${component.getCamelizedName()}ComponentWrapper implements ${compon
 	public ${component.getCamelizedName()}Component getWrapped() {
 		return wrapped${component.getCamelizedName()}Component;
 	}
-
 	<#list component.getFacesAttributes() as attribute>
-	<#if attribute.isGettable() && attribute.isBeanPropertyRequired()>
+	<#if attribute.isGettable() && attribute.isComponentPropertyRequired()>
 
 	@Override
 	public ${attribute.getJavaWrapperInputType()} ${attribute.getGetterMethodPrefix()}${attribute.getJavaBeanPropertyName()}() {
 		return getWrapped().${attribute.getGetterMethodPrefix()}${attribute.getJavaBeanPropertyName()}();
 	}
 	</#if>
-	<#if attribute.isSettable() && attribute.isBeanPropertyRequired()>
+	<#if attribute.isSettable() && attribute.isComponentPropertyRequired()>
 
 	@Override
 	public void set${attribute.getJavaBeanPropertyName()}(${attribute.getJavaWrapperInputType()} ${attribute.getJavaSafeName()}) {

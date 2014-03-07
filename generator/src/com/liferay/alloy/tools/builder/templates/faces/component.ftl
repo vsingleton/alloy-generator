@@ -35,13 +35,13 @@ public class ${component.getCamelizedName()} <#if component.isComponentBaseClass
 
 	<#if !component.isComponentBaseClassRequired()>
 	<#list component.getFacesAttributes() as attribute>
-	<#if attribute.isGettable() && attribute.isBeanPropertyRequired()>
+	<#if attribute.isGettable() && attribute.isComponentPropertyRequired()>
 	public ${attribute.getJavaWrapperInputType()} ${attribute.getGetterMethodPrefix()}${attribute.getJavaBeanPropertyName()}() {
 		return (${attribute.getJavaWrapperInputType()}) getStateHelper().eval(${attribute.getConstantName()}, null);
 	}
 	</#if>
 
-	<#if attribute.isSettable() && attribute.isBeanPropertyRequired()>
+	<#if attribute.isSettable() && attribute.isComponentPropertyRequired()>
 	public void set${attribute.getJavaBeanPropertyName()}(${attribute.getJavaWrapperInputType()} ${attribute.getJavaSafeName()}) {
 		getStateHelper().put(${attribute.getConstantName()}, ${attribute.getJavaSafeName()});
 	}

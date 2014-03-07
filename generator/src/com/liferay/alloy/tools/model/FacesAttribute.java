@@ -27,12 +27,12 @@ public class FacesAttribute extends Attribute {
 		return getterMethodPrefix;
 	}
 
-	public boolean isBeanPropertyRequired() {
-		return _beanPropertyRequired;
+	public boolean isComponentPropertyRequired() {
+		return _componentPropertyRequired;
 	}
 
-	public void setBeanPropertyRequired(boolean beanPropertyRequired) {
-		_beanPropertyRequired = beanPropertyRequired;
+	public void setComponentPropertyRequired(boolean componentPropertyRequired) {
+		_componentPropertyRequired = componentPropertyRequired;
 	}
 
 	public String getMethodSignature() {
@@ -43,6 +43,6 @@ public class FacesAttribute extends Attribute {
 		_methodSignature = methodSignature;
 	}
 
-	private boolean _beanPropertyRequired;
+	private boolean _componentPropertyRequired;
 	private String _methodSignature;
 }

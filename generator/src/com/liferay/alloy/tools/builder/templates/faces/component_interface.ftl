@@ -16,11 +16,11 @@ public interface ${component.getCamelizedName()}Component {
 	public static final String ${attribute.getConstantName()} = "${attribute.getName()}";
 	</#list>
 	<#list component.getFacesAttributes() as attribute>
-	<#if attribute.isGettable() && attribute.isBeanPropertyRequired()>
+	<#if attribute.isGettable() && attribute.isComponentPropertyRequired()>
 
 	public ${attribute.getJavaWrapperInputType()} ${attribute.getGetterMethodPrefix()}${attribute.getJavaBeanPropertyName()}();
 	</#if>
-	<#if attribute.isSettable() && attribute.isBeanPropertyRequired()>
+	<#if attribute.isSettable() && attribute.isComponentPropertyRequired()>
 
 	public void set${attribute.getJavaBeanPropertyName()}(${attribute.getJavaWrapperInputType()} ${attribute.getJavaSafeName()});
 	</#if>

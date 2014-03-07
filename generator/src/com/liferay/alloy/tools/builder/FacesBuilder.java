@@ -115,9 +115,9 @@ public class FacesBuilder extends BaseBuilder {
 			FacesAttribute facesAttribute = new FacesAttribute();
 			setAttributeBaseProperties(attributeNode, facesAttribute);
 
-			boolean beanPropertyRequired = Convert.toBoolean(
-					attributeNode.elementText("beanPropertyRequired"), true);
-			facesAttribute.setBeanPropertyRequired(beanPropertyRequired);
+			boolean componentPropertyRequired = Convert.toBoolean(
+					attributeNode.elementText("componentPropertyRequired"), true);
+			facesAttribute.setComponentPropertyRequired(componentPropertyRequired);
 			String methodSignature = attributeNode
 					.elementText("method-signature");
 			facesAttribute.setMethodSignature(methodSignature);

@@ -80,7 +80,7 @@ public abstract class ${component.getCamelizedName()}RendererBase extends AUIRen
 		boolean first = true;
 
 		<#list component.getAttributes() as attribute>
-		<#if attribute.isGettable() && attribute.isBeanPropertyRequired()>
+		<#if attribute.isGettable() && attribute.isComponentPropertyRequired()>
 		${attribute.getJavaWrapperInputType()} ${attribute.getJavaSafeName()} = ${component.getUncapitalizedName()}Component.${attribute.getGetterMethodPrefix()}${attribute.getJavaBeanPropertyName()}();
 
 		if (${attribute.getJavaSafeName()} != null) {
@@ -169,7 +169,7 @@ public abstract class ${component.getCamelizedName()}RendererBase extends AUIRen
 	}
 
 	<#list component.getAttributes() as attribute>
-	<#if attribute.isGettable() && attribute.isBeanPropertyRequired()>
+	<#if attribute.isGettable() && attribute.isComponentPropertyRequired()>
 	protected void encode${attribute.getCapitalizedName()}(ResponseWriter responseWriter, ${component.getCamelizedName()}Component ${component.getUncapitalizedName()}Component, ${attribute.getJavaWrapperInputType()} ${attribute.getJavaSafeName()}, boolean first) throws IOException {
 		encode${attribute.getJavaScriptType()}(responseWriter, ${component.getCamelizedName()}Component.${attribute.getConstantName()}, ${attribute.getJavaSafeName()}, first);
 	}
