@@ -10,7 +10,9 @@
 package ${packagePath}.${component.getUncamelizedName(BLANK)};
 
 import com.liferay.faces.util.component.Styleable;
+<#if component.isRendererBaseClassRequired()>
 import com.liferay.faces.util.component.Widget;
+</#if>
 import ${component.getParentClass()};
 
 /**
@@ -19,7 +21,7 @@ import ${component.getParentClass()};
 </#list>
  * @generated
  */
-public abstract class ${component.getCamelizedName()}Base extends ${component.getUnqualifiedParentClass()} implements Styleable, Widget, ${component.getCamelizedName()}Component {
+public abstract class ${component.getCamelizedName()}Base extends ${component.getUnqualifiedParentClass()} implements Styleable, <#if component.isRendererBaseClassRequired()>Widget, </#if>${component.getCamelizedName()}Component {
 
 	<#list component.getFacesAttributes() as attribute>
 	<#if attribute.isGettable() && attribute.isComponentPropertyRequired()>
@@ -53,7 +55,7 @@ public abstract class ${component.getCamelizedName()}Base extends ${component.ge
 
 	</#if>
 	</#list>
-
+	<#if component.isRendererBaseClassRequired()>
 	@Override
 	public String getWidgetVar() {
 		return (String) getStateHelper().eval(WIDGET_VAR, null);
@@ -64,6 +66,7 @@ public abstract class ${component.getCamelizedName()}Base extends ${component.ge
 		getStateHelper().put(WIDGET_VAR, widgetVar);
 	}
 
+	</#if>
 	@Override
 	public String getCssClass() {
 		return (String) getStateHelper().eval(CSS_CLASS, null);
