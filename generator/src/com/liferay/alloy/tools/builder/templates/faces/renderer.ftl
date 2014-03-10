@@ -6,7 +6,6 @@ package ${packagePath}.${component.getUncamelizedName(BLANK)};
 <#if !component.isRendererBaseClassRequired()>
 import ${component.getRendererParentClass()};
 </#if>
-import ${component.getParentClass()};
 import javax.faces.render.FacesRenderer;
 
 /**
@@ -15,7 +14,7 @@ import javax.faces.render.FacesRenderer;
 </#list>
  */
 @FacesRenderer(
-	componentFamily = ${component.getUnqualifiedParentClass()}.COMPONENT_FAMILY,
+	componentFamily = ${component.getCamelizedName()}.COMPONENT_FAMILY,
 	rendererType = "${packagePath}.${component.getUncamelizedName(BLANK)}.${component.getCamelizedName()}Renderer"
 )
 public class ${component.getCamelizedName()}Renderer extends ${component.getUnqualifiedRendererParentClass()} {
