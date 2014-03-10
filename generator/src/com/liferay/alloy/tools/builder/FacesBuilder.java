@@ -141,7 +141,7 @@ public class FacesBuilder extends BaseBuilder {
 
 			String rendererParentClass = Convert.toString(
 					node.attributeValue("rendererParentClass"),
-					facesComponent.getRendererBaseClass());
+					getRendererBaseClass(facesComponent));
 
 			facesComponent.setRendererParentClass(rendererParentClass);
 
@@ -158,7 +158,7 @@ public class FacesBuilder extends BaseBuilder {
 
 	@Override
 	protected String getComponentDefaultParentClass() {
-		return _FACES_COMPONENT_DEFAULT_PARENT_CLASS;
+		return _COMPONENT_DEFAULT_PARENT_CLASS;
 	}
 
 	protected String getComponentOutputDir(FacesComponent facesComponent) {
@@ -182,6 +182,17 @@ public class FacesBuilder extends BaseBuilder {
 		context.put("version", _version);
 
 		return context;
+	}
+
+	protected String getRendererBaseClass(FacesComponent facesComponent) {
+
+		String rendererBaseClass = facesComponent.getRendererBaseClass(); 
+
+		if (!_RENDERER_BASE_PARENT_CLASS.equals(_DEFAULT_RENDERER_BASE_PARENT_CLASS)) {
+			rendererBaseClass = _RENDERER_BASE_PARENT_CLASS;
+		}
+
+		return rendererBaseClass;
 	}
 
 	protected String getTaglibsXMLOutputDir() {
@@ -307,6 +318,9 @@ public class FacesBuilder extends BaseBuilder {
 
 		String path = getComponentOutputDir(facesComponent);
 
+		context.put("RENDERER_BASE_PARENT_CLASS", _RENDERER_BASE_PARENT_CLASS);
+		context.put("UNQUALIFIED_RENDERER_BASE_PARENT_CLASS", _UNQUALIFIED_RENDERER_BASE_PARENT_CLASS);
+
 		String rendererBaseContent = processTemplate(_tplRendererBase, context);
 
 		StringBuilder fileNameSb = new StringBuilder(5);
@@ -384,7 +398,9 @@ public class FacesBuilder extends BaseBuilder {
 
 	private static final String _BASE_CLASS_SUFFIX = "Base";
 
-	private static final String _FACES_COMPONENT_DEFAULT_PARENT_CLASS = "javax.faces.component.UIPanel";
+	private static final String _COMPONENT_DEFAULT_PARENT_CLASS = PropsUtil.getString("builder.faces.component.default.parent.class");
+
+	private static final String _DEFAULT_RENDERER_BASE_PARENT_CLASS = "com.liferay.faces.alloy.util.render.AUIRendererBase";
 
 	private static final String _INTERFACE_CLASS_SUFFIX = "Component";
 
@@ -394,11 +410,15 @@ public class FacesBuilder extends BaseBuilder {
 
 	private static final String _JAVA_EXT = ".java";
 
+	private static final String _RENDERER_BASE_PARENT_CLASS = PropsUtil.getString("builder.faces.renderer.base.parent.class");
+
 	private static final String _RENDERER_CLASS_SUFFIX = "Renderer";
 
 	private static final String _TAGLIB_XML_EXT = ".taglib.xml";
 
 	private static final String _TEMPLATES_DIR = "com/liferay/alloy/tools/builder/templates/faces/";
+
+	private static final String _UNQUALIFIED_RENDERER_BASE_PARENT_CLASS = _RENDERER_BASE_PARENT_CLASS.substring(_RENDERER_BASE_PARENT_CLASS.lastIndexOf(StringPool.DOT) + 1);
 
 	private String _baseOutputDir;
 	private String _taglibXMLOutputDir;
