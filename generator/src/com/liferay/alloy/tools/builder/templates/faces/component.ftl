@@ -19,7 +19,7 @@ public class ${component.getCamelizedName()} extends ${component.getCamelizedNam
 
 	// Private Constants
 	private static final String RENDERER_TYPE = "${packagePath}.${component.getUncamelizedName(BLANK)}.${component.getCamelizedName()}Renderer";
-	
+
 	public ${component.getCamelizedName()}() {
 		super();
 		setRendererType(RENDERER_TYPE);
