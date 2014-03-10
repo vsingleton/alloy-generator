@@ -400,7 +400,7 @@ public class FacesBuilder extends BaseBuilder {
 
 	private static final String _COMPONENT_DEFAULT_PARENT_CLASS = PropsUtil.getString("builder.faces.component.default.parent.class");
 
-	private static final String _DEFAULT_RENDERER_BASE_PARENT_CLASS = "com.liferay.faces.alloy.util.render.AUIRendererBase";
+	private static final String _DEFAULT_RENDERER_BASE_PARENT_CLASS = "com.liferay.faces.alloy.renderkit.AUIRendererBase";
 
 	private static final String _INTERFACE_CLASS_SUFFIX = "Component";
 
