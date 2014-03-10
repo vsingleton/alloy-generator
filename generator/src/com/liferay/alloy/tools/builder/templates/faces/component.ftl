@@ -25,6 +25,7 @@ public class ${component.getCamelizedName()} extends ${component.getCamelizedNam
 		setRendererType(RENDERER_TYPE);
 	}
 
+	@Override
 	public String getFamily() {
 		return COMPONENT_FAMILY;
 	}
