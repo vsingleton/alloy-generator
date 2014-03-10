@@ -11,7 +11,7 @@ import javax.faces.render.FacesRenderer;
 
 /**
 <#list component.getAuthors() as author>
- * @author ${author}
+ * @author  ${author}
 </#list>
  */
 @FacesRenderer(

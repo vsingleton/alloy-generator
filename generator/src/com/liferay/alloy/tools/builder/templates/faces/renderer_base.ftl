@@ -17,7 +17,7 @@ import com.liferay.faces.util.lang.StringPool;
 
 /**
 <#list component.getAuthors() as author>
- * @author ${author}
+ * @author  ${author}
 </#list>
  * @generated
  */

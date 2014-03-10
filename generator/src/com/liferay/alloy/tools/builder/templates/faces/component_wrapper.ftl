@@ -13,7 +13,7 @@ import javax.faces.FacesWrapper;
 
 /**
 <#list component.getAuthors() as author>
- * @author ${author}
+ * @author  ${author}
 </#list>
  * @generated
  */

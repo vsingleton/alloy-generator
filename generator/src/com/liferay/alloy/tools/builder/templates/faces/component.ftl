@@ -7,7 +7,7 @@ import javax.faces.component.FacesComponent;
 
 /**
 <#list component.getAuthors() as author>
- * @author ${author}
+ * @author  ${author}
 </#list>
  */
 @FacesComponent(value = "${packagePath}.${component.getUncamelizedName(BLANK)}.${component.getCamelizedName()}")

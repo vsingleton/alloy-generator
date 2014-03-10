@@ -9,6 +9,12 @@
 
 package ${packagePath}.${component.getUncamelizedName(BLANK)};
 
+/**
+<#list component.getAuthors() as author>
+ * @author  ${author}
+</#list>
+ * @generated
+ */
 public interface ${component.getCamelizedName()}Component {
 
 	// Public Constants

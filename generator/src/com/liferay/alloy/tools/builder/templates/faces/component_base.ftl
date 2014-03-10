@@ -17,7 +17,7 @@ import ${component.getParentClass()};
 
 /**
 <#list component.getAuthors() as author>
- * @author ${author}
+ * @author  ${author}
 </#list>
  * @generated
  */
