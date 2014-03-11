@@ -45,7 +45,7 @@ public abstract class ${component.getCamelizedName()}RendererBase extends ${UNQU
 		responseWriter.write(widgetVar);
 		responseWriter.write(StringPool.SEMICOLON);
 		responseWriter.write(StringPool.NEW_LINE);
-		responseWriter.write(LF_COMPONENT);
+		responseWriter.write(LIFERAY_COMPONENT);
 		responseWriter.write(StringPool.OPEN_PARENTHESIS);
 		responseWriter.write(StringPool.APOSTROPHE);
 		responseWriter.write(widgetVar);
@@ -154,7 +154,7 @@ public abstract class ${component.getCamelizedName()}RendererBase extends ${UNQU
 		responseWriter.write(StringPool.CLOSE_PARENTHESIS);
 		responseWriter.write(StringPool.SEMICOLON);
 		responseWriter.write(StringPool.NEW_LINE);
-		responseWriter.write(LF_COMPONENT);
+		responseWriter.write(LIFERAY_COMPONENT);
 		responseWriter.write(StringPool.OPEN_PARENTHESIS);
 		responseWriter.write(StringPool.APOSTROPHE);
 		responseWriter.write(widgetVar);
