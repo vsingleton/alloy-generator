@@ -32,6 +32,15 @@ public class FacesComponent extends Component {
 		return facesAttributes;
 	}
 
+	public List<Attribute> getFacesAttributesAndEvents() {
+		ArrayList<Attribute> attributes = new ArrayList<Attribute>();
+
+		attributes.addAll(getFacesAttributes());
+		attributes.addAll(getEvents());
+
+		return attributes;
+	}
+
 	public String getRendererBaseClass() {
 		StringBuilder sb = new StringBuilder(4);
 		

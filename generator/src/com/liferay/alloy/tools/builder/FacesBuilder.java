@@ -122,7 +122,61 @@ public class FacesBuilder extends BaseBuilder {
 			attributes.add(facesAttribute);
 		}
 
+		if (!group.equals("events")) {
+			_addDefaultFacesAttributes(componentNode, attributes);
+		}
+
 		return attributes;
+	}
+
+	private void _addDefaultFacesAttributes(Element componentNode,
+			List<Attribute> attributes) {
+		if (componentNode.attributeValue("parentClass") == null) {
+			FacesAttribute facesAttribute = new FacesAttribute();
+			facesAttribute.setDefaultValue(null);
+			facesAttribute.setDescription("The name of the widget's javascript variable.");
+			facesAttribute.setGettable(true);
+			facesAttribute.setInputType("java.lang.String");
+			facesAttribute.setJavaScriptType("java.lang.String");
+			facesAttribute.setName("widgetVar");
+			facesAttribute.setOutputType("java.lang.String");
+			facesAttribute.setRequired(false);
+			facesAttribute.setSettable(true);
+			facesAttribute.setComponentPropertyRequired(true);
+			facesAttribute.setMethodSignature(null);
+
+			attributes.add(facesAttribute);
+		}
+
+		FacesAttribute cssClassAttribute = new FacesAttribute();
+		cssClassAttribute.setDefaultValue(null);
+		cssClassAttribute.setDescription("The name of a CSS class that is to be rendered within the class attribute (same as styleClass).");
+		cssClassAttribute.setGettable(true);
+		cssClassAttribute.setInputType("java.lang.String");
+		cssClassAttribute.setJavaScriptType("java.lang.String");
+		cssClassAttribute.setName("cssClass");
+		cssClassAttribute.setOutputType("java.lang.String");
+		cssClassAttribute.setRequired(false);
+		cssClassAttribute.setSettable(true);
+		cssClassAttribute.setComponentPropertyRequired(true);
+		cssClassAttribute.setMethodSignature(null);
+
+		attributes.add(cssClassAttribute);
+
+		FacesAttribute styleClassAttribute = new FacesAttribute();
+		styleClassAttribute.setDefaultValue(null);
+		styleClassAttribute.setDescription("The name of a CSS class that is to be rendered within the class attribute.");
+		styleClassAttribute.setGettable(true);
+		styleClassAttribute.setInputType("java.lang.String");
+		styleClassAttribute.setJavaScriptType("java.lang.String");
+		styleClassAttribute.setName("styleClass");
+		styleClassAttribute.setOutputType("java.lang.String");
+		styleClassAttribute.setRequired(false);
+		styleClassAttribute.setSettable(true);
+		styleClassAttribute.setComponentPropertyRequired(true);
+		styleClassAttribute.setMethodSignature(null);
+
+		attributes.add(styleClassAttribute);
 	}
 
 	@Override
@@ -384,6 +438,7 @@ public class FacesBuilder extends BaseBuilder {
 			context.put("components", getComponents(doc));
 			context.put("namespaceURI", namespaceURI);
 			context.put("description", description);
+			context.put("version", _version);
 
 			String rendererContent = processTemplate(_tplTaglibsXML, context);
 

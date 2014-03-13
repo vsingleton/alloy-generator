@@ -10,7 +10,7 @@
 package ${packagePath}.${component.getUncamelizedName(BLANK)};
 
 /**
-<#list component.getAuthors() as author>
+<#list component.getAuthors()?sort as author>
  * @author  ${author}
 </#list>
  * @generated
@@ -18,27 +18,19 @@ package ${packagePath}.${component.getUncamelizedName(BLANK)};
 public interface ${component.getCamelizedName()}Component {
 
 	// Public Constants
-	<#list component.getAttributesAndEvents() as attribute>
+	<#list component.getAttributesAndEvents()?sort_by("constantName") as attribute>
+	<#if (attribute.getName() != "cssClass") && (attribute.getName() != "styleClass") && (attribute.getName() != "widgetVar")>
 	public static final String ${attribute.getConstantName()} = "${attribute.getName()}";
-	</#list>
-	<#list component.getFacesAttributes() as attribute>
-	<#if attribute.isGettable() && attribute.isComponentPropertyRequired()>
-
-	public ${attribute.getJavaWrapperInputType()} ${attribute.getGetterMethodPrefix()}${attribute.getJavaBeanPropertyName()}();
 	</#if>
-	<#if attribute.isSettable() && attribute.isComponentPropertyRequired()>
+	</#list>
+	<#list component.getAttributesAndEvents()?sort_by("javaBeanPropertyName") as attribute>
+	<#if attribute.isGettable() && (attribute.isEvent() || attribute.isComponentPropertyRequired()) && (attribute.getName() != "cssClass") && (attribute.getName() != "styleClass") && (attribute.getName() != "widgetVar")>
+
+	public ${attribute.getJavaWrapperInputType()} <#if attribute.isEvent()>get<#else>${attribute.getGetterMethodPrefix()}</#if>${attribute.getJavaBeanPropertyName()}();
+	</#if>
+	<#if attribute.isSettable() && (attribute.isEvent() || attribute.isComponentPropertyRequired()) && (attribute.getName() != "cssClass") && (attribute.getName() != "styleClass") && (attribute.getName() != "widgetVar")>
 
 	public void set${attribute.getJavaBeanPropertyName()}(${attribute.getJavaWrapperInputType()} ${attribute.getJavaSafeName()});
-	</#if>
-	</#list>
-	<#list component.getEvents() as event>
-	<#if event.isGettable()>
-
-	public ${event.getJavaWrapperInputType()} get${event.getJavaBeanPropertyName()}();
-	</#if>
-	<#if event.isSettable()>
-
-	public void set${event.getJavaBeanPropertyName()}(${event.getJavaWrapperInputType()} ${event.getJavaSafeName()});
 	</#if>
 	</#list>
 }

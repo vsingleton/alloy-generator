@@ -12,7 +12,7 @@ package ${packagePath}.${component.getUncamelizedName(BLANK)};
 import javax.faces.FacesWrapper;
 
 /**
-<#list component.getAuthors() as author>
+<#list component.getAuthors()?sort as author>
  * @author  ${author}
 </#list>
  * @generated
@@ -30,35 +30,19 @@ public class ${component.getCamelizedName()}ComponentWrapper implements ${compon
 	public ${component.getCamelizedName()}Component getWrapped() {
 		return wrapped${component.getCamelizedName()}Component;
 	}
-	<#list component.getFacesAttributes() as attribute>
-	<#if attribute.isGettable() && attribute.isComponentPropertyRequired()>
+	<#list component.getFacesAttributesAndEvents()?sort_by("javaBeanPropertyName") as attribute>
+	<#if attribute.isGettable() && (attribute.isEvent() || attribute.isComponentPropertyRequired()) && (attribute.getName() != "cssClass") && (attribute.getName() != "styleClass") && (attribute.getName() != "widgetVar")>
 
 	@Override
-	public ${attribute.getJavaWrapperInputType()} ${attribute.getGetterMethodPrefix()}${attribute.getJavaBeanPropertyName()}() {
-		return getWrapped().${attribute.getGetterMethodPrefix()}${attribute.getJavaBeanPropertyName()}();
+	public ${attribute.getJavaWrapperInputType()} <#if attribute.isEvent()>get<#else>${attribute.getGetterMethodPrefix()}</#if>${attribute.getJavaBeanPropertyName()}() {
+		return getWrapped().<#if attribute.isEvent()>get<#else>${attribute.getGetterMethodPrefix()}</#if>${attribute.getJavaBeanPropertyName()}();
 	}
 	</#if>
-	<#if attribute.isSettable() && attribute.isComponentPropertyRequired()>
+	<#if attribute.isSettable() && (attribute.isEvent() || attribute.isComponentPropertyRequired()) && (attribute.getName() != "cssClass") && (attribute.getName() != "styleClass") && (attribute.getName() != "widgetVar")>
 
 	@Override
 	public void set${attribute.getJavaBeanPropertyName()}(${attribute.getJavaWrapperInputType()} ${attribute.getJavaSafeName()}) {
 		getWrapped().set${attribute.getJavaBeanPropertyName()}(${attribute.getJavaSafeName()});
-	}
-	</#if>
-	</#list>
-	<#list component.getEvents() as event>
-	<#if event.isGettable()>
-
-	@Override
-	public ${event.getJavaWrapperInputType()} get${event.getJavaBeanPropertyName()}() {
-		return getWrapped().get${event.getJavaBeanPropertyName()}();
-	}
-	</#if>
-	<#if event.isSettable()>
-
-	@Override
-	public void set${event.getJavaBeanPropertyName()}(${event.getJavaWrapperInputType()} ${event.getJavaSafeName()}) {
-		getWrapped().set${event.getJavaBeanPropertyName()}(${event.getJavaSafeName()});
 	}
 	</#if>
 	</#list>

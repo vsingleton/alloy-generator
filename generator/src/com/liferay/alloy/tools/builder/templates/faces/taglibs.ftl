@@ -8,7 +8,7 @@
 	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facelettaglibrary_2_0.xsd http://vdldoc.org/vdldoc https://vdldoc.googlecode.com/hg/src/org/omnifaces/vdldoc/resources/vdldoc.taglib.xml.xsd">
 	<description><![CDATA[${description}]]></description>
 	<namespace>${namespaceURI}</namespace>
-	<#list functions as function>
+	<#list functions?sort_by("name") as function>
 	<function>
 		<description><![CDATA[${function["description"]}]]></description>
 		<function-name>${function["name"]}</function-name>
@@ -16,7 +16,7 @@
 		<function-signature>${function["signature"]}</function-signature>
 	</function>
 	</#list>
-	<#list components as component>
+	<#list components?sort as component>
 	<tag>
 		<description>${component.getDescription()}</description>
 		<tag-name>${component.getUncapitalizedName()}</tag-name>
@@ -24,7 +24,7 @@
 			<component-type>${packagePath}.${component.getUncamelizedName(BLANK)}.${component.getCamelizedName()}</component-type>
 			<renderer-type>${packagePath}.${component.getUncamelizedName(BLANK)}.${component.getCamelizedName()}Renderer</renderer-type>
 		</component>
-		<#list component.getFacesAttributes() as attribute>
+		<#list component.getFacesAttributesAndEvents()?sort_by("safeName") as attribute>
 		<attribute>
 			<#if attribute.getDescription()??>
 			<description><![CDATA[${attribute.getDescription()}]]></description>
@@ -32,35 +32,13 @@
 			<name>${attribute.getSafeName()}</name>
 			<required>${attribute.isRequired()?string("true", "false")}</required>
 			<type>${attribute.getJavaWrapperInputType()}</type>
-			<#if attribute.getMethodSignature()??>
+			<#if !attribute.isEvent() && attribute.getMethodSignature()??>
 			<method-signature>${attribute.getMethodSignature()}</method-signature>
 			</#if>
 		</attribute>
 		</#list>
-		<#list component.getEvents() as event>
-		<attribute>
-			<#if event.getDescription()??>
-			<description><![CDATA[${event.getDescription()}]]></description>
-			</#if>
-			<name>${event.getSafeName()}</name>
-			<required>${event.isRequired()?string("true", "false")}</required>
-			<type>${event.getJavaWrapperInputType()}</type>
-		</attribute>
-		</#list>
-		<attribute>
-			<description>The name of a CSS class that is to be rendered within the class attribute (same as styleClass).</description>
-			<name>cssClass</name>
-			<required>false</required>
-			<type>java.lang.String</type>
-		</attribute>
-		<attribute>
-			<description>The name of a CSS class that is to be rendered within the class attribute.</description>
-			<name>styleClass</name>
-			<required>false</required>
-			<type>java.lang.String</type>
-		</attribute>
 		<tag-extension>
-			<vdldoc:since>4.1.0</vdldoc:since>
+			<vdldoc:since>${version}</vdldoc:since>
 		</tag-extension>
 	</tag>
 </#list>
