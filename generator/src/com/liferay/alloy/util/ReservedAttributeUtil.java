@@ -39,7 +39,7 @@ public class ReservedAttributeUtil {
 	public static String getJavaSafeName(Attribute attribute) {
 		String name = attribute.getName();
 
-		name = getSafeName(attribute);
+		name = attribute.getSafeName();
 
 		Component component = attribute.getComponent();
 

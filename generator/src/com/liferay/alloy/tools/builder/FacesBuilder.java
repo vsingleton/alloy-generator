@@ -131,37 +131,24 @@ public class FacesBuilder extends BaseBuilder {
 
 	private void _addDefaultFacesAttributes(Element componentNode,
 			List<Attribute> attributes) {
+
 		if (componentNode.attributeValue("parentClass") == null) {
-			FacesAttribute facesAttribute = new FacesAttribute();
-			facesAttribute.setDefaultValue(null);
-			facesAttribute.setDescription("The name of the widget's javascript variable.");
-			facesAttribute.setGettable(true);
-			facesAttribute.setInputType("java.lang.String");
-			facesAttribute.setJavaScriptType("java.lang.String");
-			facesAttribute.setName("widgetVar");
-			facesAttribute.setOutputType("java.lang.String");
-			facesAttribute.setRequired(false);
-			facesAttribute.setSettable(true);
-			facesAttribute.setComponentPropertyRequired(true);
-			facesAttribute.setMethodSignature(null);
+			FacesAttribute widgetVarAttribute = new FacesAttribute();
+			widgetVarAttribute.setDefaultValue(null);
+			widgetVarAttribute.setDescription("The name of the widget's javascript variable.");
+			widgetVarAttribute.setGettable(true);
+			widgetVarAttribute.setInputType("java.lang.String");
+			widgetVarAttribute.setJavaScriptType("java.lang.String");
+			widgetVarAttribute.setName("widgetVar");
+			widgetVarAttribute.setOutputType("java.lang.String");
+			widgetVarAttribute.setRequired(false);
+			widgetVarAttribute.setSettable(true);
+			widgetVarAttribute.setComponentPropertyRequired(true);
+			widgetVarAttribute.setMethodSignature(null);
+			widgetVarAttribute.setOutputUnsafe(true);
 
-			attributes.add(facesAttribute);
+			attributes.add(widgetVarAttribute);
 		}
-
-		FacesAttribute cssClassAttribute = new FacesAttribute();
-		cssClassAttribute.setDefaultValue(null);
-		cssClassAttribute.setDescription("The name of a CSS class that is to be rendered within the class attribute (same as styleClass).");
-		cssClassAttribute.setGettable(true);
-		cssClassAttribute.setInputType("java.lang.String");
-		cssClassAttribute.setJavaScriptType("java.lang.String");
-		cssClassAttribute.setName("cssClass");
-		cssClassAttribute.setOutputType("java.lang.String");
-		cssClassAttribute.setRequired(false);
-		cssClassAttribute.setSettable(true);
-		cssClassAttribute.setComponentPropertyRequired(true);
-		cssClassAttribute.setMethodSignature(null);
-
-		attributes.add(cssClassAttribute);
 
 		FacesAttribute styleClassAttribute = new FacesAttribute();
 		styleClassAttribute.setDefaultValue(null);
@@ -175,6 +162,7 @@ public class FacesBuilder extends BaseBuilder {
 		styleClassAttribute.setSettable(true);
 		styleClassAttribute.setComponentPropertyRequired(true);
 		styleClassAttribute.setMethodSignature(null);
+		styleClassAttribute.setOutputUnsafe(true);
 
 		attributes.add(styleClassAttribute);
 	}

@@ -8,15 +8,17 @@
 </#compress>
 
 package ${packagePath}.${component.getUncamelizedName(BLANK)};
+//J-
 
+import javax.annotation.Generated;
 import javax.faces.FacesWrapper;
 
 /**
 <#list component.getAuthors()?sort as author>
  * @author  ${author}
 </#list>
- * @generated
  */
+@Generated(value="com.liferay.alloy.tools.builder.FacesBuilder")
 public class ${component.getCamelizedName()}ComponentWrapper implements ${component.getCamelizedName()}Component, FacesWrapper<${component.getCamelizedName()}Component> {
 
 	// Private Data Members
@@ -31,14 +33,14 @@ public class ${component.getCamelizedName()}ComponentWrapper implements ${compon
 		return wrapped${component.getCamelizedName()}Component;
 	}
 	<#list component.getFacesAttributesAndEvents()?sort_by("javaBeanPropertyName") as attribute>
-	<#if attribute.isGettable() && (attribute.isEvent() || attribute.isComponentPropertyRequired()) && (attribute.getName() != "cssClass") && (attribute.getName() != "styleClass") && (attribute.getName() != "widgetVar")>
+	<#if attribute.isGettable() && (attribute.isEvent() || attribute.isComponentPropertyRequired()) && (attribute.getSafeName() != "styleClass") && (attribute.getSafeName() != "widgetVar")>
 
 	@Override
 	public ${attribute.getJavaWrapperInputType()} <#if attribute.isEvent()>get<#else>${attribute.getGetterMethodPrefix()}</#if>${attribute.getJavaBeanPropertyName()}() {
 		return getWrapped().<#if attribute.isEvent()>get<#else>${attribute.getGetterMethodPrefix()}</#if>${attribute.getJavaBeanPropertyName()}();
 	}
 	</#if>
-	<#if attribute.isSettable() && (attribute.isEvent() || attribute.isComponentPropertyRequired()) && (attribute.getName() != "cssClass") && (attribute.getName() != "styleClass") && (attribute.getName() != "widgetVar")>
+	<#if attribute.isSettable() && (attribute.isEvent() || attribute.isComponentPropertyRequired()) && (attribute.getSafeName() != "styleClass") && (attribute.getSafeName() != "widgetVar")>
 
 	@Override
 	public void set${attribute.getJavaBeanPropertyName()}(${attribute.getJavaWrapperInputType()} ${attribute.getJavaSafeName()}) {
@@ -47,3 +49,4 @@ public class ${component.getCamelizedName()}ComponentWrapper implements ${compon
 	</#if>
 	</#list>
 }
+//J+

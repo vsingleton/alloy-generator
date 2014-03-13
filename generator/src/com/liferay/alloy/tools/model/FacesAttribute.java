@@ -43,6 +43,24 @@ public class FacesAttribute extends Attribute {
 		_methodSignature = methodSignature;
 	}
 
+	public boolean isOutputUnsafe() {
+		return _outputUnsafe;
+	}
+
+	public void setOutputUnsafe(boolean _outputUnsafe) {
+		this._outputUnsafe = _outputUnsafe;
+	}
+
+	@Override
+	public String getSafeName() {
+		if (_outputUnsafe) {
+			return super.getName();
+		} else {
+			return super.getSafeName();
+		}
+	}
+
 	private boolean _componentPropertyRequired;
+	private boolean _outputUnsafe;
 	private String _methodSignature;
 }

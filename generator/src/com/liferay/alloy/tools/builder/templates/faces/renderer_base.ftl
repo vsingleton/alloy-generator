@@ -2,9 +2,11 @@
 <#include "../common/copyright.ftl">
 
 package ${packagePath}.${component.getUncamelizedName(BLANK)};
+//J-
 
 import java.io.IOException;
 
+import javax.annotation.Generated;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
@@ -15,11 +17,11 @@ import com.liferay.faces.util.component.Widget;
 import com.liferay.faces.util.lang.StringPool;
 
 /**
-<#list component.getAuthors() as author>
+<#list component.getAuthors()?sort as author>
  * @author  ${author}
 </#list>
- * @generated
  */
+@Generated(value="com.liferay.alloy.tools.builder.FacesBuilder")
 public abstract class ${component.getCamelizedName()}RendererBase extends ${UNQUALIFIED_RENDERER_BASE_PARENT_CLASS} {
 
 	// Private Constants
@@ -77,7 +79,7 @@ public abstract class ${component.getCamelizedName()}RendererBase extends ${UNQU
 
 		boolean first = true;
 		<#list component.getAttributes()?sort_by("javaSafeName") as attribute>
-		<#if attribute.isGettable() && attribute.isComponentPropertyRequired() && (attribute.getName() != "cssClass") && (attribute.getName() != "styleClass") && (attribute.getName() != "widgetVar")>
+		<#if attribute.isGettable() && attribute.isComponentPropertyRequired() && (attribute.getSafeName() != "styleClass") && (attribute.getSafeName() != "widgetVar")>
 
 		${attribute.getJavaWrapperInputType()} ${attribute.getJavaSafeName()} = ${component.getUncapitalizedName()}Component.${attribute.getGetterMethodPrefix()}${attribute.getJavaBeanPropertyName()}();
 
@@ -168,7 +170,7 @@ public abstract class ${component.getCamelizedName()}RendererBase extends ${UNQU
 	protected void encode${attribute.getCapitalizedName()}(ResponseWriter responseWriter, ${component.getCamelizedName()}Component ${component.getUncapitalizedName()}Component, ${attribute.getJavaWrapperInputType()} ${attribute.getJavaSafeName()}, boolean first) throws IOException {
 		encodeEvent(responseWriter, ${attribute.getConstantUnprefixedName()}, ${attribute.getJavaSafeName()}, first);
 	}
-	<#elseif attribute.isGettable() && attribute.isComponentPropertyRequired() && (attribute.getName() != "cssClass") && (attribute.getName() != "styleClass") && (attribute.getName() != "widgetVar")>
+	<#elseif attribute.isGettable() && attribute.isComponentPropertyRequired() && (attribute.getSafeName() != "styleClass") && (attribute.getSafeName() != "widgetVar")>
 
 	protected void encode${attribute.getCapitalizedName()}(ResponseWriter responseWriter, ${component.getCamelizedName()}Component ${component.getUncapitalizedName()}Component, ${attribute.getJavaWrapperInputType()} ${attribute.getJavaSafeName()}, boolean first) throws IOException {
 		encode${attribute.getJavaScriptType()}(responseWriter, ${component.getCamelizedName()}Component.${attribute.getConstantName()}, ${attribute.getJavaSafeName()}, first);
@@ -176,3 +178,4 @@ public abstract class ${component.getCamelizedName()}RendererBase extends ${UNQU
 	</#if>
 	</#list>
 }
+//J+

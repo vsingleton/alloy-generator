@@ -8,29 +8,33 @@
 </#compress>
 
 package ${packagePath}.${component.getUncamelizedName(BLANK)};
+//J-
+
+import javax.annotation.Generated;
 
 /**
 <#list component.getAuthors()?sort as author>
  * @author  ${author}
 </#list>
- * @generated
  */
+@Generated(value="com.liferay.alloy.tools.builder.FacesBuilder")
 public interface ${component.getCamelizedName()}Component {
 
 	// Public Constants
 	<#list component.getAttributesAndEvents()?sort_by("constantName") as attribute>
-	<#if (attribute.getName() != "cssClass") && (attribute.getName() != "styleClass") && (attribute.getName() != "widgetVar")>
+	<#if (attribute.getSafeName() != "styleClass") && (attribute.getSafeName() != "widgetVar")>
 	public static final String ${attribute.getConstantName()} = "${attribute.getName()}";
 	</#if>
 	</#list>
 	<#list component.getAttributesAndEvents()?sort_by("javaBeanPropertyName") as attribute>
-	<#if attribute.isGettable() && (attribute.isEvent() || attribute.isComponentPropertyRequired()) && (attribute.getName() != "cssClass") && (attribute.getName() != "styleClass") && (attribute.getName() != "widgetVar")>
+	<#if attribute.isGettable() && (attribute.isEvent() || attribute.isComponentPropertyRequired()) && (attribute.getSafeName() != "styleClass") && (attribute.getSafeName() != "widgetVar")>
 
 	public ${attribute.getJavaWrapperInputType()} <#if attribute.isEvent()>get<#else>${attribute.getGetterMethodPrefix()}</#if>${attribute.getJavaBeanPropertyName()}();
 	</#if>
-	<#if attribute.isSettable() && (attribute.isEvent() || attribute.isComponentPropertyRequired()) && (attribute.getName() != "cssClass") && (attribute.getName() != "styleClass") && (attribute.getName() != "widgetVar")>
+	<#if attribute.isSettable() && (attribute.isEvent() || attribute.isComponentPropertyRequired()) && (attribute.getSafeName() != "styleClass") && (attribute.getSafeName() != "widgetVar")>
 
 	public void set${attribute.getJavaBeanPropertyName()}(${attribute.getJavaWrapperInputType()} ${attribute.getJavaSafeName()});
 	</#if>
 	</#list>
 }
+//J+

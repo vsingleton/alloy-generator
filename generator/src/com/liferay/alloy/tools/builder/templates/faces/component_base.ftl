@@ -8,23 +8,26 @@
 </#compress>
 
 package ${packagePath}.${component.getUncamelizedName(BLANK)};
+//J-
+
+import javax.annotation.Generated;
+import ${component.getParentClass()};
 
 import com.liferay.faces.util.component.Styleable;
 <#if component.isRendererBaseClassRequired()>
 import com.liferay.faces.util.component.Widget;
 </#if>
-import ${component.getParentClass()};
 
 /**
 <#list component.getAuthors()?sort as author>
  * @author  ${author}
 </#list>
- * @generated
  */
+@Generated(value = "com.liferay.alloy.tools.builder.FacesBuilder")
 public abstract class ${component.getCamelizedName()}Base extends ${component.getUnqualifiedParentClass()} implements Styleable, <#if component.isRendererBaseClassRequired()>Widget, </#if>${component.getCamelizedName()}Component {
 	<#list component.getFacesAttributesAndEvents()?sort_by("javaBeanPropertyName") as attribute>
 	<#if attribute.isGettable() && (attribute.isEvent() || attribute.isComponentPropertyRequired())>
-	<#if (attribute.getName() != "widgetVar") || (attribute.getName() == "widgetVar") && component.isRendererBaseClassRequired()>
+	<#if (attribute.getSafeName() != "widgetVar") || ((attribute.getSafeName() == "widgetVar") && component.isRendererBaseClassRequired())>
 
 	@Override
 	public ${attribute.getJavaWrapperInputType()} <#if attribute.isEvent()>get<#else>${attribute.getGetterMethodPrefix()}</#if>${attribute.getJavaBeanPropertyName()}() {
@@ -33,7 +36,7 @@ public abstract class ${component.getCamelizedName()}Base extends ${component.ge
 	</#if>
 	</#if>
 	<#if attribute.isSettable() && (attribute.isEvent() || attribute.isComponentPropertyRequired())>
-	<#if (attribute.getName() != "widgetVar") || (attribute.getName() == "widgetVar") && component.isRendererBaseClassRequired()>
+	<#if (attribute.getSafeName() != "widgetVar") || ((attribute.getSafeName() == "widgetVar") && component.isRendererBaseClassRequired())>
 
 	@Override
 	public void set${attribute.getJavaBeanPropertyName()}(${attribute.getJavaWrapperInputType()} ${attribute.getJavaSafeName()}) {
@@ -43,3 +46,4 @@ public abstract class ${component.getCamelizedName()}Base extends ${component.ge
 	</#if>
 	</#list>
 }
+//J+
