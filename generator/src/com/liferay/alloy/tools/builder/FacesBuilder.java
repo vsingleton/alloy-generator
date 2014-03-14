@@ -132,7 +132,7 @@ public class FacesBuilder extends BaseBuilder {
 	private void _addDefaultFacesAttributes(Element componentNode,
 			List<Attribute> attributes) {
 
-		if (componentNode.attributeValue("parentClass") == null) {
+		if (componentNode.attributeValue("rendererParentClass") == null) {
 			FacesAttribute widgetVarAttribute = new FacesAttribute();
 			widgetVarAttribute.setDefaultValue(null);
 			widgetVarAttribute.setDescription("The name of the widget's javascript variable.");

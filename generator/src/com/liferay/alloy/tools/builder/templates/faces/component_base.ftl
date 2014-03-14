@@ -27,22 +27,18 @@ import com.liferay.faces.util.component.Widget;
 public abstract class ${component.getCamelizedName()}Base extends ${component.getUnqualifiedParentClass()} implements Styleable, <#if component.isRendererBaseClassRequired()>Widget, </#if>${component.getCamelizedName()}Component {
 	<#list component.getFacesAttributesAndEvents()?sort_by("javaBeanPropertyName") as attribute>
 	<#if attribute.isGettable() && (attribute.isEvent() || attribute.isComponentPropertyRequired())>
-	<#if (attribute.getSafeName() != "widgetVar") || ((attribute.getSafeName() == "widgetVar") && component.isRendererBaseClassRequired())>
 
 	@Override
 	public ${attribute.getJavaWrapperInputType()} <#if attribute.isEvent()>get<#else>${attribute.getGetterMethodPrefix()}</#if>${attribute.getJavaBeanPropertyName()}() {
 		return (${attribute.getJavaWrapperInputType()}) getStateHelper().eval(${attribute.getConstantName()}, null);
 	}
 	</#if>
-	</#if>
 	<#if attribute.isSettable() && (attribute.isEvent() || attribute.isComponentPropertyRequired())>
-	<#if (attribute.getSafeName() != "widgetVar") || ((attribute.getSafeName() == "widgetVar") && component.isRendererBaseClassRequired())>
 
 	@Override
 	public void set${attribute.getJavaBeanPropertyName()}(${attribute.getJavaWrapperInputType()} ${attribute.getJavaSafeName()}) {
 		getStateHelper().put(${attribute.getConstantName()}, ${attribute.getJavaSafeName()});
 	}
-	</#if>
 	</#if>
 	</#list>
 }
