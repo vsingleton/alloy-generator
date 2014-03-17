@@ -18,7 +18,7 @@ import javax.faces.FacesWrapper;
  * @author  ${author}
 </#list>
  */
-@Generated(value="com.liferay.alloy.tools.builder.FacesBuilder")
+@Generated(value = "com.liferay.alloy.tools.builder.FacesBuilder")
 public class ${component.getCamelizedName()}ComponentWrapper implements ${component.getCamelizedName()}Component, FacesWrapper<${component.getCamelizedName()}Component> {
 
 	// Private Data Members

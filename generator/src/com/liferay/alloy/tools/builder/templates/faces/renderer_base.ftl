@@ -21,7 +21,7 @@ import com.liferay.faces.util.lang.StringPool;
  * @author  ${author}
 </#list>
  */
-@Generated(value="com.liferay.alloy.tools.builder.FacesBuilder")
+@Generated(value = "com.liferay.alloy.tools.builder.FacesBuilder")
 public abstract class ${component.getCamelizedName()}RendererBase extends ${UNQUALIFIED_RENDERER_BASE_PARENT_CLASS} {
 
 	// Private Constants

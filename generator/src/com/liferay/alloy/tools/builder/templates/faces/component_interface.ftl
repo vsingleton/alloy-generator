@@ -17,7 +17,7 @@ import javax.annotation.Generated;
  * @author  ${author}
 </#list>
  */
-@Generated(value="com.liferay.alloy.tools.builder.FacesBuilder")
+@Generated(value = "com.liferay.alloy.tools.builder.FacesBuilder")
 public interface ${component.getCamelizedName()}Component {
 
 	// Public Constants
