@@ -10,15 +10,13 @@ import javax.faces.component.FacesComponent;
  * @author  ${author}
 </#list>
  */
-@FacesComponent(value = "${packagePath}.${component.getUncamelizedName(BLANK)}.${component.getCamelizedName()}")
+@FacesComponent(value = ${component.getCamelizedName()}.COMPONENT_TYPE)
 public class ${component.getCamelizedName()} extends ${component.getCamelizedName()}Base {
 
 	// Public Constants
 	public static final String COMPONENT_FAMILY = "${packagePath}.${component.getUncamelizedName(BLANK)}";
 	public static final String COMPONENT_TYPE = "${packagePath}.${component.getUncamelizedName(BLANK)}.${component.getCamelizedName()}";
-
-	// Private Constants
-	private static final String RENDERER_TYPE = "${packagePath}.${component.getUncamelizedName(BLANK)}.${component.getCamelizedName()}Renderer";
+	public static final String RENDERER_TYPE = "${packagePath}.${component.getUncamelizedName(BLANK)}.${component.getCamelizedName()}Renderer";
 
 	public ${component.getCamelizedName()}() {
 

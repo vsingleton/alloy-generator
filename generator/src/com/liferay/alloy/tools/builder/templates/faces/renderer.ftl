@@ -16,7 +16,7 @@ import javax.faces.render.FacesRenderer;
  */
 @FacesRenderer(
 	componentFamily = ${component.getCamelizedName()}.COMPONENT_FAMILY,
-	rendererType = "${packagePath}.${component.getUncamelizedName(BLANK)}.${component.getCamelizedName()}Renderer"
+	rendererType = ${component.getCamelizedName()}.RENDERER_TYPE
 )
 @ResourceDependency(library = "liferay-faces-alloy", name = "liferay.js")
 public class ${component.getCamelizedName()}Renderer extends ${component.getUnqualifiedRendererParentClass()} {
