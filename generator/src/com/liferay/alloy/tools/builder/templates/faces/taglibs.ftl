@@ -14,7 +14,7 @@
 		<function-signature>${function["signature"]}</function-signature>
 	</function>
 	</#list>
-	<#list components?sort as component>
+	<#list components?sort_by("uncapitalizedName") as component>
 	<tag>
 		<description>${component.getDescription()}</description>
 		<tag-name>${component.getUncapitalizedName()}</tag-name>
