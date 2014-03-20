@@ -5,6 +5,7 @@ package ${packagePath}.${component.getUncamelizedName(BLANK)};
 //J-
 
 import java.io.IOException;
+import java.util.List;
 
 import javax.annotation.Generated;
 import javax.faces.component.UIComponent;
@@ -161,8 +162,13 @@ public abstract class ${component.getCamelizedName()}RendererBase extends ${UNQU
 		responseWriter.write(StringPool.NEW_LINE);
 	}
 
-	protected String getModule() {
-		return AUI_MODULE_NAME;
+	protected List<String> getModules() {
+
+		List<String> modules = super.getModules();
+		modules.remove(0);
+		modules.add(AUI_MODULE_NAME);
+
+		return modules;
 	}
 	<#list component.getAttributesAndEvents()?sort_by("capitalizedName") as attribute>
 	<#if attribute.isEvent()>
