@@ -5,7 +5,7 @@ package ${packagePath}.${component.getUncamelizedName(BLANK)};
 //J-
 
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.annotation.Generated;
@@ -34,6 +34,9 @@ public abstract class ${component.getCamelizedName()}RendererBase extends ${UNQU
 	private static final String ${event.getConstantUnprefixedName()} = "${event.getUnprefixedName()}";
 	</#if>
 	</#list>
+
+	// Protected Constants
+	protected static final List<String> MODULES = Arrays.asList(AUI_MODULE_NAME);
 
 	protected void encodeJavaScriptMain(FacesContext facesContext, UIComponent uiComponent) throws IOException {
 
@@ -164,11 +167,7 @@ public abstract class ${component.getCamelizedName()}RendererBase extends ${UNQU
 	}
 
 	protected List<String> getModules() {
-
-		List<String> modules = new ArrayList<String>();
-		modules.add(AUI_MODULE_NAME);
-
-		return modules;
+		return MODULES;
 	}
 	<#list component.getAttributesAndEvents()?sort_by("capitalizedName") as attribute>
 	<#if attribute.isEvent()>
