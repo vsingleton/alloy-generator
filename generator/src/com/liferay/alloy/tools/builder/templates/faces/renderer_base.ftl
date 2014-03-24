@@ -5,8 +5,6 @@ package ${packagePath}.${component.getUncamelizedName(BLANK)};
 //J-
 
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.List;
 
 import javax.annotation.Generated;
 import javax.faces.component.UIComponent;
@@ -36,7 +34,7 @@ public abstract class ${component.getCamelizedName()}RendererBase extends ${UNQU
 	</#list>
 
 	// Protected Constants
-	protected static final List<String> MODULES = Arrays.asList(AUI_MODULE_NAME);
+	protected static final String[] MODULES = {AUI_MODULE_NAME};
 
 	protected void encodeJavaScriptMain(FacesContext facesContext, UIComponent uiComponent) throws IOException {
 
@@ -166,7 +164,8 @@ public abstract class ${component.getCamelizedName()}RendererBase extends ${UNQU
 		responseWriter.write(StringPool.NEW_LINE);
 	}
 
-	protected List<String> getModules() {
+	@Override
+	protected String[] getModules() {
 		return MODULES;
 	}
 	<#list component.getAttributesAndEvents()?sort_by("capitalizedName") as attribute>
