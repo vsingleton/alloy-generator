@@ -76,7 +76,7 @@ public abstract class ${component.getCamelizedName()}RendererBase extends ${UNQU
 		responseWriter.write(StringPool.SPACE);
 		responseWriter.write(NEW);
 		responseWriter.write(StringPool.SPACE);
-		responseWriter.write(A_CLASS_NAME);
+		responseWriter.write(getAlloyClassName());
 		responseWriter.write(StringPool.OPEN_PARENTHESIS);
 		responseWriter.write(StringPool.OPEN_CURLY_BRACE);
 		responseWriter.write(StringPool.NEW_LINE);
@@ -164,7 +164,11 @@ public abstract class ${component.getCamelizedName()}RendererBase extends ${UNQU
 		responseWriter.write(StringPool.SEMICOLON);
 		responseWriter.write(StringPool.NEW_LINE);
 	}
-
+	
+	protected String getAlloyClassName() {
+		return A_CLASS_NAME;
+	}
+	
 	@Override
 	protected String[] getModules() {
 		return MODULES;
