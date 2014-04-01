@@ -16,7 +16,7 @@
 	</#list>
 	<#list components?sort_by("uncapitalizedName") as component>
 	<tag>
-		<description>${component.getDescription()}</description>
+		<description><![CDATA[${component.getDescription()}]]></description>
 		<tag-name>${component.getUncapitalizedName()}</tag-name>
 		<component>
 			<component-type>${packagePath}.${component.getUncamelizedName(BLANK)}.${component.getCamelizedName()}</component-type>

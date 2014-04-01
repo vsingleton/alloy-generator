@@ -68,5 +68,14 @@ public class FacesComponent extends Component {
 		_rendererParentClass = rendererParentClass;
 	}
 
+	@Override
+	public String getDescription() {
+		return removeCDATATag(super.getDescription());
+	}
+
+	protected String removeCDATATag(String string) {
+		return string.replace("<![CDATA[", "").replace("]]>", "");
+	}
+
 	private String _rendererParentClass;
 }

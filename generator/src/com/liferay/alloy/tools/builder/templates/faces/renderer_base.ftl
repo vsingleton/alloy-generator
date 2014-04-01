@@ -12,6 +12,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 
 import ${RENDERER_BASE_PARENT_CLASS};
+import com.liferay.faces.alloy.util.AlloyConstants;
 import com.liferay.faces.util.component.ComponentUtil;
 import com.liferay.faces.util.component.Widget;
 import com.liferay.faces.util.lang.StringPool;
@@ -99,7 +100,7 @@ public abstract class ${component.getCamelizedName()}RendererBase extends ${UNQU
 
 		responseWriter.write(StringPool.NEW_LINE);
 
-		responseWriter.write(AFTER);
+		responseWriter.write(AlloyConstants.AFTER);
 		responseWriter.write(StringPool.COLON);
 		responseWriter.write(StringPool.OPEN_CURLY_BRACE);
 		responseWriter.write(StringPool.NEW_LINE);
@@ -120,7 +121,7 @@ public abstract class ${component.getCamelizedName()}RendererBase extends ${UNQU
 		responseWriter.write(StringPool.COMMA);
 		responseWriter.write(StringPool.NEW_LINE);
 
-		responseWriter.write(ON);
+		responseWriter.write(AlloyConstants.ON);
 		responseWriter.write(StringPool.COLON);
 		responseWriter.write(StringPool.OPEN_CURLY_BRACE);
 		responseWriter.write(StringPool.NEW_LINE);
