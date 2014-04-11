@@ -15,7 +15,17 @@
 package com.liferay.alloy.util;
 
 import jodd.util.StringPool;
+
 public class StringUtil extends jodd.util.StringUtil {
+
+	public static String removeNewlinesAndCDATA(String string) {
+		return string.replace("<![CDATA[", "").replace("]]>", "").replace("\n",
+				" ");
+	}
+
+	public static String toConstantName(String name) {
+		return StringUtil.fromCamelCase(name, '_').toUpperCase();
+	}
 
 	public static String unquote(String s) {
 		if (isBlank(s)) {

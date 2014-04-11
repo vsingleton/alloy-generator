@@ -25,6 +25,9 @@ import jodd.util.StringPool;
  */
 public class TypeUtil {
 
+	public static final String COMPLEX_BOOLEAN = "ComplexBoolean";
+	public static final String COMPLEX_NUMBER = "ComplexNumber";
+
 	public static final String ARRAY_NOTATION = "[]";
 
 	public static final String[] ARRAYS = {
@@ -61,6 +64,8 @@ public class TypeUtil {
 		"long"
 	};
 
+	public static final String NUMBER ="number";
+
 	public static final String[] NUMBERS = {
 		"num", "number"
 	};
@@ -75,6 +80,8 @@ public class TypeUtil {
 		"short"
 	};
 
+	public static final String STRING = "string";
+
 	public static final String[] STRINGS = {
 		"node | string", "string", "string | node", "string | int"
 	};
@@ -87,6 +94,57 @@ public class TypeUtil {
 		}
 
 		return _instance._getInputJavaType(type, removeGenericsType);
+	}
+
+	public static String getJavaWrapperType(String type) {
+
+		String javaWrapperType = type;
+
+		if (TypeUtil.isPrimitiveType(javaWrapperType)) {
+			if (javaWrapperType.equals("int")) {
+				javaWrapperType = "Integer";
+			}
+			else {
+				javaWrapperType = StringUtil.capitalize(javaWrapperType);
+			}
+		}
+		
+		javaWrapperType = removeJavaPrefix(javaWrapperType);
+		
+		return javaWrapperType;
+	}
+
+	public static String getFacesJavaScriptType(String javaScriptType) {
+
+		String facesJavaScriptType = javaScriptType;
+		if (facesJavaScriptType != null) {
+
+			if (facesJavaScriptType.contains("|")) {
+
+				// TODO maybe add logic for functions
+				boolean containsString = facesJavaScriptType.contains(StringUtil.capitalize(STRING)) || facesJavaScriptType.contains(STRING);
+				boolean containsBoolean = facesJavaScriptType.contains(StringUtil.capitalize(BOOLEAN)) || facesJavaScriptType.contains(BOOLEAN);
+				boolean containsNumber = facesJavaScriptType.contains(StringUtil.capitalize(NUMBER)) || facesJavaScriptType.contains(NUMBER);
+
+				if (containsString && containsBoolean) {	
+					facesJavaScriptType = COMPLEX_BOOLEAN;
+				} else if (containsString && containsNumber) {
+					facesJavaScriptType = COMPLEX_NUMBER;
+				} else if (containsString) {
+					facesJavaScriptType = getJavaScriptType(StringUtil.capitalize(STRING));
+				} else if (containsBoolean) {
+					facesJavaScriptType = getJavaScriptType(StringUtil.capitalize(BOOLEAN));
+				} else if (containsNumber) {
+					facesJavaScriptType = getJavaScriptType(StringUtil.capitalize(NUMBER));
+				} else {
+					facesJavaScriptType = getJavaScriptType("Object");
+				}
+			} else {
+				facesJavaScriptType = getJavaScriptType(facesJavaScriptType.replace("java.lang.", ""));
+			}
+		}
+
+		return facesJavaScriptType;
 	}
 
 	public static String getJavaScriptType(String type) {
@@ -105,6 +163,10 @@ public class TypeUtil {
 		}
 
 		return _instance._getOutputJavaType(type, removeGenericsType);
+	}
+
+	public static String removeJavaPrefix(String type) {
+		return type.replace("java.lang.", "");
 	}
 
 	public static boolean isPrimitiveType(String type) {
@@ -158,6 +220,10 @@ public class TypeUtil {
 		_registerTypes(_OUTPUT_TYPES, STRINGS, String.class.getName());
 	}
 
+	private String _removeCurlyBraces(String type) {
+		return type.replace("{", "").replace("}", "");
+	}
+
 	private String _getGenericsType(String type) {
 		int begin = type.indexOf(StringPool.LEFT_CHEV);
 		int end = type.indexOf(StringPool.RIGHT_CHEV);
@@ -190,7 +256,7 @@ public class TypeUtil {
 	}
 
 	private String _getJavaScriptType(String type) {
-		String javaScriptType = _JAVASCRIPT_TYPES.get(type.toLowerCase());
+		String javaScriptType = _JAVASCRIPT_TYPES.get(_removeCurlyBraces(type.toLowerCase()));
 
 		if (StringUtil.isBlank(javaScriptType)) {
 			javaScriptType = String.class.getSimpleName();
