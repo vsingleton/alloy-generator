@@ -12,8 +12,9 @@
  * details.
  */
 
-package com.liferay.alloy.tools.builder;
+package com.liferay.alloy.tools.builder.taglib;
 
+import com.liferay.alloy.tools.builder.BaseBuilder;
 import com.liferay.alloy.tools.model.Component;
 import com.liferay.alloy.util.PropsUtil;
 import com.liferay.alloy.util.xml.SAXReaderUtil;
@@ -21,15 +22,12 @@ import com.liferay.alloy.util.xml.xpath.AlloyGeneratorNamespaceContext;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import jodd.io.FileUtil;
-
 import jodd.typeconverter.Convert;
-
 import jodd.util.StringPool;
 
 import org.dom4j.Document;
@@ -37,7 +35,6 @@ import org.dom4j.DocumentFactory;
 import org.dom4j.Element;
 import org.dom4j.Node;
 import org.dom4j.XPath;
-
 import org.jaxen.NamespaceContext;
 public class TagBuilder extends BaseBuilder {
 

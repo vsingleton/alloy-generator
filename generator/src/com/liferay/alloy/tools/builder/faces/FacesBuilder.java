@@ -12,18 +12,17 @@
  * details.
  */
 
-package com.liferay.alloy.tools.builder;
+package com.liferay.alloy.tools.builder.faces;
 
+import com.liferay.alloy.tools.builder.BaseBuilder;
 import com.liferay.alloy.tools.model.Component;
 import com.liferay.alloy.util.PropsUtil;
 
 import java.io.File;
-
 import java.util.List;
 import java.util.Map;
 
 import jodd.typeconverter.Convert;
-
 import jodd.util.StringPool;
 
 import org.dom4j.Document;

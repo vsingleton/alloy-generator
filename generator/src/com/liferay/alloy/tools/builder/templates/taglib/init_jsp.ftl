@@ -1,6 +1,6 @@
 <%--
-<#include "../common/init.ftl">
-<#include "../common/copyright.ftl">
+<#include "../init.ftl">
+<#include "../copyright.ftl">
 
 @generated
 --%>

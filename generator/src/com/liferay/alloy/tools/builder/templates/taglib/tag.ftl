@@ -1,4 +1,4 @@
-<#include "../common/copyright.ftl">
+<#include "../copyright.ftl">
 
 package ${packagePath}.${component.getPackage()};
 

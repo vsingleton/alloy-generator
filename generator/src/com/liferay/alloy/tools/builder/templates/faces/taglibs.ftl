@@ -1,4 +1,4 @@
-<#include "../common/init.ftl">
+<#include "../init.ftl">
 <?xml version="1.0" encoding="UTF-8"?>
 <facelet-taglib
 	version="2.0"
