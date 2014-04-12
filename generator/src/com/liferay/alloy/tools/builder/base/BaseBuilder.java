@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.alloy.tools.builder;
+package com.liferay.alloy.tools.builder.base;
 
 import com.liferay.alloy.tools.model.Attribute;
 import com.liferay.alloy.tools.model.Component;

@@ -1,5 +1,5 @@
 <%--
-<#include "../copyright.ftl">
+<#include "../base/copyright.ftl">
 --%>
 
 <%@ include file="init.jsp" %>

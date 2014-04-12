@@ -14,7 +14,7 @@
 
 package com.liferay.alloy.tools.builder.faces;
 
-import com.liferay.alloy.tools.builder.BaseBuilder;
+import com.liferay.alloy.tools.builder.base.BaseBuilder;
 import com.liferay.alloy.tools.model.Component;
 import com.liferay.alloy.util.PropsUtil;
 
