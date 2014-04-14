@@ -192,11 +192,11 @@ public class AlloyDocsTransformer {
 			Element componentNode = root.addElement("component");
 
 			componentNode.addAttribute("name", component.getName());
+			componentNode.addAttribute("description", component.getDescription());
 			componentNode.addAttribute("module", component.getModule());
 			componentNode.addAttribute("package", component.getPackage());
 			componentNode.addAttribute(
 				"bodyContent", String.valueOf(component.isBodyContent()));
-
 			componentNode.addAttribute(
 				"alloyComponent", String.valueOf(component.isAlloyComponent()));
 
@@ -211,6 +211,8 @@ public class AlloyDocsTransformer {
 				Element descriptionNode = attributeNode.addElement(
 					"description");
 				Element inputTypeNode = attributeNode.addElement("inputType");
+				Element rawJavaScriptTypeNode = attributeNode.addElement(
+					"rawJavaScriptType");
 				Element javaScriptTypeNode = attributeNode.addElement(
 					"javaScriptType");
 				Element nameNode = attributeNode.addElement("name");
@@ -219,6 +221,7 @@ public class AlloyDocsTransformer {
 				defaultValueNode.setText(attribute.getDefaultValue());
 				descriptionNode.addCDATA(_getAttributeDescription(attribute));
 				inputTypeNode.setText(attribute.getInputType());
+				rawJavaScriptTypeNode.setText(attribute.getRawJavaScriptType());
 				javaScriptTypeNode.setText(attribute.getJavaScriptType());
 				nameNode.setText(attribute.getName());
 				outputTypeNode.setText(attribute.getOutputType());
@@ -442,7 +445,7 @@ public class AlloyDocsTransformer {
 
 	private static final String _DEFAULT_ATTRIBUTE_NAMESPACE = "alloy";
 
-	private static final String _DEFAULT_JAVASCRIPT_TYPE = "String";
+	private static final String _DEFAULT_JAVASCRIPT_TYPE = "Object";
 
 	private static final String _DEFAULT_TAGLIB_SHORT_NAME = "alloy";
 
