@@ -15,7 +15,6 @@
 package com.liferay.alloy.tools.model;
 
 import com.liferay.alloy.util.StringUtil;
-import org.dom4j.Element;
 
 public class Event extends Attribute {
 
@@ -36,6 +35,7 @@ public class Event extends Attribute {
 		this(attribute);
 		setAfter(isAfter);
 
+		setUnprefixedName(getSafeName());
 		String capitalizedName = StringUtil.capitalize(getSafeName());
 
 		if (isAfter) {
@@ -45,12 +45,33 @@ public class Event extends Attribute {
 		}
 	}
 
+	public boolean createConstant() {
+		return _isOn || !(_isOn || _isAfter);
+	}
+
 	public boolean isAfter() {
 		return _isAfter;
 	}
 
+	public String getConstantUnprefixedName() {
+		return StringUtil.toConstantName(_unprefixedName);
+	}
+
 	public boolean isOn() {
 		return _isOn;
+	}
+
+	public String getUnprefixedName() {
+		return _unprefixedName;
+	}
+
+	public void setUnprefixedName(String _unprefixedName) {
+		this._unprefixedName = _unprefixedName;
+	}
+
+	@Override
+	public String getJavaWrapperType() {
+		return "String";
 	}
 
 	public void setAfter(boolean after) {
@@ -68,5 +89,5 @@ public class Event extends Attribute {
 
 	private boolean _isAfter = false;
 	private boolean _isOn = false;
-
+	private String _unprefixedName;
 }

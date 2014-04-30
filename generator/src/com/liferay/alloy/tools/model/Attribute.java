@@ -73,7 +73,7 @@ public class Attribute extends BaseModel {
 
 		String getterMethodPrefix = "get";
 
-		if (getJSFInputType().equals("Boolean")) {// TODO ignorecase
+		if (getJavaWrapperType().equalsIgnoreCase("Boolean")) {
 			getterMethodPrefix = "is";
 		}
 
@@ -109,22 +109,11 @@ public class Attribute extends BaseModel {
 		return TypeUtil.getJavaScriptType(_javaScriptType);
 	}
 
-	public String getJSFInputType() {
-		String inputJavaType = TypeUtil.getInputJavaType(_inputType, true);
+	public String getJavaWrapperType() {
+		String javaWrapperType = getJavaScriptType();
+		javaWrapperType = TypeUtil.getInputJavaType(javaWrapperType, true);
 
-		if (TypeUtil.isPrimitiveType(inputJavaType)) {
-			if (inputJavaType.equals("int")) {
-				inputJavaType = "Integer";
-			}
-			else {
-				inputJavaType = StringUtil.capitalize(inputJavaType);
-			}
-		}
-		else if (inputJavaType.startsWith("java.lang.")) {
-			inputJavaType = inputJavaType.substring("java.lang.".length());
-		}
-
-		return inputJavaType;
+		return TypeUtil.getJavaWrapperType(javaWrapperType);
 	}
 
 	public String getOutputType() {
