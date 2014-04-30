@@ -14,6 +14,8 @@
 
 package com.liferay.alloy.tools.model;
 
+import com.liferay.alloy.util.StringUtil;
+
 /**
  * @author Eduardo Lundgren
  * @author Bruno Basto
@@ -32,8 +34,12 @@ public abstract class BaseModel implements Comparable<Object> {
 		return _name.equals(model.getName());
 	}
 
+	public String getRawDescription() {
+		return	_description;
+	}
+
 	public String getDescription() {
-		return _description;
+		return	StringUtil.removeNewlinesAndCDATA(_description).trim();
 	}
 
 	public String getName() {
