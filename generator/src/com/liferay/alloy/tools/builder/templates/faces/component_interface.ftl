@@ -30,7 +30,7 @@ public interface ${component.getCamelizedName()}${INTERFACE_CLASS_SUFFIX} {
 	<#if attribute.isGenerateJava()>
 	<#if attribute.isGettable()>
 
-	public <#if !attribute.isEvent() && attribute.isJSFReservedAttribute()>${attribute.getJSFReservedAttributeType()}<#else>${attribute.getJavaWrapperType()}</#if> <#if attribute.isEvent()>get<#else>${attribute.getGetterMethodPrefix()}</#if>${attribute.getJavaBeanPropertyName()}();
+	public <#if !attribute.isEvent() && attribute.isJSFReservedAttribute()>${attribute.getJSFReservedAttributeType()}<#else>${attribute.getJavaWrapperType()}</#if> ${attribute.getGetterMethodPrefix()}${attribute.getJavaBeanPropertyName()}();
 	</#if>
 	<#if attribute.isSettable()>
 

@@ -41,7 +41,7 @@ public abstract class ${component.getCamelizedName()}${BASE_CLASS_SUFFIX} extend
 	<#if component.isAlloyComponent()>
 	@Override
 	</#if>
-	public ${attribute.getJavaWrapperType()} <#if attribute.isEvent()>get<#else>${attribute.getGetterMethodPrefix()}</#if>${attribute.getJavaBeanPropertyName()}() {
+	public ${attribute.getJavaWrapperType()} ${attribute.getGetterMethodPrefix()}${attribute.getJavaBeanPropertyName()}() {
 		return (${attribute.getJavaWrapperType()}) getStateHelper().eval(${attribute.getConstantName()}, <#if attribute.isEvent()>null<#else>${attribute.getGetterDefaultReturnValue()}</#if>);
 	}
 	</#if>
