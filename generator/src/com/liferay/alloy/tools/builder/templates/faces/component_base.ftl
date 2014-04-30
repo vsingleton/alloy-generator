@@ -29,8 +29,8 @@ public abstract class ${component.getCamelizedName()}${BASE_CLASS_SUFFIX} extend
 
 	// Public Constants
 	<#list component.getAttributesAndEvents()?sort_by("constantName") as attribute>
-	<#if attribute.isGenerateJava() && (attribute.getSafeName() != "styleClass")>
-	public static final String ${attribute.getConstantName()} = "${attribute.getName()}";
+	<#if attribute.isGenerateJava()>
+	private static final String ${attribute.getConstantName()} = "${attribute.getName()}";
 	</#if>
 	</#list>
 	</#if>
@@ -38,7 +38,7 @@ public abstract class ${component.getCamelizedName()}${BASE_CLASS_SUFFIX} extend
 	<#if attribute.isGenerateJava() && (attribute.isEvent() || !attribute.isJSFReservedAttribute())>
 	<#if attribute.isGettable()>
 
-	<#if component.isAlloyComponent() || (attribute.getSafeName() == "styleClass")>
+	<#if component.isAlloyComponent()>
 	@Override
 	</#if>
 	public ${attribute.getJavaWrapperType()} <#if attribute.isEvent()>get<#else>${attribute.getGetterMethodPrefix()}</#if>${attribute.getJavaBeanPropertyName()}() {
@@ -47,7 +47,7 @@ public abstract class ${component.getCamelizedName()}${BASE_CLASS_SUFFIX} extend
 	</#if>
 	<#if attribute.isSettable()>
 
-	<#if component.isAlloyComponent() || (attribute.getSafeName() == "styleClass")>
+	<#if component.isAlloyComponent()>
 	@Override
 	</#if>
 	public void set${attribute.getJavaBeanPropertyName()}(${attribute.getJavaWrapperType()} ${attribute.getJavaSafeName()}) {

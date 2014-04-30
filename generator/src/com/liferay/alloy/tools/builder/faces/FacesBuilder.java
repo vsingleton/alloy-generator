@@ -16,7 +16,6 @@ package com.liferay.alloy.tools.builder.faces;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -31,9 +30,7 @@ import com.liferay.alloy.tools.builder.base.BaseBuilder;
 import com.liferay.alloy.tools.builder.faces.model.FacesAttribute;
 import com.liferay.alloy.tools.model.Component;
 import com.liferay.alloy.tools.builder.faces.model.FacesComponent;
-import com.liferay.alloy.tools.model.Attribute;
 import com.liferay.alloy.util.PropsUtil;
-import com.liferay.alloy.util.ReservedAttributeUtil;
 import com.liferay.alloy.util.StringUtil;
 
 public class FacesBuilder extends BaseBuilder {
@@ -82,8 +79,19 @@ public class FacesBuilder extends BaseBuilder {
 				context.put("INTERFACE_CLASS_SUFFIX", _INTERFACE_CLASS_SUFFIX);
 				context.put("RENDERER_BASE_CLASS_SUFFIX", _RENDERER_CLASS_SUFFIX + _BASE_CLASS_SUFFIX);
 
+				List<FacesAttribute> additionalAttributes = _getAdditionalAttributes(facesComponent);
+
 				_buildComponent(facesComponent, context);
+
+				if (additionalAttributes.size() > 0) {
+					facesComponent.getAttributes().addAll(additionalAttributes);
+				}
+
 				_buildComponentBase(facesComponent, context);
+
+				if (additionalAttributes.size() > 0) {
+					facesComponent.getAttributes().removeAll(additionalAttributes);
+				}
 	
 				if (facesComponent.isAlloyComponent()) {
 					_buildComponentInterface(facesComponent, context);
@@ -108,46 +116,13 @@ public class FacesBuilder extends BaseBuilder {
 		return _TEMPLATES_DIR;
 	}
 
-	private void _addDefaultFacesAttributes(Element componentNode,
-			List<Attribute> attributes) {
-
-		if (componentNode.attributeValue("rendererParentClass") == null) {
-			FacesAttribute widgetVarAttribute = new FacesAttribute();
-			widgetVarAttribute.setDefaultValue(null);
-			widgetVarAttribute.setDescription("The name of the widget's javascript variable.");
-			widgetVarAttribute.setGettable(true);
-			widgetVarAttribute.setInputType("java.lang.String");
-			widgetVarAttribute.setJavaScriptType("java.lang.String");
-			widgetVarAttribute.setName("widgetVar");
-			widgetVarAttribute.setOutputType("java.lang.String");
-			widgetVarAttribute.setRequired(false);
-			widgetVarAttribute.setSettable(true);
-			widgetVarAttribute.setGenerateJava(true);
-			widgetVarAttribute.setMethodSignature(null);
-			widgetVarAttribute.setOutputUnsafe(true);
-
-			attributes.add(widgetVarAttribute);
-		}
-
-		FacesAttribute styleClassAttribute = new FacesAttribute();
-		styleClassAttribute.setDefaultValue(null);
-		styleClassAttribute.setDescription("The name of a CSS class that is to be rendered within the class attribute.");
-		styleClassAttribute.setGettable(true);
-		styleClassAttribute.setInputType("java.lang.String");
-		styleClassAttribute.setJavaScriptType("java.lang.String");
-		styleClassAttribute.setName("styleClass");
-		styleClassAttribute.setOutputType("java.lang.String");
-		styleClassAttribute.setRequired(false);
-		styleClassAttribute.setSettable(true);
-		styleClassAttribute.setGenerateJava(true);
-		styleClassAttribute.setMethodSignature(null);
-		styleClassAttribute.setOutputUnsafe(true);
-
-		attributes.add(styleClassAttribute);
-	}
-
 	@Override
 	protected List<Component> getComponents(Document doc) throws Exception {
+		Element root = doc.getRootElement();
+		return getComponents(doc, false);
+	}
+
+	protected List<Component> getComponents(Document doc, boolean addAdditionalAttributes) throws Exception {
 		Element root = doc.getRootElement();
 
 		List<Component> facesComponents = new ArrayList<Component>();
@@ -158,6 +133,16 @@ public class FacesBuilder extends BaseBuilder {
 		for (Element node : allComponentNodes) {
 			FacesComponent facesComponent = new FacesComponent();
 			facesComponent.initialize(node, defaultPackage);
+
+			if (addAdditionalAttributes) {
+				List<FacesAttribute> additionalAttributes = new ArrayList<FacesAttribute>();
+				additionalAttributes = _getAdditionalAttributes(facesComponent);
+
+				if (additionalAttributes.size() > 0) {
+					facesComponent.getAttributes().addAll(additionalAttributes);
+				}
+			}
+			
 			facesComponents.add(facesComponent);
 		}
 
@@ -207,6 +192,52 @@ public class FacesBuilder extends BaseBuilder {
 				.getCamelizedName().concat(_JAVA_EXT)));
 
 		writeFile(componentFile, componentContent, false);
+	}
+
+	private List<FacesAttribute> _getAdditionalAttributes(FacesComponent facesComponent) {
+
+		List<FacesAttribute> additionalAttributes = new ArrayList<FacesAttribute>();
+		
+		for (Document doc : getComponentDefinitionDocs()) {
+			Element root = doc.getRootElement();
+
+			Element extensionElement = root.element("extension");
+
+			if (extensionElement != null) {
+
+				if (facesComponent.isAlloyComponent()) {
+					List<FacesAttribute> clientComponentAttributes =
+						_getInterfaceAttributes(extensionElement, "clientComponentAttributes", facesComponent);
+					additionalAttributes.addAll(clientComponentAttributes);
+				}
+
+				if (facesComponent.isStyleable()) {
+					List<FacesAttribute> styleableAttributes =
+						_getInterfaceAttributes(extensionElement, "styleableAttributes", facesComponent);
+					additionalAttributes.addAll(styleableAttributes);
+				}
+			}
+		}
+
+		return additionalAttributes;
+	}
+
+	private List<FacesAttribute> _getInterfaceAttributes(
+		Element extensionElement, String interfaceAttributesElementName,
+			FacesComponent facesComponent) {
+
+		Element interfaceAttributesElement = extensionElement.element(interfaceAttributesElementName);
+
+		List<Element> interfaceAttributeElementList = interfaceAttributesElement.elements("attribute");
+		List<FacesAttribute> facesAttributeList = new ArrayList<FacesAttribute>();
+
+		for (Element interfaceAttributeElement : interfaceAttributeElementList) {
+			FacesAttribute facesAttribute = new FacesAttribute();
+			facesAttribute.initialize(interfaceAttributeElement, facesComponent);
+			facesAttributeList.add(facesAttribute);
+		}
+
+		return facesAttributeList;
 	}
 
 	private void _buildComponentBase(FacesComponent facesComponent,
@@ -341,9 +372,8 @@ public class FacesBuilder extends BaseBuilder {
 
 				context.put("functions", functionsList);
 			}
-			
 
-			context.put("components", getComponents(doc));
+			context.put("components", getComponents(doc, true));
 			context.put("namespaceURI", namespaceURI);
 			context.put("description", description);
 			context.put("version", _version);

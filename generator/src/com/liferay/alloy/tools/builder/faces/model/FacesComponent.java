@@ -32,6 +32,9 @@ public class FacesComponent extends Component {
 			String defaultPackage) {
 		super.initialize(facesComponentElement, defaultPackage);
 
+		_styleable = Convert.toBoolean(
+			facesComponentElement.attributeValue("styleable"), true);
+
 		boolean alloyComponent = Convert.toBoolean(
 			facesComponentElement.attributeValue("alloyComponent"), false);
 		setAlloyComponent(alloyComponent);
@@ -131,5 +134,14 @@ public class FacesComponent extends Component {
 	private static final String _DEFAULT_RENDERER_PARENT_CLASS =
 		PropsUtil.getString("builder.faces.renderer.base.parent.class");
 
+	public boolean isStyleable() {
+		return _styleable;
+	}
+
+	public void setStyleable(boolean _styleable) {
+		this._styleable = _styleable;
+	}
+
+	private boolean _styleable;
 	private String _rendererParentClass;
 }

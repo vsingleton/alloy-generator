@@ -33,6 +33,9 @@ public class FacesAttribute extends Attribute {
 			"null");
 		_methodSignature = facesAttributeElement
 				.elementText("method-signature");
+		_outputUnsafe = Convert.toBoolean(facesAttributeElement
+			.elementText("outputUnsafe"), false);
+		
 		String type = Convert.toString(
 				facesAttributeElement.elementText("type"), DEFAULT_TYPE);
 		String rawJavaScriptType = Convert.toString(

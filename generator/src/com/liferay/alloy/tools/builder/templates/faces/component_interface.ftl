@@ -22,12 +22,12 @@ public interface ${component.getCamelizedName()}${INTERFACE_CLASS_SUFFIX} {
 
 	// Public Constants
 	<#list component.getAttributesAndEvents()?sort_by("constantName") as attribute>
-	<#if attribute.isGenerateJava() && (attribute.getSafeName() != "styleClass") && (attribute.getSafeName() != "clientKey")>
+	<#if attribute.isGenerateJava()>
 	public static final String ${attribute.getConstantName()} = "${attribute.getName()}";
 	</#if>
 	</#list>
 	<#list component.getAttributesAndEvents()?sort_by("javaBeanPropertyName") as attribute>
-	<#if attribute.isGenerateJava() && (attribute.getSafeName() != "styleClass") && (attribute.getSafeName() != "clientKey")>
+	<#if attribute.isGenerateJava()>
 	<#if attribute.isGettable()>
 
 	public <#if !attribute.isEvent() && attribute.isJSFReservedAttribute()>${attribute.getJSFReservedAttributeType()}<#else>${attribute.getJavaWrapperType()}</#if> <#if attribute.isEvent()>get<#else>${attribute.getGetterMethodPrefix()}</#if>${attribute.getJavaBeanPropertyName()}();
