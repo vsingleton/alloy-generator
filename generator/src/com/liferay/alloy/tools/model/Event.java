@@ -14,6 +14,9 @@
 
 package com.liferay.alloy.tools.model;
 
+import com.liferay.alloy.util.StringUtil;
+import org.dom4j.Element;
+
 public class Event extends Attribute {
 
 	public Event(Attribute attribute) {
@@ -31,8 +34,15 @@ public class Event extends Attribute {
 
 	public Event(Attribute attribute, boolean isAfter) {
 		this(attribute);
-
 		setAfter(isAfter);
+
+		String capitalizedName = StringUtil.capitalize(getSafeName());
+
+		if (isAfter) {
+			setName(_AFTER + capitalizedName);
+		} else {
+			setName(_ON + capitalizedName);
+		}
 	}
 
 	public boolean isAfter() {
@@ -52,6 +62,9 @@ public class Event extends Attribute {
 		_isAfter = !on;
 		_isOn = on;
 	}
+
+	private static final String _AFTER = "after";
+	private static final String _ON = "on";
 
 	private boolean _isAfter = false;
 	private boolean _isOn = false;

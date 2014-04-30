@@ -50,12 +50,11 @@ public class ReservedAttributeUtil {
 		return name;
 	}
 
-	public static String getJSFReservedAttributeType(Attribute attribute) {
+	public static String getJSFReservedAttributeType(String name) {
 
 		String reservedAttributeType = null;
-		String name = attribute.getName();
 
-		if (_isJSFReservedAttribute(name)) {
+		if (isJSFReservedAttribute(name)) {
 			reservedAttributeType = JSF_RESERVED_ATTRIBUTES_MAP.get(name);
 		}
 
@@ -101,8 +100,8 @@ public class ReservedAttributeUtil {
 		return JAVA_RESERVED_WORDS.contains(attribute.getName());
 	}
 
-	public static boolean isJSFReservedAttribute(Attribute attribute) {
-		return JSF_RESERVED_ATTRIBUTES_MAP.containsKey(attribute.getName());
+	public static boolean isJSFReservedAttribute(String name) {
+		return JSF_RESERVED_ATTRIBUTES_MAP.containsKey(name);
 	}
 
 	public static boolean isNamespaced(Attribute attribute) {
@@ -111,10 +110,6 @@ public class ReservedAttributeUtil {
 
 	public static boolean isNamespaced(String attributeName) {
 		return NAMESPACED_ATTRIBUTES.contains(attributeName);
-	}
-
-	private static boolean _isJSFReservedAttribute(String attributeName) {
-		return JSF_RESERVED_ATTRIBUTES_MAP.containsKey(attributeName);
 	}
 
 	public static final List<String> JAVA_RESERVED_WORDS = Arrays.asList(

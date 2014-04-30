@@ -14,9 +14,7 @@
 
 package com.liferay.alloy.tools.builder.base;
 
-import com.liferay.alloy.tools.model.Attribute;
 import com.liferay.alloy.tools.model.Component;
-import com.liferay.alloy.tools.model.Event;
 import com.liferay.alloy.util.FreeMarkerUtil;
 import com.liferay.alloy.util.PropsUtil;
 import com.liferay.alloy.util.StringUtil;
@@ -29,7 +27,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -141,7 +138,7 @@ public abstract class BaseBuilder {
 				extComponent.addAttribute("package", extComponentPackage);
 			}
 
-			Element authors = currentRoot.element(_AUTHORS);
+			Element authors = currentRoot.element("author");
 
 			List<Element> components = currentRoot.elements("component");
 
@@ -162,91 +159,6 @@ public abstract class BaseBuilder {
 		return getComponents(doc);
 	}
 
-	protected List<Attribute> getAttributes(Element componentNode) {
-		return getAttributes(componentNode, "attributes", "attribute");
-	}
-
-	protected List<Attribute> getAttributes(
-		Element componentNode, String group, String nodeName) {
-
-		List<Element> nodes = Collections.emptyList();
-
-		List<Attribute> attributes = new ArrayList<Attribute>();
-
-		Element node = componentNode.element(group);
-
-		if (node != null) {
-			nodes = node.elements(nodeName);
-		}
-
-		for (Element attributeNode : nodes) {
-			String defaultValue = attributeNode.elementText("defaultValue");
-			String description = attributeNode.elementText("description");
-			String name = attributeNode.elementText("name");
-			String type = Convert.toString(
-				attributeNode.elementText("type"), _DEFAULT_TYPE);
-			String inputType = Convert.toString(
-				attributeNode.elementText("inputType"), type);
-			String javaScriptType = Convert.toString(
-				attributeNode.elementText("javaScriptType"), type);
-			String outputType = Convert.toString(
-				attributeNode.elementText("outputType"), type);
-
-			boolean gettable = Convert.toBoolean(
-				attributeNode.elementText("gettable"), true);
-			boolean required = Convert.toBoolean(
-				attributeNode.elementText("required"), false);
-			boolean settable = Convert.toBoolean(
-				attributeNode.elementText("settable"), true);
-
-			Attribute attribute = new Attribute();
-
-			attribute.setDefaultValue(defaultValue);
-			attribute.setDescription(description);
-			attribute.setGettable(gettable);
-			attribute.setInputType(inputType);
-			attribute.setJavaScriptType(javaScriptType);
-			attribute.setName(name);
-			attribute.setOutputType(outputType);
-			attribute.setRequired(required);
-			attribute.setSettable(settable);
-
-			attributes.add(attribute);
-		}
-
-		return attributes;
-	}
-
-	protected String[] getAuthorList(Element element) {
-		List<String> authors = new ArrayList<String>();
-
-		if (element != null) {
-			Element elAuthors = element.element(_AUTHORS);
-
-			if (elAuthors != null) {
-				List<Element> authorList = elAuthors.elements(_AUTHOR);
-
-				for (Element author : authorList) {
-					authors.add(author.getText());
-				}
-			}
-		}
-
-		if (authors.isEmpty()) {
-			String[] propertiesAuthors = PropsUtil.getStringArray(
-				"builder.authors");
-
-			return propertiesAuthors;
-		}
-		else {
-			return authors.toArray(new String[authors.size()]);
-		}
-	}
-
-	protected abstract String getComponentDefaultInterface();
-
-	protected abstract String getComponentDefaultParentClass();
-
 	protected Element getComponentNode(Document doc, String name) {
 		List<Element> components = doc.getRootElement().elements(_COMPONENT);
 
@@ -259,75 +171,7 @@ public abstract class BaseBuilder {
 		return null;
 	}
 
-	protected List<Component> getComponents(Document doc) throws Exception {
-		Element root = doc.getRootElement();
-
-		List<Component> components = new ArrayList<Component>();
-
-		String defaultPackage = root.attributeValue("short-name");
-		List<Element> allComponentNodes = root.elements("component");
-
-		for (Element node : allComponentNodes) {
-			String componentPackage = Convert.toString(
-				node.attributeValue("package"), defaultPackage);
-
-			String name = node.attributeValue("name");
-
-			boolean alloyComponent = Convert.toBoolean(
-				node.attributeValue("alloyComponent"), true);
-
-			boolean bodyContent = Convert.toBoolean(
-				node.attributeValue("bodyContent"), false);
-
-			String className = Convert.toString(
-				node.attributeValue("className"));
-
-			String componentInterface = Convert.toString(
-				node.attributeValue("componentInterface"),
-				getComponentDefaultInterface());
-
-			String description = Convert.toString(
-				node.attributeValue("description"), StringPool.EMPTY);
-
-			boolean dynamicAttributes = Convert.toBoolean(
-				node.attributeValue("dynamicAttributes"), true);
-
-			String module = Convert.toString(
-				node.attributeValue("module"), null);
-
-			String parentClass = Convert.toString(
-				node.attributeValue("parentClass"),
-				getComponentDefaultParentClass());
-
-			boolean writeJSP = Convert.toBoolean(
-				node.attributeValue("writeJSP"), true);
-
-			String[] authors = getAuthorList(node);
-			List<Attribute> attributes = getAttributes(node);
-			List<Event> events = getPrefixedEvents(node);
-
-			Component component = new Component();
-
-			component.setAlloyComponent(alloyComponent);
-			component.setAttributes(attributes);
-			component.setAuthors(authors);
-			component.setBodyContent(bodyContent);
-			component.setClassName(className);
-			component.setDescription(description);
-			component.setDynamicAttributes(dynamicAttributes);
-			component.setEvents(events);
-			component.setInterface(componentInterface);
-			component.setModule(module);
-			component.setName(name);
-			component.setPackage(componentPackage);
-			component.setParentClass(parentClass);
-			component.setWriteJSP(writeJSP);
-
-			components.add(component);
-		}
-
-		return components;
-	}
+	protected abstract List<Component> getComponents(Document doc) throws Exception;
 
 	protected Document getComponentsDocByShortName(String name) {
 		for (Document doc : getComponentDefinitionDocs()) {
@@ -357,40 +201,6 @@ public abstract class BaseBuilder {
 		}
 
 		return null;
-	}
-
-	protected List<Event> getPrefixedEvents(Element componentNode) {
-		List<Event> prefixedEvents = new ArrayList<Event>();
-
-		List<Attribute> afterEvents = getAttributes(
-			componentNode, "events", "event");
-
-		for (Attribute afterEvent : afterEvents) {
-			Event event = new Event(afterEvent, true);
-
-			String name = _AFTER.concat(
-				StringUtil.capitalize(event.getSafeName()));
-
-			event.setName(name);
-
-			prefixedEvents.add(event);
-		}
-
-		List<Attribute> onEvents = getAttributes(
-			componentNode, "events", "event");
-
-		for (Attribute onEvent : onEvents) {
-			Event event = new Event(onEvent, false);
-
-			String name = _ON.concat(
-				StringUtil.capitalize(event.getSafeName()));
-
-			event.setName(name);
-
-			prefixedEvents.add(event);
-		}
-
-		return prefixedEvents;
 	}
 
 	protected Map<String, Object> getTemplateContext(Component component) {
@@ -475,7 +285,7 @@ public abstract class BaseBuilder {
 
 				Element doc1EventsNode = doc1Component.element(_EVENTS);
 
-				Element eventsNode = doc2Component.element(_EVENTS);
+				Element eventsNode = component.element(_EVENTS);
 
 				if ((doc1EventsNode != null) && (eventsNode != null)) {
 					List<Element> doc1Events = doc1EventsNode.elements(_EVENT);
@@ -577,26 +387,15 @@ public abstract class BaseBuilder {
 
 		return document;
 	}
-
-	private static final String _AFTER = "after";
-
 	private static final String _ATTRIBUTE = "attribute";
 
 	private static final String _ATTRIBUTES = "attributes";
 
-	private static final String _AUTHOR = "author";
-
-	private static final String _AUTHORS = "authors";
-
 	private static final String _COMPONENT = "component";
-
-	private static final String _DEFAULT_TYPE = "java.lang.Object";
 
 	private static final String _EVENT = "event";
 
 	private static final String _EVENTS = "events";
-
-	private static final String _ON = "on";
 
 	private List<Document> _componentsDefinitionDocs;
 	private List<String> _componentsDefinitionList;

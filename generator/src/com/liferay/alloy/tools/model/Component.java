@@ -14,13 +14,113 @@
 
 package com.liferay.alloy.tools.model;
 
+import com.liferay.alloy.util.PropsUtil;
 import com.liferay.alloy.util.StringUtil;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import jodd.typeconverter.Convert;
 
 import jodd.util.StringPool;
+import org.dom4j.Element;
+
 public class Component extends BaseModel {
+
+	public void initialize(Element componentElement, String defaultPackage) {
+
+		String name = componentElement.attributeValue("name");
+		setName(name);
+
+		Element descriptionElement = componentElement.element("description");
+
+		String description = StringPool.EMPTY;
+
+		if (descriptionElement != null) {
+			description = Convert.toString(descriptionElement.getText());
+		}
+		
+		setDescription(description);
+
+		Element authorsElement = componentElement.element("authors");
+		if (authorsElement != null) {
+
+			List<String> authors = new ArrayList<String>();
+			List<Element> authorElementsList = authorsElement.elements("author");
+
+			for (Element authorElement : authorElementsList) {
+				authors.add(authorElement.getText());
+			}
+
+			_authors = authors.toArray(new String[authors.size()]);
+		}
+
+		if (_authors == null) {
+			_authors = _DEFAULT_AUTHORS;
+		}
+
+		_alloyComponent = Convert.toBoolean(
+			componentElement.attributeValue("alloyComponent"), true);
+		_bodyContent = Convert.toBoolean(
+			componentElement.attributeValue("bodyContent"), false);
+		_componentInterface = Convert.toString(
+			componentElement.attributeValue("componentInterface"), null);
+		_module = Convert.toString(
+			componentElement.attributeValue("module"), null);
+		_package = Convert.toString(
+			componentElement.attributeValue("package"), defaultPackage);
+		_parentClass = Convert.toString(
+			componentElement.attributeValue("parentClass"), null);
+
+		Element attributesElement = componentElement.element("attributes");
+
+		_attributes = Collections.EMPTY_LIST;
+		if (attributesElement != null) {
+			List<Element> attributeElementsList = attributesElement.elements("attribute");	
+			_attributes = getAttributesFromElements(attributeElementsList);	
+		}
+
+		Element eventsElement = componentElement.element("events");
+
+		_events = Collections.EMPTY_LIST;
+		if (eventsElement != null) {
+			List<Element> eventElementsList = eventsElement.elements("event");
+			_events = getEventsFromElements(eventElementsList);	
+		}
+	}
+
+	protected List<Attribute> getAttributesFromElements(List<Element> attributeElements) {
+
+		List<Attribute> attributes = new ArrayList<Attribute>();
+
+		for (Element attributeElement : attributeElements) {
+			Attribute attribute = new Attribute();
+			attribute.initialize(attributeElement, this);
+			attributes.add(attribute);
+		}
+
+		return attributes;
+	}
+
+	protected List<Event> getEventsFromElements(List<Element> eventElements) {
+
+		List<Event> events = new ArrayList<Event>();
+
+		for (Element eventElement : eventElements) {
+
+			System.err.println(eventElement);
+			Attribute attribute = new Attribute();
+			attribute.initialize(eventElement, this);
+
+			Event afterEvent = new Event(attribute, true);
+			events.add(afterEvent);
+
+			Event onEvent = new Event(attribute, false);
+			events.add(onEvent);
+		}
+
+		return events;
+	}
 
 	public List<Event> getAfterEvents() {
 		List<Event> afterEvents = new ArrayList<Event>();
@@ -65,16 +165,6 @@ public class Component extends BaseModel {
 	public String getCamelizedName() {
 		return StringUtil.toCamelCase(
 			getName(), true, StringPool.DASH.charAt(0));
-	}
-
-	public String getClassName() {
-		String className = _className;
-
-		if (StringUtil.isBlank(className)) {
-			className = getSafeName().concat(_CLASS_NAME_SUFFIX);
-		}
-
-		return className;
 	}
 
 	public List<Event> getEvents() {
@@ -141,10 +231,6 @@ public class Component extends BaseModel {
 			_parentClass.lastIndexOf(StringPool.DOT) + 1);
 	}
 
-	public boolean getWriteJSP() {
-		return _writeJSP;
-	}
-
 	public boolean isAlloyComponent() {
 		return _alloyComponent;
 	}
@@ -171,10 +257,6 @@ public class Component extends BaseModel {
 		return false;
 	}
 
-	public boolean isDynamicAttributes() {
-		return _dynamicAttributes;
-	}
-
 	public void setAlloyComponent(boolean alloyComponent) {
 		_alloyComponent = alloyComponent;
 	}
@@ -193,14 +275,6 @@ public class Component extends BaseModel {
 
 	public void setBodyContent(boolean bodyContent) {
 		_bodyContent = bodyContent;
-	}
-
-	public void setClassName(String className) {
-		_className = className;
-	}
-
-	public void setDynamicAttributes(boolean dynamicAttributes) {
-		_dynamicAttributes = dynamicAttributes;
 	}
 
 	public void setEvents(List<Event> events) {
@@ -227,23 +301,17 @@ public class Component extends BaseModel {
 		_parentClass = parentClass;
 	}
 
-	public void setWriteJSP(boolean writeJSP) {
-		_writeJSP = writeJSP;
-	}
-
-	private final static String _CLASS_NAME_SUFFIX = "Tag";
+	private static final String[] _DEFAULT_AUTHORS = PropsUtil.getStringArray(
+				"builder.authors");
 
 	private boolean _alloyComponent;
 	private List<Attribute> _attributes;
 	private String[] _authors;
 	private boolean _bodyContent;
-	private String _className;
 	private String _componentInterface;
-	private boolean _dynamicAttributes;
 	private List<Event> _events;
 	private String _module;
 	private String _package;
 	private String _parentClass;
-	private boolean _writeJSP;
 
 }

@@ -14,11 +14,10 @@
 
 package com.liferay.alloy.tools.builder.faces;
 
-import com.liferay.alloy.tools.builder.base.BaseBuilder;
-import com.liferay.alloy.tools.model.Component;
-import com.liferay.alloy.util.PropsUtil;
-
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -27,6 +26,12 @@ import jodd.util.StringPool;
 
 import org.dom4j.Document;
 import org.dom4j.Element;
+
+import com.liferay.alloy.tools.builder.base.BaseBuilder;
+import com.liferay.alloy.tools.model.Component;
+import com.liferay.alloy.tools.builder.faces.model.FacesComponent;
+import com.liferay.alloy.util.PropsUtil;
+
 public class FacesBuilder extends BaseBuilder {
 
 	public static void main(String[] args) throws Exception {
@@ -81,13 +86,21 @@ public class FacesBuilder extends BaseBuilder {
 	}
 
 	@Override
-	protected String getComponentDefaultInterface() {
-		return null;
-	}
+	protected List<Component> getComponents(Document doc) throws Exception {
+		Element root = doc.getRootElement();
 
-	@Override
-	protected String getComponentDefaultParentClass() {
-		return _COMPONENT_DEFAULT_PARENT_CLASS;
+		List<Component> facesComponents = new ArrayList<Component>();
+
+		String defaultPackage = root.attributeValue("short-name");
+		List<Element> allComponentNodes = root.elements("component");
+
+		for (Element node : allComponentNodes) {
+			FacesComponent facesComponent = new FacesComponent();
+			facesComponent.initialize(node, defaultPackage);
+			facesComponents.add(facesComponent);
+		}
+
+		return facesComponents;
 	}
 
 	protected String getComponentOutputDir(Component component) {
@@ -221,9 +234,6 @@ public class FacesBuilder extends BaseBuilder {
 	}
 
 	private static final String _BASE_CLASS_SUFFIX = "Base";
-
-	private static final String _COMPONENT_DEFAULT_PARENT_CLASS =
-		"javax.faces.component.UIPanel";
 
 	private static final String _COMPONENTS_PACKAGE =
 		"com.liferay.faces.alloy.component";

@@ -52,7 +52,16 @@ public abstract class BaseModel implements Comparable<Object> {
 		_name = name;
 	}
 
+	public boolean isGenerateJava() {
+		return _generateJava;
+	}
+
+	public void setGenerateJava(boolean _generateJava) {
+		this._generateJava = _generateJava;
+	}
+	
 	private String _description;
+	private boolean _generateJava;
 	private String _name;
 
 }
