@@ -22,18 +22,20 @@ public interface ${component.getCamelizedName()}${INTERFACE_CLASS_SUFFIX} {
 
 	// Public Constants
 	<#list component.getAttributesAndEvents()?sort_by("constantName") as attribute>
-	<#if (attribute.isEvent() || attribute.isGenerateJava()) && (attribute.getSafeName() != "styleClass") && (attribute.getSafeName() != "clientKey")>
+	<#if attribute.isGenerateJava() && (attribute.getSafeName() != "styleClass") && (attribute.getSafeName() != "clientKey")>
 	public static final String ${attribute.getConstantName()} = "${attribute.getName()}";
 	</#if>
 	</#list>
 	<#list component.getAttributesAndEvents()?sort_by("javaBeanPropertyName") as attribute>
-	<#if attribute.isGettable() && (attribute.isEvent() || attribute.isGenerateJava()) && (attribute.getSafeName() != "styleClass") && (attribute.getSafeName() != "clientKey")>
+	<#if attribute.isGenerateJava() && (attribute.getSafeName() != "styleClass") && (attribute.getSafeName() != "clientKey")>
+	<#if attribute.isGettable()>
 
 	public <#if !attribute.isEvent() && attribute.isJSFReservedAttribute()>${attribute.getJSFReservedAttributeType()}<#else>${attribute.getJavaWrapperType()}</#if> <#if attribute.isEvent()>get<#else>${attribute.getGetterMethodPrefix()}</#if>${attribute.getJavaBeanPropertyName()}();
 	</#if>
-	<#if attribute.isSettable() && (attribute.isEvent() || attribute.isGenerateJava()) && (attribute.getSafeName() != "styleClass") && (attribute.getSafeName() != "clientKey")>
+	<#if attribute.isSettable()>
 
 	public void set${attribute.getJavaBeanPropertyName()}(<#if !attribute.isEvent() && attribute.isJSFReservedAttribute()>${attribute.getJSFReservedAttributeType()}<#else>${attribute.getJavaWrapperType()}</#if> ${attribute.getJavaSafeName()});
+	</#if>
 	</#if>
 	</#list>
 }

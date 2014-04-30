@@ -44,6 +44,9 @@ public class Attribute extends BaseModel {
 			attributeElement.elementText("javaScriptType"), type);
 		_outputType = Convert.toString(
 			attributeElement.elementText("outputType"), type);
+		boolean generateJava = Convert.toBoolean(
+			attributeElement.elementText("generateJava"), true);
+		setGenerateJava(generateJava);
 
 		_gettable = Convert.toBoolean(
 			attributeElement.elementText("gettable"), true);

@@ -22,6 +22,7 @@ public class Event extends Attribute {
 		setComponent(attribute.getComponent());
 		setDefaultValue(attribute.getDefaultValue());
 		setDescription(attribute.getDescription());
+		setGenerateJava(attribute.isGenerateJava());
 		setGettable(attribute.isGettable());
 		setInputType(attribute.getInputType());
 		setJavaScriptType(attribute.getJavaScriptType());

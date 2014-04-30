@@ -42,7 +42,7 @@ public abstract class ${component.getCamelizedName()}${RENDERER_BASE_CLASS_SUFFI
 		<#list component.getAttributes()?sort_by("javaSafeName") as attribute>
 		<#if attribute.isGettable() && attribute.isGenerateJava() && (attribute.getSafeName() != "styleClass") && (attribute.getSafeName() != "clientKey")>
 
-		<#if attribute.isJSFReservedAttribute()>${attribute.getCapitalizedJSFReservedAttributeType()}<#else>${attribute.getJavaWrapperType()}</#if> ${attribute.getJavaSafeName()} = ${component.getUncapitalizedName()}${INTERFACE_CLASS_SUFFIX}.${attribute.getGetterMethodPrefix()}${attribute.getJavaBeanPropertyName()}();
+		${attribute.getJavaWrapperType()} ${attribute.getJavaSafeName()} = ${component.getUncapitalizedName()}${INTERFACE_CLASS_SUFFIX}.${attribute.getGetterMethodPrefix()}${attribute.getJavaBeanPropertyName()}();
 
 		if (${attribute.getJavaSafeName()} != null) {
 
@@ -109,7 +109,7 @@ public abstract class ${component.getCamelizedName()}${RENDERER_BASE_CLASS_SUFFI
 	}
 	<#elseif attribute.isGettable() && attribute.isGenerateJava() && (attribute.getSafeName() != "styleClass") && (attribute.getSafeName() != "clientKey")>
 
-	protected void encode${attribute.getCapitalizedName()}(ResponseWriter responseWriter, ${component.getCamelizedName()}${INTERFACE_CLASS_SUFFIX} ${component.getUncapitalizedName()}${INTERFACE_CLASS_SUFFIX}, <#if attribute.isJSFReservedAttribute()>${attribute.getCapitalizedJSFReservedAttributeType()}<#else>${attribute.getJavaWrapperType()}</#if> ${attribute.getJavaSafeName()}, boolean first) throws IOException {
+	protected void encode${attribute.getCapitalizedName()}(ResponseWriter responseWriter, ${component.getCamelizedName()}${INTERFACE_CLASS_SUFFIX} ${component.getUncapitalizedName()}${INTERFACE_CLASS_SUFFIX}, ${attribute.getJavaWrapperType()} ${attribute.getJavaSafeName()}, boolean first) throws IOException {
 		encode${attribute.getJavaScriptType()}(responseWriter, ${component.getCamelizedName()}${INTERFACE_CLASS_SUFFIX}.${attribute.getConstantName()}, ${attribute.getJavaSafeName()}, first);
 	}
 	</#if>

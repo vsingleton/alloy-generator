@@ -34,7 +34,11 @@
 			</#if>
 			<name>${attribute.getSafeName()}</name>
 			<required>${attribute.isRequired()?string("true", "false")}</required>
+			<#if !attribute.isEvent() && attribute.isJSFReservedAttribute()>
+			<type>${attribute.getJSFReservedAttributeType()}</type>
+			<#else>
 			<type>${attribute.getJavaWrapperType()}</type>
+			</#if>
 			<#if !attribute.isEvent() && attribute.getMethodSignature()??>
 			<method-signature>${attribute.getMethodSignature()}</method-signature>
 			</#if>

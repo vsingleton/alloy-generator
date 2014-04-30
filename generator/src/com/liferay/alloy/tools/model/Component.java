@@ -71,6 +71,9 @@ public class Component extends BaseModel {
 			componentElement.attributeValue("package"), defaultPackage);
 		_parentClass = Convert.toString(
 			componentElement.attributeValue("parentClass"), null);
+		boolean generateJava = Convert.toBoolean(
+			componentElement.attributeValue("generateJava"), true);
+		setGenerateJava(generateJava);
 
 		Element attributesElement = componentElement.element("attributes");
 		_attributes = Collections.EMPTY_LIST;

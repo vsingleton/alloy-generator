@@ -28,10 +28,6 @@ public class FacesAttribute extends Attribute {
 	public void initialize(Element facesAttributeElement, Component component) {
 		super.initialize(facesAttributeElement, component);
 
-		boolean generateJava = Convert.toBoolean(
-				facesAttributeElement.elementText("generateJava"), true);
-		setGenerateJava(generateJava);
-
 		_getterDefaultReturnValue = Convert.toString(
 			facesAttributeElement.elementText("getterDefaultReturnValue"),
 			"null");
@@ -72,16 +68,24 @@ public class FacesAttribute extends Attribute {
 
 	@Override
 	public String getJavaWrapperType() {
-		String javaWrapperType = getJavaScriptType();
 
-		if (javaWrapperType.equals(TypeUtil.COMPLEX_BOOLEAN)
-				|| javaWrapperType.equals(TypeUtil.COMPLEX_NUMBER)) {
-			javaWrapperType = "Object";
+		String javaWrapperType;
+
+		if (_jsfReservedAttribute) {
+			javaWrapperType = getCapitalizedJSFReservedAttributeType();
+		} else {
+			javaWrapperType = getJavaScriptType();
+
+			if (javaWrapperType.equals(TypeUtil.COMPLEX_BOOLEAN)
+					|| javaWrapperType.equals(TypeUtil.COMPLEX_NUMBER)) {
+				javaWrapperType = "Object";
+			}
+
+			javaWrapperType = TypeUtil.getInputJavaType(javaWrapperType, true);
+			javaWrapperType = TypeUtil.getJavaWrapperType(javaWrapperType);
 		}
 
-		javaWrapperType = TypeUtil.getInputJavaType(javaWrapperType, true);
-
-		return TypeUtil.getJavaWrapperType(javaWrapperType);
+		return javaWrapperType;
 	}
 
 	public String getJSFReservedAttributeType() {
