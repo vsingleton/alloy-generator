@@ -192,7 +192,6 @@ public class AlloyDocsTransformer {
 			Element componentNode = root.addElement("component");
 
 			componentNode.addAttribute("name", component.getName());
-			componentNode.addAttribute("description", component.getDescription());
 			componentNode.addAttribute("module", component.getModule());
 			componentNode.addAttribute("package", component.getPackage());
 			componentNode.addAttribute(
@@ -200,6 +199,8 @@ public class AlloyDocsTransformer {
 			componentNode.addAttribute(
 				"alloyComponent", String.valueOf(component.isAlloyComponent()));
 
+			Element descriptionNode = componentNode.addElement("description");
+			descriptionNode.addCDATA(component.getDescription());
 			Element attributesNode = componentNode.addElement("attributes");
 			Element eventsNode = componentNode.addElement("events");
 
@@ -208,7 +209,7 @@ public class AlloyDocsTransformer {
 
 				Element defaultValueNode = attributeNode.addElement(
 					"defaultValue");
-				Element descriptionNode = attributeNode.addElement(
+				Element attributeDescriptionNode = attributeNode.addElement(
 					"description");
 				Element inputTypeNode = attributeNode.addElement("inputType");
 				Element rawJavaScriptTypeNode = attributeNode.addElement(
@@ -219,7 +220,7 @@ public class AlloyDocsTransformer {
 				Element outputTypeNode = attributeNode.addElement("outputType");
 
 				defaultValueNode.setText(attribute.getDefaultValue());
-				descriptionNode.addCDATA(_getAttributeDescription(attribute));
+				attributeDescriptionNode.addCDATA(_getAttributeDescription(attribute));
 				inputTypeNode.setText(attribute.getInputType());
 				rawJavaScriptTypeNode.setText(attribute.getRawJavaScriptType());
 				javaScriptTypeNode.setText(attribute.getJavaScriptType());
@@ -231,11 +232,11 @@ public class AlloyDocsTransformer {
 				Element eventNode = eventsNode.addElement("event");
 				Element nameNode = eventNode.addElement("name");
 				Element typeNode = eventNode.addElement("type");
-				Element descriptionNode = eventNode.addElement("description");
+				Element elementDescriptionNode = eventNode.addElement("description");
 
 				nameNode.setText(event.getName());
 				typeNode.setText(event.getInputType());
-				descriptionNode.addCDATA(_getAttributeDescription(event));
+				elementDescriptionNode.addCDATA(_getAttributeDescription(event));
 			}
 		}
 

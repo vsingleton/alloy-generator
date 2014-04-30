@@ -73,7 +73,6 @@ public class Component extends BaseModel {
 			componentElement.attributeValue("parentClass"), null);
 
 		Element attributesElement = componentElement.element("attributes");
-
 		_attributes = Collections.EMPTY_LIST;
 		if (attributesElement != null) {
 			List<Element> attributeElementsList = attributesElement.elements("attribute");	
@@ -81,7 +80,6 @@ public class Component extends BaseModel {
 		}
 
 		Element eventsElement = componentElement.element("events");
-
 		_events = Collections.EMPTY_LIST;
 		if (eventsElement != null) {
 			List<Element> eventElementsList = eventsElement.elements("event");
@@ -108,7 +106,6 @@ public class Component extends BaseModel {
 
 		for (Element eventElement : eventElements) {
 
-			System.err.println(eventElement);
 			Attribute attribute = new Attribute();
 			attribute.initialize(eventElement, this);
 
