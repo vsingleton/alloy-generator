@@ -32,10 +32,16 @@ public class FacesAttribute extends Attribute {
 				facesAttributeElement.elementText("generateJava"), true);
 		setGenerateJava(generateJava);
 
+		_getterDefaultReturnValue = Convert.toString(
+			facesAttributeElement.elementText("getterDefaultReturnValue"),
+			"null");
 		_methodSignature = facesAttributeElement
 				.elementText("method-signature");
 		String type = Convert.toString(
 				facesAttributeElement.elementText("type"), DEFAULT_TYPE);
+		String rawJavaScriptType = Convert.toString(
+			facesAttributeElement.elementText("rawJavaScriptType"), type);
+		setJavaScriptType(rawJavaScriptType);
 
 		boolean jsfReservedAttributeDefault =
 			ReservedAttributeUtil.isJSFReservedAttribute(getName());
@@ -51,6 +57,7 @@ public class FacesAttribute extends Attribute {
 			_jsfReservedAttributeType = Convert.toString(facesAttributeElement
 				.elementText("jsfReservedAttributeType"),
 				jsfReservedAttributeTypeDefault);
+			_jsfReservedAttributeType = TypeUtil.removeJavaPrefix(_jsfReservedAttributeType);
 		}
 	}
 
@@ -58,23 +65,12 @@ public class FacesAttribute extends Attribute {
 		return StringUtil.capitalize(_jsfReservedAttributeType);
 	}
 
-	public String getGetterMethodPrefix() {
-
-		String getterMethodPrefix = "get";
-
-		if (getJavaWrapperType().equals("Boolean")) {
-			getterMethodPrefix = "is";
-		}
-
-		return getterMethodPrefix;
-	}
-
 	@Override
 	public String getJavaScriptType() {
 		return TypeUtil.getFacesJavaScriptType(getRawJavaScriptType());
 	}
 
-
+	@Override
 	public String getJavaWrapperType() {
 		String javaWrapperType = getJavaScriptType();
 
@@ -89,16 +85,16 @@ public class FacesAttribute extends Attribute {
 	}
 
 	public String getJSFReservedAttributeType() {
-		return TypeUtil.removeJavaPrefix(_jsfReservedAttributeType);
+		return _jsfReservedAttributeType;
 	}
 
 	public String getMethodSignature() {
 		return _methodSignature;
 	}
 
-	@Override
+@Override
 	public String getSafeName() {
-		if (_outputUnsafe) {
+		if (_outputUnsafe || !isGenerateJava() || isJSFReservedAttribute()) {
 			return super.getName();
 		} else {
 			return super.getSafeName();
@@ -129,6 +125,15 @@ public class FacesAttribute extends Attribute {
 		this._outputUnsafe = _outputUnsafe;
 	}
 
+	public String getGetterDefaultReturnValue() {
+		return _getterDefaultReturnValue;
+	}
+
+	public void setGetterDefaultReturnValue(String _getterDefaultReturnValue) {
+		this._getterDefaultReturnValue = _getterDefaultReturnValue;
+	}
+	
+	private String _getterDefaultReturnValue;
 	private boolean _jsfReservedAttribute;
 	private String _jsfReservedAttributeType;
 	private String _methodSignature;

@@ -249,6 +249,19 @@ public abstract class BaseBuilder {
 			Element doc1Component = getComponentNode(doc1, name);
 
 			if (doc1Component != null) {
+
+				Element doc1ComponentDescriptionElement = doc1Component.element("description");
+
+				if (doc1ComponentDescriptionElement != null) {
+					Element descriptionElement = component.element("description");
+
+					if (descriptionElement != null) {
+						component.remove(descriptionElement);
+					} 
+					
+					component.add(doc1ComponentDescriptionElement.createCopy());
+				}
+
 				Iterator<Object> attributesIterator =
 					doc1Component.attributeIterator();
 
@@ -322,6 +335,13 @@ public abstract class BaseBuilder {
 					doc.getRootElement().add(component);
 				}
 			}
+		}
+
+
+		Element extensionElement = doc1Root.element("extension");
+
+		if (extensionElement != null) {
+			docRoot.add(extensionElement.createCopy());
 		}
 
 		return doc;

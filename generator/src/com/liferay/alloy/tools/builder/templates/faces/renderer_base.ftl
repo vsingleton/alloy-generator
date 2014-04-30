@@ -2,151 +2,117 @@
 <#include "../base/copyright.ftl">
 
 package ${packagePath}.${component.getUncamelizedName(BLANK)};
+//J-
 
 import java.io.IOException;
 
-import javax.faces.application.ResourceDependency;
+import javax.annotation.Generated;
 import javax.faces.component.UIComponent;
-import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 
-import com.liferay.faces.util.component.ComponentUtil;
-import com.liferay.faces.util.component.Widget;
+import ${RENDERER_BASE_PARENT_CLASS};
+import com.liferay.faces.alloy.util.AlloyConstants;
 import com.liferay.faces.util.lang.StringPool;
-import com.liferay.faces.util.render.RendererBase;
 
 /**
-<#list component.getAuthors() as author>
- * @author ${author}
+<#list component.getAuthors()?sort as author>
+ * @author  ${author}
 </#list>
- * @generated
  */
-@ResourceDependency(library = "liferay-faces", name = "liferay-faces.js")
-public abstract class ${component.getCamelizedName()}RendererBase extends RendererBase {
+@Generated(value = "com.liferay.alloy.tools.builder.FacesBuilder")
+public abstract class ${component.getCamelizedName()}${RENDERER_BASE_CLASS_SUFFIX} extends ${UNQUALIFIED_RENDERER_BASE_PARENT_CLASS} {
 
 	// Private Constants
-	private static final String AUI_MODULE_NAME = ${component.getModuleString()};
+	private static final String ALLOY_CLASS_NAME = "${component.getCamelizedName()}";
+	private static final String ALLOY_MODULE_NAME = ${component.getModuleString()};
+	<#list component.getOnEvents()?sort_by("constantUnprefixedName") as event>
+	<#if event.createConstant()>
+	private static final String ${event.getConstantUnprefixedName()} = "${event.getUnprefixedName()}";
+	</#if>
+	</#list>
 
-	protected void encodeJavaScriptMain(FacesContext facesContext, UIComponent uiComponent) throws IOException {
+	// Protected Constants
+	protected static final String[] MODULES = {ALLOY_MODULE_NAME};
 
-		${component.getCamelizedName()} ${component.getUncapitalizedName()} = (${component.getCamelizedName()}) uiComponent;
+	@Override
+	protected void encodeAlloyAttributes(ResponseWriter responseWriter, UIComponent uiComponent) throws IOException {
 
-		ResponseWriter responseWriter = facesContext.getResponseWriter();
-
-		String widgetVar = ComponentUtil.resolveWidgetVar(facesContext, (Widget) ${component.getUncapitalizedName()});
-
-		responseWriter.write("var ");
-		responseWriter.write(widgetVar);
-		responseWriter.write(StringPool.SEMICOLON);
-		responseWriter.write(StringPool.NEW_LINE);
-		responseWriter.write("LF.component('");
-		responseWriter.write(widgetVar);
-		responseWriter.write("', function() {");
-		responseWriter.write(StringPool.NEW_LINE);
-		responseWriter.write("if (!");
-		responseWriter.write(widgetVar);
-		responseWriter.write(StringPool.CLOSE_PARENTHESIS);
-		responseWriter.write(StringPool.SPACE);
-		responseWriter.write(StringPool.OPEN_CURLY_BRACE);
-		responseWriter.write(StringPool.NEW_LINE);
-		responseWriter.write(widgetVar);
-		responseWriter.write("= new A.${component.getCamelizedName()}");
-		responseWriter.write(StringPool.OPEN_PARENTHESIS);
-		responseWriter.write(StringPool.OPEN_CURLY_BRACE);
-		responseWriter.write(StringPool.NEW_LINE);
-
+		${component.getCamelizedName()}${INTERFACE_CLASS_SUFFIX} ${component.getUncapitalizedName()}${INTERFACE_CLASS_SUFFIX} = (${component.getCamelizedName()}${INTERFACE_CLASS_SUFFIX}) uiComponent;
 		boolean first = true;
+		<#list component.getAttributes()?sort_by("javaSafeName") as attribute>
+		<#if attribute.isGettable() && attribute.isGenerateJava() && (attribute.getSafeName() != "styleClass") && (attribute.getSafeName() != "clientKey")>
 
-		<#list component.getAttributes() as attribute>
-		<#if attribute.isGettable()>
-		${attribute.getJSFInputType()} ${attribute.getJavaSafeName()} = ${component.getUncapitalizedName()}.${attribute.getGetterMethodPrefix()}${attribute.getJavaBeanPropertyName()}();
+		<#if attribute.isJSFReservedAttribute()>${attribute.getCapitalizedJSFReservedAttributeType()}<#else>${attribute.getJavaWrapperType()}</#if> ${attribute.getJavaSafeName()} = ${component.getUncapitalizedName()}${INTERFACE_CLASS_SUFFIX}.${attribute.getGetterMethodPrefix()}${attribute.getJavaBeanPropertyName()}();
 
 		if (${attribute.getJavaSafeName()} != null) {
 
-			encode${attribute.getCapitalizedName()}(responseWriter, ${component.getUncapitalizedName()}, ${attribute.getJavaSafeName()}, first);
+			encode${attribute.getCapitalizedName()}(responseWriter, ${component.getUncapitalizedName()}Alloy, ${attribute.getJavaSafeName()}, first);
 			first = false;
 		}
-
 		</#if>
 		</#list>
-		if (!first) {
-			responseWriter.write(StringPool.COMMA);
-		}
 
-		responseWriter.write(StringPool.NEW_LINE);
-
-		responseWriter.write("after");
-		responseWriter.write(StringPool.COLON);
+		// Begin encoding "after" object
+		encodeObject(responseWriter, AlloyConstants.AFTER, StringPool.BLANK, first);
 		responseWriter.write(StringPool.OPEN_CURLY_BRACE);
-		responseWriter.write(StringPool.NEW_LINE);
 
 		first = true;
+		<#list component.getAfterEvents()?sort_by("javaSafeName") as event>
 
-		<#list component.getAfterEvents() as event>
-		${event.getJSFInputType()} ${event.getJavaSafeName()} = ${component.getUncapitalizedName()}.${event.getGetterMethodPrefix()}${event.getJavaBeanPropertyName()}();
+		${event.getJavaWrapperType()} ${event.getJavaSafeName()} = ${component.getUncapitalizedName()}${INTERFACE_CLASS_SUFFIX}.get${event.getJavaBeanPropertyName()}();
 
 		if (${event.getJavaSafeName()} != null) {
 
-			encode${event.getCapitalizedName()}(responseWriter, ${component.getUncapitalizedName()}, ${event.getJavaSafeName()}, first);
+			encode${event.getCapitalizedName()}(responseWriter, ${component.getUncapitalizedName()}${INTERFACE_CLASS_SUFFIX}, ${event.getJavaSafeName()}, first);
 			first = false;
 		}
-
 		</#list>
-		responseWriter.write(StringPool.NEW_LINE);
-		responseWriter.write(StringPool.CLOSE_CURLY_BRACE);
-		responseWriter.write(StringPool.COMMA);
-		responseWriter.write(StringPool.NEW_LINE);
 
-		responseWriter.write("on");
-		responseWriter.write(StringPool.COLON);
+		// End encoding "after" object
+		responseWriter.write(StringPool.CLOSE_CURLY_BRACE);
+
+		// Begin encoding "on" object
+		first = false;
+		encodeObject(responseWriter, AlloyConstants.ON, StringPool.BLANK, first);
 		responseWriter.write(StringPool.OPEN_CURLY_BRACE);
-		responseWriter.write(StringPool.NEW_LINE);
 
 		first = true;
+		<#list component.getOnEvents()?sort_by("javaSafeName") as event>
 
-		<#list component.getOnEvents() as event>
-		${event.getJSFInputType()} ${event.getJavaSafeName()} = ${component.getUncapitalizedName()}.${event.getGetterMethodPrefix()}${event.getJavaBeanPropertyName()}();
+		${event.getJavaWrapperType()} ${event.getJavaSafeName()} = ${component.getUncapitalizedName()}${INTERFACE_CLASS_SUFFIX}.get${event.getJavaBeanPropertyName()}();
 
 		if (${event.getJavaSafeName()} != null) {
 
-			encode${event.getCapitalizedName()}(responseWriter, ${component.getUncapitalizedName()}, ${event.getJavaSafeName()}, first);
+			encode${event.getCapitalizedName()}(responseWriter, ${component.getUncapitalizedName()}${INTERFACE_CLASS_SUFFIX}, ${event.getJavaSafeName()}, first);
 			first = false;
 		}
-
 		</#list>
-		responseWriter.write(StringPool.NEW_LINE);
+
+		// End encoding "on" object
 		responseWriter.write(StringPool.CLOSE_CURLY_BRACE);
-		responseWriter.write(StringPool.NEW_LINE);
-		responseWriter.write("}).render();");
-		responseWriter.write(StringPool.NEW_LINE);
-		responseWriter.write(StringPool.CLOSE_CURLY_BRACE);
-		responseWriter.write(StringPool.NEW_LINE);
-		responseWriter.write("return ");
-		responseWriter.write(widgetVar);
-		responseWriter.write(StringPool.SEMICOLON);
-		responseWriter.write(StringPool.NEW_LINE);
-		responseWriter.write("});");
-		responseWriter.write(StringPool.NEW_LINE);
-		responseWriter.write("LF.component('");
-		responseWriter.write(widgetVar);
-		responseWriter.write("');");
-		responseWriter.write(StringPool.NEW_LINE);
 	}
 
-	protected String getModule() {
-		return AUI_MODULE_NAME;
+	@Override
+	protected String getAlloyClassName() {
+		return ALLOY_CLASS_NAME;
 	}
 
-	<#list component.getAttributes() as attribute>
-	protected void encode${attribute.getCapitalizedName()}(ResponseWriter responseWriter, ${component.getCamelizedName()} ${component.getUncapitalizedName()}, ${attribute.getJSFInputType()} ${attribute.getJavaSafeName()}, boolean first) throws IOException {
-		encode${attribute.getJavaScriptType()}(responseWriter, ${component.getCamelizedName()}.${attribute.getConstantName()}, ${attribute.getJavaSafeName()}, first);
+	@Override
+	protected String[] getModules() {
+		return MODULES;
 	}
+	<#list component.getAttributesAndEvents()?sort_by("capitalizedName") as attribute>
+	<#if attribute.isEvent()>
 
-	</#list>
-	<#list component.getEvents() as event>
-	protected void encode${event.getCapitalizedName()}(ResponseWriter responseWriter, ${component.getCamelizedName()} ${component.getUncapitalizedName()}, ${event.getJSFInputType()} ${event.getJavaSafeName()}, boolean first) throws IOException {
-		encode${event.getJavaScriptType()}(responseWriter, ${component.getCamelizedName()}.${event.getConstantName()}, ${event.getJavaSafeName()}, first);
+	protected void encode${attribute.getCapitalizedName()}(ResponseWriter responseWriter, ${component.getCamelizedName()}${INTERFACE_CLASS_SUFFIX} ${component.getUncapitalizedName()}${INTERFACE_CLASS_SUFFIX}, ${attribute.getJavaWrapperType()} ${attribute.getJavaSafeName()}, boolean first) throws IOException {
+		encodeEvent(responseWriter, ${attribute.getConstantUnprefixedName()}, ${attribute.getJavaSafeName()}, first);
 	}
+	<#elseif attribute.isGettable() && attribute.isGenerateJava() && (attribute.getSafeName() != "styleClass") && (attribute.getSafeName() != "clientKey")>
 
+	protected void encode${attribute.getCapitalizedName()}(ResponseWriter responseWriter, ${component.getCamelizedName()}${INTERFACE_CLASS_SUFFIX} ${component.getUncapitalizedName()}${INTERFACE_CLASS_SUFFIX}, <#if attribute.isJSFReservedAttribute()>${attribute.getCapitalizedJSFReservedAttributeType()}<#else>${attribute.getJavaWrapperType()}</#if> ${attribute.getJavaSafeName()}, boolean first) throws IOException {
+		encode${attribute.getJavaScriptType()}(responseWriter, ${component.getCamelizedName()}${INTERFACE_CLASS_SUFFIX}.${attribute.getConstantName()}, ${attribute.getJavaSafeName()}, first);
+	}
+	</#if>
 	</#list>
 }
+//J+

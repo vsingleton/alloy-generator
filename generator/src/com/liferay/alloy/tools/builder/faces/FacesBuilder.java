@@ -28,9 +28,13 @@ import org.dom4j.Document;
 import org.dom4j.Element;
 
 import com.liferay.alloy.tools.builder.base.BaseBuilder;
+import com.liferay.alloy.tools.builder.faces.model.FacesAttribute;
 import com.liferay.alloy.tools.model.Component;
 import com.liferay.alloy.tools.builder.faces.model.FacesComponent;
+import com.liferay.alloy.tools.model.Attribute;
 import com.liferay.alloy.util.PropsUtil;
+import com.liferay.alloy.util.ReservedAttributeUtil;
+import com.liferay.alloy.util.StringUtil;
 
 public class FacesBuilder extends BaseBuilder {
 
@@ -52,6 +56,7 @@ public class FacesBuilder extends BaseBuilder {
 
 		_tplComponent = getTemplatesDir() + "component.ftl";
 		_tplComponentBase = getTemplatesDir() + "component_base.ftl";
+		_tplComponentInterface = getTemplatesDir() + "component_interface.ftl";
 		_tplRenderer = getTemplatesDir() + "renderer.ftl";
 		_tplRendererBase = getTemplatesDir() + "renderer_base.ftl";
 		_tplTaglibsXML = getTemplatesDir() + "taglibs.ftl";
@@ -66,23 +71,79 @@ public class FacesBuilder extends BaseBuilder {
 		List<Component> components = getAllComponents();
 
 		for (Component component : components) {
-			Map<String, Object> context = getTemplateContext(component);
+			FacesComponent facesComponent = (FacesComponent) component;
+			
+			if (facesComponent.isGenerateJava()) {
 
-			_buildComponent(component, context);
-			_buildComponentBase(component, context);
-			_buildRenderer(component, context);
-			_buildRendererBase(component, context);
+				Map<String, Object> context = getTemplateContext(component);
+
+				context.put("BASE_CLASS_SUFFIX", _BASE_CLASS_SUFFIX);
+				context.put("RENDERER_CLASS_SUFFIX", _RENDERER_CLASS_SUFFIX);
+				context.put("INTERFACE_CLASS_SUFFIX", _INTERFACE_CLASS_SUFFIX);
+				context.put("RENDERER_BASE_CLASS_SUFFIX", _RENDERER_CLASS_SUFFIX + _BASE_CLASS_SUFFIX);
+
+				_buildComponent(facesComponent, context);
+				_buildComponentBase(facesComponent, context);
+	
+				if (facesComponent.isAlloyComponent()) {
+					_buildComponentInterface(facesComponent, context);
+				}
+	
+				_buildRenderer(facesComponent, context);
+	
+				if (facesComponent.isAlloyComponent()) {
+					_buildRendererBase(facesComponent, context);
+				}
+			}
 		}
 
 		_buildTaglibsXML();
 
-		System.out.println(
-			"Finished looping over " + components.size() + " components.");
+		System.out.println("Finished looping over " + components.size()
+				+ " components.");
 	}
 
 	@Override
 	public String getTemplatesDir() {
 		return _TEMPLATES_DIR;
+	}
+
+	private void _addDefaultFacesAttributes(Element componentNode,
+			List<Attribute> attributes) {
+
+		if (componentNode.attributeValue("rendererParentClass") == null) {
+			FacesAttribute widgetVarAttribute = new FacesAttribute();
+			widgetVarAttribute.setDefaultValue(null);
+			widgetVarAttribute.setDescription("The name of the widget's javascript variable.");
+			widgetVarAttribute.setGettable(true);
+			widgetVarAttribute.setInputType("java.lang.String");
+			widgetVarAttribute.setJavaScriptType("java.lang.String");
+			widgetVarAttribute.setName("widgetVar");
+			widgetVarAttribute.setOutputType("java.lang.String");
+			widgetVarAttribute.setRequired(false);
+			widgetVarAttribute.setSettable(true);
+			widgetVarAttribute.setGenerateJava(true);
+			widgetVarAttribute.setMethodSignature(null);
+			widgetVarAttribute.setOutputUnsafe(true);
+
+			attributes.add(widgetVarAttribute);
+		}
+
+		FacesAttribute styleClassAttribute = new FacesAttribute();
+		styleClassAttribute.setDefaultValue(null);
+		styleClassAttribute.setDescription("The name of a CSS class that is to be rendered within the class attribute.");
+		styleClassAttribute.setGettable(true);
+		styleClassAttribute.setInputType("java.lang.String");
+		styleClassAttribute.setJavaScriptType("java.lang.String");
+		styleClassAttribute.setName("styleClass");
+		styleClassAttribute.setOutputType("java.lang.String");
+		styleClassAttribute.setRequired(false);
+		styleClassAttribute.setSettable(true);
+		styleClassAttribute.setGenerateJava(true);
+		styleClassAttribute.setMethodSignature(null);
+		styleClassAttribute.setOutputUnsafe(true);
+
+		attributes.add(styleClassAttribute);
 	}
 
 	@Override
@@ -135,33 +196,31 @@ public class FacesBuilder extends BaseBuilder {
 		return sb.toString();
 	}
 
-	private void _buildComponent(
-			Component component, Map<String, Object> context)
-		throws Exception {
+	private void _buildComponent(FacesComponent facesComponent,
+			Map<String, Object> context) throws Exception {
 
-		String path = getComponentOutputDir(component);
+		String path = getComponentOutputDir(facesComponent);
 
 		String componentContent = processTemplate(_tplComponent, context);
 
-		File componentFile = new File(
-			path.concat(component.getCamelizedName().concat(_JAVA_EXT)));
+		File componentFile = new File(path.concat(facesComponent
+				.getCamelizedName().concat(_JAVA_EXT)));
 
 		writeFile(componentFile, componentContent, false);
 	}
 
-	private void _buildComponentBase(
-			Component component, Map<String, Object> context)
-		throws Exception {
+	private void _buildComponentBase(FacesComponent facesComponent,
+			Map<String, Object> context) throws Exception {
 
-		String path = getComponentOutputDir(component);
+		String path = getComponentOutputDir(facesComponent);
 
-		String componentBaseContent = processTemplate(
-			_tplComponentBase, context);
+		String componentBaseContent = processTemplate(_tplComponentBase,
+				context);
 
 		StringBuilder fileNameSb = new StringBuilder(4);
 
 		fileNameSb.append(path);
-		fileNameSb.append(component.getCamelizedName());
+		fileNameSb.append(facesComponent.getCamelizedName());
 		fileNameSb.append(_BASE_CLASS_SUFFIX);
 		fileNameSb.append(_JAVA_EXT);
 
@@ -170,18 +229,37 @@ public class FacesBuilder extends BaseBuilder {
 		writeFile(componentBaseFile, componentBaseContent);
 	}
 
-	private void _buildRenderer(
-			Component component, Map<String, Object> context)
-		throws Exception {
+	private void _buildComponentInterface(FacesComponent facesComponent,
+			Map<String, Object> context) throws Exception {
 
-		String path = getComponentOutputDir(component);
+		String path = getComponentOutputDir(facesComponent);
+
+		String componentBaseContent = processTemplate(_tplComponentInterface,
+				context);
+
+		StringBuilder fileNameSb = new StringBuilder(4);
+
+		fileNameSb.append(path);
+		fileNameSb.append(facesComponent.getCamelizedName());
+		fileNameSb.append(_INTERFACE_CLASS_SUFFIX);
+		fileNameSb.append(_JAVA_EXT);
+
+		File componentInterfaceFile = new File(fileNameSb.toString());
+
+		writeFile(componentInterfaceFile, componentBaseContent);
+	}
+
+	private void _buildRenderer(FacesComponent facesComponent,
+			Map<String, Object> context) throws Exception {
+
+		String path = getComponentOutputDir(facesComponent);
 
 		String rendererContent = processTemplate(_tplRenderer, context);
 
 		StringBuilder fileNameSb = new StringBuilder(4);
 
 		fileNameSb.append(path);
-		fileNameSb.append(component.getCamelizedName());
+		fileNameSb.append(facesComponent.getCamelizedName());
 		fileNameSb.append(_RENDERER_CLASS_SUFFIX);
 		fileNameSb.append(_JAVA_EXT);
 
@@ -190,18 +268,20 @@ public class FacesBuilder extends BaseBuilder {
 		writeFile(rendererFile, rendererContent, false);
 	}
 
-	private void _buildRendererBase(
-			Component component, Map<String, Object> context)
-		throws Exception {
+	private void _buildRendererBase(FacesComponent facesComponent,
+			Map<String, Object> context) throws Exception {
 
-		String path = getComponentOutputDir(component);
+		String path = getComponentOutputDir(facesComponent);
+
+		context.put("RENDERER_BASE_PARENT_CLASS", _RENDERER_BASE_PARENT_CLASS);
+		context.put("UNQUALIFIED_RENDERER_BASE_PARENT_CLASS", _UNQUALIFIED_RENDERER_BASE_PARENT_CLASS);
 
 		String rendererBaseContent = processTemplate(_tplRendererBase, context);
 
 		StringBuilder fileNameSb = new StringBuilder(5);
 
 		fileNameSb.append(path);
-		fileNameSb.append(component.getCamelizedName());
+		fileNameSb.append(facesComponent.getCamelizedName());
 		fileNameSb.append(_RENDERER_CLASS_SUFFIX);
 		fileNameSb.append(_BASE_CLASS_SUFFIX);
 		fileNameSb.append(_JAVA_EXT);
@@ -217,17 +297,67 @@ public class FacesBuilder extends BaseBuilder {
 		for (Document doc : getComponentDefinitionDocs()) {
 			Element root = doc.getRootElement();
 
-			String namespace = Convert.toString(
-				root.attributeValue("namespace"));
+			String namespace = Convert.toString(root
+					.attributeValue("namespace"));
+
+			String namespaceURI = Convert.toString(root
+					.attributeValue("namespaceURI"));
+
+			Element descriptionElement = root.element("description");
+
+			String description = null;
+
+			if (descriptionElement != null) {
+				String descriptionElementText = Convert.toString(descriptionElement.getText());
+				description = StringUtil.removeNewlinesAndCDATA(descriptionElementText);
+			}
+
+			Element extensionElement = root.element("extension");
+
+			if (extensionElement != null) {
+
+				List<Element> functions = extensionElement.elements("function");
+				List<Map<String, String>> functionsList = new ArrayList<Map<String, String>>();
+
+				for (Element function : functions) {
+
+					Map<String, String> functionMap = new HashMap<String, String>();
+
+					String functionDescription = function
+							.element("description").getText();
+					functionMap.put("description", functionDescription);
+					String functionName = function.element("function-name")
+							.getText();
+					functionMap.put("name", functionName);
+					String functionClass = function.element("function-class")
+							.getText();
+					functionMap.put("class", functionClass);
+					String functionSignature = function.element(
+							"function-signature").getText();
+					functionMap.put("signature", functionSignature);
+
+					functionsList.add(functionMap);
+				}
+
+				context.put("functions", functionsList);
+			}
+			
 
 			context.put("components", getComponents(doc));
+			context.put("namespaceURI", namespaceURI);
+			context.put("description", description);
+			context.put("version", _version);
+			context.put("BASE_CLASS_SUFFIX", _BASE_CLASS_SUFFIX);
+			context.put("RENDERER_CLASS_SUFFIX", _RENDERER_CLASS_SUFFIX);
+			context.put("INTERFACE_CLASS_SUFFIX", _INTERFACE_CLASS_SUFFIX);
+			context.put("RENDERER_BASE_CLASS_SUFFIX", _RENDERER_CLASS_SUFFIX + _BASE_CLASS_SUFFIX);
 
 			String rendererContent = processTemplate(_tplTaglibsXML, context);
 
 			String path = getTaglibsXMLOutputDir();
 
-			File rendererFile = new File(
-				path.concat(namespace).concat(_TAGLIB_XML_EXT));
+			File rendererFile = new File(path.concat(namespace).concat(
+					_TAGLIB_XML_EXT));
 
 			writeFile(rendererFile, rendererContent, true);
 		}
@@ -235,22 +365,27 @@ public class FacesBuilder extends BaseBuilder {
 
 	private static final String _BASE_CLASS_SUFFIX = "Base";
 
-	private static final String _COMPONENTS_PACKAGE =
-		"com.liferay.faces.alloy.component";
+	private static final String _INTERFACE_CLASS_SUFFIX = "Alloy";
+
+	private static final String _COMPONENTS_PACKAGE = "com.liferay.faces.alloy.component";
 
 	private static final String _JAVA_EXT = ".java";
+
+	private static final String _RENDERER_BASE_PARENT_CLASS = PropsUtil.getString("builder.faces.renderer.base.parent.class");
 
 	private static final String _RENDERER_CLASS_SUFFIX = "Renderer";
 
 	private static final String _TAGLIB_XML_EXT = ".taglib.xml";
 
-	private static final String _TEMPLATES_DIR =
-		"com/liferay/alloy/tools/builder/templates/faces/";
+	private static final String _TEMPLATES_DIR = "com/liferay/alloy/tools/builder/templates/faces/";
+
+	private static final String _UNQUALIFIED_RENDERER_BASE_PARENT_CLASS = _RENDERER_BASE_PARENT_CLASS.substring(_RENDERER_BASE_PARENT_CLASS.lastIndexOf(StringPool.DOT) + 1);
 
 	private String _baseOutputDir;
 	private String _taglibXMLOutputDir;
 	private String _tplComponent;
 	private String _tplComponentBase;
+	private String _tplComponentInterface;
 	private String _tplRenderer;
 	private String _tplRendererBase;
 	private String _tplTaglibsXML;
