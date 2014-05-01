@@ -34,7 +34,7 @@ public abstract class ${component.getCamelizedName()}${BASE_CLASS_SUFFIX} extend
 	</#if>
 	</#list>
 	</#if>
-	<#list component.getFacesAttributesAndEvents()?sort_by("javaBeanPropertyName") as attribute>
+	<#list component.getAttributesAndEvents()?sort_by("javaBeanPropertyName") as attribute>
 	<#if attribute.isGenerateJava() && (attribute.isEvent() || !attribute.isJSFReservedAttribute())>
 	<#if attribute.isGettable()>
 

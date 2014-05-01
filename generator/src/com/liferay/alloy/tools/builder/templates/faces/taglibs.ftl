@@ -26,7 +26,7 @@
 			<component-type>${packagePath}.${component.getUncamelizedName(BLANK)}.${component.getCamelizedName()}</component-type>
 			<renderer-type>${packagePath}.${component.getUncamelizedName(BLANK)}.${component.getCamelizedName()}${RENDERER_CLASS_SUFFIX}</renderer-type>
 		</component>
-		<#list component.getFacesAttributesAndEvents()?sort_by("safeName") as attribute>
+		<#list component.getAttributesAndEvents()?sort_by("safeName") as attribute>
 		<#if attribute.isSettable() || attribute.isGettable()>
 		<attribute>
 			<#if attribute.getDescription()??>

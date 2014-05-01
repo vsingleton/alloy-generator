@@ -90,26 +90,6 @@ public class FacesComponent extends Component {
 		return sb.toString();
 	}
 
-	public List<FacesAttribute> getFacesAttributes() {
-		List<Attribute> attributes = super.getAttributes();
-		List<FacesAttribute> facesAttributes = new ArrayList<FacesAttribute>();
-
-		for (Attribute attribute : attributes) {
-			facesAttributes.add((FacesAttribute) attribute);
-		}
-
-		return facesAttributes;
-	}
-
-	public List<Attribute> getFacesAttributesAndEvents() {
-		ArrayList<Attribute> attributes = new ArrayList<Attribute>();
-
-		attributes.addAll(getFacesAttributes());
-		attributes.addAll(getEvents());
-
-		return attributes;
-	}
-
 	public String getRendererParentClass() {
 		return _rendererParentClass;
 	}
