@@ -217,6 +217,8 @@ public abstract class BaseBuilder {
 		Element doc1Root = doc1.getRootElement();
 		Element docRoot = doc2Root.createCopy();
 
+		docRoot.clearContent();
+
 		if (doc1Root != null) {
 			Iterator<Object> attributesIterator = doc1Root.attributeIterator();
 
@@ -230,9 +232,13 @@ public abstract class BaseBuilder {
 
 				docRoot.addAttribute(attribute.getName(), attribute.getValue());
 			}
-		}
 
-		docRoot.clearContent();
+			Element descriptionElement = doc1Root.element("description");
+
+			if (descriptionElement != null) {
+				docRoot.add(descriptionElement.createCopy());
+			}
+		}
 
 		DocumentFactory factory = SAXReaderUtil.getDocumentFactory();
 

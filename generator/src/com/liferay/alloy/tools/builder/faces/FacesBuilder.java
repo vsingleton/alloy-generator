@@ -339,8 +339,7 @@ public class FacesBuilder extends BaseBuilder {
 			String description = null;
 
 			if (descriptionElement != null) {
-				String descriptionElementText = Convert.toString(descriptionElement.getText());
-				description = StringUtil.removeNewlinesAndCDATA(descriptionElementText);
+				description = descriptionElement.getTextTrim();
 			}
 
 			Element extensionElement = root.element("extension");
