@@ -30,8 +30,9 @@ import com.liferay.alloy.tools.builder.base.BaseBuilder;
 import com.liferay.alloy.tools.builder.faces.model.FacesAttribute;
 import com.liferay.alloy.tools.model.Component;
 import com.liferay.alloy.tools.builder.faces.model.FacesComponent;
+import com.liferay.alloy.tools.model.Attribute;
+import com.liferay.alloy.tools.model.Event;
 import com.liferay.alloy.util.PropsUtil;
-import com.liferay.alloy.util.StringUtil;
 
 public class FacesBuilder extends BaseBuilder {
 
@@ -125,7 +126,7 @@ public class FacesBuilder extends BaseBuilder {
 	protected List<Component> getComponents(Document doc, boolean addAdditionalAttributes) throws Exception {
 		Element root = doc.getRootElement();
 
-		List<Component> facesComponents = new ArrayList<Component>();
+		Map<String, Component> facesComponentsMap = new HashMap<String, Component>();
 
 		String defaultPackage = root.attributeValue("short-name");
 		List<Element> allComponentNodes = root.elements("component");
@@ -143,11 +144,52 @@ public class FacesBuilder extends BaseBuilder {
 				}
 			}
 			
-			facesComponents.add(facesComponent);
+			facesComponentsMap.put(facesComponent.getName(), facesComponent);
+		}
+
+		List<Component> facesComponents = new ArrayList<Component>(facesComponentsMap.values());
+
+		for (Component facesComponent : facesComponents) {
+			recursivelyAddExtensionAttributesAndEvents(facesComponent, facesComponentsMap);
 		}
 
 		return facesComponents;
 	}
+
+	protected void recursivelyAddExtensionAttributesAndEvents(Component component, Map<String, Component> facesComponentsMap) {
+
+		String extensionName = component.getExtends();
+
+		if (extensionName != null) {
+
+			Component extensionComponent = facesComponentsMap.get(extensionName);
+			recursivelyAddExtensionAttributesAndEvents(extensionComponent, facesComponentsMap);
+			List<Attribute> extensionAttributes = extensionComponent.getAttributesAndEvents();
+
+			if (extensionAttributes.size() > 0) {
+
+				List<Attribute> attributes = component.getAttributes();
+				List<Event> events = component.getEvents();
+
+				for (Attribute extensionAttribute : extensionAttributes) {
+
+					if (extensionAttribute instanceof Event) {
+
+						Event event = (Event) extensionAttribute;
+
+						if (!events.contains(event)) {
+							events.add(event);
+						}
+					} else {
+
+						if (!attributes.contains(extensionAttribute)) {
+							attributes.add(extensionAttribute);
+						}
+					}
+				}
+			}	
+		}
+	} 
 
 	protected String getComponentOutputDir(Component component) {
 		StringBuilder sb = new StringBuilder(6);

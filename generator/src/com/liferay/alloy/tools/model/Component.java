@@ -18,7 +18,6 @@ import com.liferay.alloy.util.PropsUtil;
 import com.liferay.alloy.util.StringUtil;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import jodd.typeconverter.Convert;
 
@@ -65,6 +64,8 @@ public class Component extends BaseModel {
 			componentElement.attributeValue("bodyContent"), false);
 		_componentInterface = Convert.toString(
 			componentElement.attributeValue("componentInterface"), null);
+		_extends = Convert.toString(
+			componentElement.attributeValue("extends"), null);
 		_module = Convert.toString(
 			componentElement.attributeValue("module"), null);
 		_package = Convert.toString(
@@ -76,17 +77,17 @@ public class Component extends BaseModel {
 		setGenerateJava(generateJava);
 
 		Element attributesElement = componentElement.element("attributes");
-		_attributes = Collections.EMPTY_LIST;
+		_attributes = new ArrayList<Attribute>();
 		if (attributesElement != null) {
-			List<Element> attributeElementsList = attributesElement.elements("attribute");	
-			_attributes = getAttributesFromElements(attributeElementsList);	
+			List<Element> attributeElementsList = attributesElement.elements("attribute");
+			_attributes.addAll(getAttributesFromElements(attributeElementsList));
 		}
 
 		Element eventsElement = componentElement.element("events");
-		_events = Collections.EMPTY_LIST;
+		_events = new ArrayList<Event>();
 		if (eventsElement != null) {
 			List<Element> eventElementsList = eventsElement.elements("event");
-			_events = getEventsFromElements(eventElementsList);	
+			_events.addAll(getEventsFromElements(eventElementsList));	
 		}
 	}
 
@@ -169,6 +170,14 @@ public class Component extends BaseModel {
 
 	public List<Event> getEvents() {
 		return _events;
+	}
+
+	public String getExtends() {
+		return _extends;
+	}
+
+	public void setExtends(String _extends) {
+		this._extends = _extends;
 	}
 
 	public String getInterface() {
@@ -313,5 +322,6 @@ public class Component extends BaseModel {
 	private String _module;
 	private String _package;
 	private String _parentClass;
+	private String _extends;
 
 }
