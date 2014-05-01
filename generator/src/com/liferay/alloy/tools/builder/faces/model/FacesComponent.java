@@ -103,17 +103,6 @@ public class FacesComponent extends Component {
 		_rendererParentClass = rendererParentClass;
 	}
 
-	public static final String DEFAULT_RENDERER_BASE_PARENT_CLASS =
-		"com.liferay.faces.alloy.renderkit.AlloyRendererBase";
-
-	
-
-	private static final String _COMPONENT_DEFAULT_PARENT_CLASS =
-			PropsUtil.getString("builder.faces.component.default.parent.class");
-
-	private static final String _DEFAULT_RENDERER_PARENT_CLASS =
-		PropsUtil.getString("builder.faces.renderer.base.parent.class");
-
 	public boolean isStyleable() {
 		return _styleable;
 	}
@@ -121,6 +110,15 @@ public class FacesComponent extends Component {
 	public void setStyleable(boolean _styleable) {
 		this._styleable = _styleable;
 	}
+
+	public static final String DEFAULT_RENDERER_BASE_PARENT_CLASS =
+		"com.liferay.faces.alloy.renderkit.AlloyRendererBase";
+
+	private static final String _COMPONENT_DEFAULT_PARENT_CLASS =
+			PropsUtil.getString("builder.faces.component.default.parent.class");
+
+	private static final String _DEFAULT_RENDERER_PARENT_CLASS =
+		PropsUtil.getString("builder.faces.renderer.base.parent.class");
 
 	private boolean _styleable;
 	private String _rendererParentClass;
