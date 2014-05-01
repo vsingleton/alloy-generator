@@ -391,8 +391,16 @@ public abstract class BaseBuilder {
 		String parentXMLPath = document.getRootElement().attributeValue(
 			"extends");
 
+		File parentXML = null;
+
 		if (StringUtil.isNotBlank(parentXMLPath)) {
-			File parentXML = new File(parentXMLPath);
+
+			parentXML = new File(parentXMLPath);
+
+			if (!parentXML.exists()) {
+				parentXMLPath = PropsUtil.getString(parentXMLPath);
+				parentXML = new File(parentXMLPath);
+			}
 
 			if (parentXML.exists()) {
 				try {
@@ -410,7 +418,6 @@ public abstract class BaseBuilder {
 					". File does not exist.");
 			}
 		}
-
 		return document;
 	}
 	private static final String _ATTRIBUTE = "attribute";
