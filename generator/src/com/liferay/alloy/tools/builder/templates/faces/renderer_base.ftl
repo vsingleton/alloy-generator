@@ -10,7 +10,7 @@ import javax.annotation.Generated;
 import javax.faces.component.UIComponent;
 import javax.faces.context.ResponseWriter;
 
-import ${RENDERER_BASE_PARENT_CLASS};
+import ${component.getRendererParentClass()};
 import com.liferay.faces.alloy.util.AlloyConstants;
 import com.liferay.faces.util.lang.StringPool;
 
@@ -20,7 +20,7 @@ import com.liferay.faces.util.lang.StringPool;
 </#list>
  */
 @Generated(value = "com.liferay.alloy.tools.builder.FacesBuilder")
-public abstract class ${component.getCamelizedName()}${RENDERER_BASE_CLASS_SUFFIX} extends ${UNQUALIFIED_RENDERER_BASE_PARENT_CLASS} {
+public abstract class ${component.getCamelizedName()}${RENDERER_BASE_CLASS_SUFFIX} extends ${component.getUnqualifiedRendererParentClass()} {
 
 	// Private Constants
 	private static final String ALLOY_CLASS_NAME = "${component.getCamelizedName()}";
@@ -35,7 +35,7 @@ public abstract class ${component.getCamelizedName()}${RENDERER_BASE_CLASS_SUFFI
 	protected static final String[] MODULES = {ALLOY_MODULE_NAME};
 
 	@Override
-	protected void encodeAlloyAttributes(ResponseWriter responseWriter, UIComponent uiComponent) throws IOException {
+	public void encodeAlloyAttributes(ResponseWriter responseWriter, UIComponent uiComponent) throws IOException {
 
 		${component.getCamelizedName()}${INTERFACE_CLASS_SUFFIX} ${component.getUncapitalizedName()}${INTERFACE_CLASS_SUFFIX} = (${component.getCamelizedName()}${INTERFACE_CLASS_SUFFIX}) uiComponent;
 		boolean first = true;
@@ -93,7 +93,7 @@ public abstract class ${component.getCamelizedName()}${RENDERER_BASE_CLASS_SUFFI
 	}
 
 	@Override
-	protected String getAlloyClassName() {
+	public String getAlloyClassName() {
 		return ALLOY_CLASS_NAME;
 	}
 

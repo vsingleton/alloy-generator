@@ -346,9 +346,6 @@ public class FacesBuilder extends BaseBuilder {
 
 		String path = getComponentOutputDir(facesComponent);
 
-		context.put("RENDERER_BASE_PARENT_CLASS", _RENDERER_BASE_PARENT_CLASS);
-		context.put("UNQUALIFIED_RENDERER_BASE_PARENT_CLASS", _UNQUALIFIED_RENDERER_BASE_PARENT_CLASS);
-
 		String rendererBaseContent = processTemplate(_tplRendererBase, context);
 
 		StringBuilder fileNameSb = new StringBuilder(5);
@@ -442,15 +439,11 @@ public class FacesBuilder extends BaseBuilder {
 
 	private static final String _JAVA_EXT = ".java";
 
-	private static final String _RENDERER_BASE_PARENT_CLASS = PropsUtil.getString("builder.faces.renderer.base.parent.class");
-
 	private static final String _RENDERER_CLASS_SUFFIX = "Renderer";
 
 	private static final String _TAGLIB_XML_EXT = ".taglib.xml";
 
 	private static final String _TEMPLATES_DIR = "com/liferay/alloy/tools/builder/templates/faces/";
-
-	private static final String _UNQUALIFIED_RENDERER_BASE_PARENT_CLASS = _RENDERER_BASE_PARENT_CLASS.substring(_RENDERER_BASE_PARENT_CLASS.lastIndexOf(StringPool.DOT) + 1);
 
 	private String _baseOutputDir;
 	private String _taglibXMLOutputDir;

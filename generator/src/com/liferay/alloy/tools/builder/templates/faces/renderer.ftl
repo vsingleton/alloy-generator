@@ -4,7 +4,7 @@
 package ${packagePath}.${component.getUncamelizedName(BLANK)};
 
 <#if !component.isAlloyComponent()>
-import ${component.getRendererParentClass()};
+import ${component.getRendererBaseClass()};
 </#if>
 import javax.faces.application.ResourceDependency;
 import javax.faces.render.FacesRenderer;
@@ -16,5 +16,5 @@ import javax.faces.render.FacesRenderer;
  */
 @FacesRenderer(componentFamily = ${component.getCamelizedName()}.COMPONENT_FAMILY, rendererType = ${component.getCamelizedName()}.RENDERER_TYPE)
 @ResourceDependency(library = "liferay-faces-alloy", name = "liferay.js")
-public class ${component.getCamelizedName()}${RENDERER_CLASS_SUFFIX} extends ${component.getUnqualifiedRendererParentClass()} {
+public class ${component.getCamelizedName()}${RENDERER_CLASS_SUFFIX} extends ${component.getUnqualifiedRendererBaseClass()} {
 }
