@@ -143,7 +143,7 @@ public class FacesBuilder extends BaseBuilder {
 					facesComponent.getAttributes().addAll(additionalAttributes);
 				}
 			}
-			
+
 			facesComponentsMap.put(facesComponent.getName(), facesComponent);
 		}
 

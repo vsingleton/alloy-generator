@@ -29,7 +29,7 @@ public abstract class ${component.getCamelizedName()}${BASE_CLASS_SUFFIX} extend
 
 	// Public Constants
 	<#list component.getAttributesAndEvents()?sort_by("constantName") as attribute>
-	<#if attribute.isGenerateJava()>
+	<#if attribute.isGenerateJava() && (attribute.isEvent() || !attribute.isJSFReservedAttribute())>
 	private static final String ${attribute.getConstantName()} = "${attribute.getName()}";
 	</#if>
 	</#list>
