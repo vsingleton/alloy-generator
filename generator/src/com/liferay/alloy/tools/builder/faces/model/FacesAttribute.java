@@ -99,7 +99,7 @@ public class FacesAttribute extends Attribute {
 		return _methodSignature;
 	}
 
-@Override
+	@Override
 	public String getSafeName() {
 		if (_outputUnsafe || !isGenerateJava() || isJSFReservedAttribute()) {
 			return super.getName();

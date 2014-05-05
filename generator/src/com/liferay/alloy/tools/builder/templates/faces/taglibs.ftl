@@ -20,7 +20,7 @@
 	</#if>
 	<#list components?sort_by("uncapitalizedName") as component>
 	<tag>
-		<description><![CDATA[${component.getDescription()}]]></description>
+		<description><![CDATA[${component.getCleanDescription()}]]></description>
 		<tag-name>${component.getUncapitalizedName()}</tag-name>
 		<component>
 			<component-type>${packagePath}.${component.getUncamelizedName(BLANK)}.${component.getCamelizedName()}</component-type>
@@ -30,7 +30,7 @@
 		<#if attribute.isSettable() || attribute.isGettable()>
 		<attribute>
 			<#if attribute.getDescription()??>
-			<description><![CDATA[${attribute.getDescription()}]]></description>
+			<description><![CDATA[${attribute.getCleanDescription()}]]></description>
 			</#if>
 			<name>${attribute.getSafeName()}</name>
 			<required>${attribute.isRequired()?string("true", "false")}</required>

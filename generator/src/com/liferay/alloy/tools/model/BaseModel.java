@@ -15,6 +15,7 @@
 package com.liferay.alloy.tools.model;
 
 import com.liferay.alloy.util.StringUtil;
+import jodd.util.StringPool;
 
 /**
  * @author Eduardo Lundgren
@@ -34,12 +35,22 @@ public abstract class BaseModel implements Comparable<Object> {
 		return _name.equals(model.getName());
 	}
 
-	public String getRawDescription() {
-		return	_description;
+	public String getCleanDescription() {
+
+		if (_cleanDescription == null) {
+			_cleanDescription = _description;
+			_cleanDescription = _cleanDescription.replace(StringPool.NEWLINE,
+				StringPool.SPACE);
+			_cleanDescription = _cleanDescription.replaceAll("<!--.*-->",
+				StringPool.EMPTY);
+			_cleanDescription = _cleanDescription.trim();
+		}
+
+		return _cleanDescription; 
 	}
 
 	public String getDescription() {
-		return	StringUtil.removeNewlinesAndCDATA(_description).trim();
+		return	_description;
 	}
 
 	public String getName() {
@@ -65,7 +76,8 @@ public abstract class BaseModel implements Comparable<Object> {
 	public void setGenerateJava(boolean _generateJava) {
 		this._generateJava = _generateJava;
 	}
-	
+
+	private String _cleanDescription;
 	private String _description;
 	private boolean _generateJava;
 	private String _name;
