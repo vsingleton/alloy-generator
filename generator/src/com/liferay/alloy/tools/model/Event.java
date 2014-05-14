@@ -23,12 +23,11 @@ public class Event extends Attribute {
 		setDescription(attribute.getDescription());
 		setGenerateJava(attribute.isGenerateJava());
 		setGettable(attribute.isGettable());
-		setInputType(attribute.getInputType());
 		setJavaScriptType(attribute.getJavaScriptType());
 		setName(attribute.getName());
-		setOutputType(attribute.getOutputType());
 		setRequired(attribute.isRequired());
 		setSettable(attribute.isSettable());
+		setType(attribute.getType());
 	}
 
 	public Event(Attribute attribute, boolean isAfter) {

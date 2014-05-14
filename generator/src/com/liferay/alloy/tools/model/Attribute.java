@@ -56,14 +56,6 @@ public class Attribute extends BaseModel {
 		return getterMethodPrefix;
 	}
 
-	public String getInputType() {
-		return TypeUtil.getInputJavaType(_inputType, true);
-	}
-
-	public String getInputTypeSimpleClassName() {
-		return getTypeSimpleClassName(getRawInputType());
-	}
-
 	public String getJavaBeanPropertyName() {
 		String javaBeanPropertyName = getSafeName();
 
@@ -81,35 +73,15 @@ public class Attribute extends BaseModel {
 		return ReservedAttributeUtil.getJavaSafeName(this);
 	}
 
-	public String getJavaScriptType() {
-		return TypeUtil.getJavaScriptType(_javaScriptType);
-	}
-
 	public String getJavaWrapperType() {
-		String javaWrapperType = getJavaScriptType();
+		String javaWrapperType = getType();
 		javaWrapperType = TypeUtil.getInputJavaType(javaWrapperType, true);
 
 		return TypeUtil.getJavaWrapperType(javaWrapperType);
 	}
 
-	public String getOutputType() {
-		return TypeUtil.getOutputJavaType(_outputType, true);
-	}
-
-	public String getOutputTypeSimpleClassName() {
-		return getTypeSimpleClassName(getRawOutputType());
-	}
-
-	public String getRawInputType() {
-		return TypeUtil.getInputJavaType(_inputType, false);
-	}
-
-	public String getRawJavaScriptType() {
+	public String getJavaScriptType() {
 		return _javaScriptType;
-	}
-
-	public String getRawOutputType() {
-		return TypeUtil.getOutputJavaType(_outputType, false);
 	}
 
 	public String getSafeName() {
@@ -150,14 +122,18 @@ public class Attribute extends BaseModel {
 		String name = attributeElement.elementText("name");
 		setName(name);
 		_defaultValue = attributeElement.elementText("defaultValue");
-		String type = Convert.toString(
-			attributeElement.elementText("type"), DEFAULT_TYPE);
-		_inputType = Convert.toString(
-			attributeElement.elementText("inputType"), type);
 		_javaScriptType = Convert.toString(
-			attributeElement.elementText("javaScriptType"), type);
-		_outputType = Convert.toString(
-			attributeElement.elementText("outputType"), type);
+			attributeElement.elementText("javaScriptType"), null);
+
+		String defaultType = DEFAULT_TYPE;
+
+		if (_javaScriptType != null) {
+			defaultType = TypeUtil.getJavaScriptType(_javaScriptType);
+			defaultType = TypeUtil.getInputJavaType(defaultType, true);
+		}
+
+		_type = Convert.toString(
+			attributeElement.elementText("type"), defaultType);
 		boolean generateJava = Convert.toBoolean(
 			attributeElement.elementText("generateJava"), true);
 		setGenerateJava(generateJava);
@@ -200,16 +176,8 @@ public class Attribute extends BaseModel {
 		_gettable = gettable;
 	}
 
-	public void setInputType(String inputType) {
-		_inputType = inputType;
-	}
-
 	public void setJavaScriptType(String javaScriptType) {
 		_javaScriptType = javaScriptType;
-	}
-
-	public void setOutputType(String outputType) {
-		_outputType = outputType;
 	}
 
 	public void setRequired(boolean required) {
@@ -218,6 +186,14 @@ public class Attribute extends BaseModel {
 
 	public void setSettable(boolean settable) {
 		_settable = settable;
+	}
+
+	public String getType() {
+		return _type;
+	}
+
+	public void setType(String _type) {
+		this._type = _type;
 	}
 
 	/**
@@ -233,10 +209,8 @@ public class Attribute extends BaseModel {
 	private Component _component;
 	private String _defaultValue;
 	private boolean _gettable = true;
-	private String _inputType;
 	private String _javaScriptType;
-	private String _outputType;
 	private boolean _required;
 	private boolean _settable = true;
-
+	private String _type;
 }

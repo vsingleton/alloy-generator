@@ -14,9 +14,12 @@
 
 package com.liferay.alloy.tools.builder.taglib.model;
 
+import com.liferay.alloy.tools.model.Attribute;
 import com.liferay.alloy.tools.model.Component;
 import com.liferay.alloy.util.StringUtil;
 
+import java.util.ArrayList;
+import java.util.List;
 import jodd.typeconverter.Convert;
 
 import org.dom4j.Element;
@@ -50,6 +53,20 @@ public class TagComponent extends Component {
 
 	public boolean isDynamicAttributes() {
 		return _dynamicAttributes;
+	}
+
+	@Override
+	protected List<Attribute> getAttributesFromElements(List<Element> attributeElements) {
+
+		List<Attribute> attributes = new ArrayList<Attribute>();
+
+		for (Element attributeElement : attributeElements) {
+			TagAttribute tagAttribute = new TagAttribute();
+			tagAttribute.initialize(attributeElement, this);
+			attributes.add(tagAttribute);
+		}
+
+		return attributes;
 	}
 
 	public boolean isWriteJSP() {

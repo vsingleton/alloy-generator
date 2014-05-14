@@ -211,21 +211,14 @@ public class AlloyDocsTransformer {
 					"defaultValue");
 				Element attributeDescriptionNode = attributeNode.addElement(
 					"description");
-				Element inputTypeNode = attributeNode.addElement("inputType");
-				Element rawJavaScriptTypeNode = attributeNode.addElement(
-					"rawJavaScriptType");
 				Element javaScriptTypeNode = attributeNode.addElement(
 					"javaScriptType");
 				Element nameNode = attributeNode.addElement("name");
-				Element outputTypeNode = attributeNode.addElement("outputType");
 
 				defaultValueNode.setText(attribute.getDefaultValue());
 				attributeDescriptionNode.addCDATA(_getAttributeDescription(attribute));
-				inputTypeNode.setText(attribute.getInputType());
-				rawJavaScriptTypeNode.setText(attribute.getRawJavaScriptType());
 				javaScriptTypeNode.setText(attribute.getJavaScriptType());
 				nameNode.setText(attribute.getName());
-				outputTypeNode.setText(attribute.getOutputType());
 			}
 
 			for (Attribute event : component.getEvents()) {
@@ -235,8 +228,8 @@ public class AlloyDocsTransformer {
 				Element elementDescriptionNode = eventNode.addElement("description");
 
 				nameNode.setText(event.getName());
-				typeNode.setText(event.getInputType());
 				elementDescriptionNode.addCDATA(_getAttributeDescription(event));
+				typeNode.setText(event.getType());
 			}
 		}
 
@@ -272,8 +265,7 @@ public class AlloyDocsTransformer {
 			}
 
 			descriptionJSON.put("event", attribute.isEvent());
-			descriptionJSON.put("inputType", attribute.getInputType());
-			descriptionJSON.put("outputType", attribute.getOutputType());
+			descriptionJSON.put("type", attribute.getType());
 			descriptionJSON.put("required", attribute.isRequired());
 		}
 		catch (JSONException jsone) {
@@ -302,8 +294,7 @@ public class AlloyDocsTransformer {
 			Event event = new Event(attribute);
 
 			event.setName(name + "Change");
-			event.setInputType("String");
-			event.setOutputType("String");
+			event.setType("java.lang.String");
 			event.setDefaultValue(null);
 			event.setRequired(false);
 
@@ -365,9 +356,6 @@ public class AlloyDocsTransformer {
 						JSONUtil.getString(attributeJSON, "type"),
 						_DEFAULT_JAVASCRIPT_TYPE);
 
-					String inputJavaType = TypeUtil.getInputJavaType(
-						javaScriptType, true);
-
 					String outputJavaType = TypeUtil.getOutputJavaType(
 						javaScriptType, true);
 
@@ -385,9 +373,7 @@ public class AlloyDocsTransformer {
 					Attribute attribute = new Attribute();
 
 					attribute.setName(name);
-					attribute.setInputType(inputJavaType);
 					attribute.setJavaScriptType(javaScriptType);
-					attribute.setOutputType(outputJavaType);
 					attribute.setDefaultValue(defaultValue);
 					attribute.setDescription(description);
 					attribute.setRequired(required);

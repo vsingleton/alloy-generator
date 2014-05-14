@@ -33,20 +33,22 @@ public class FacesAttribute extends Attribute {
 		return _getterDefaultReturnValue;
 	}
 
-	@Override
-	public String getJavaScriptType() {
-		return TypeUtil.getFacesJavaScriptType(getRawJavaScriptType());
-	}
+//	@Override
+//	public String getJavaScriptType() {
+//		return TypeUtil.getFacesJavaScriptType(getRawJavaScriptType());
+//	}
 
 	@Override
 	public String getJavaWrapperType() {
 
 		String javaWrapperType;
 
+		String javaScriptType = getJavaScriptType();
+
 		if (_jsfReservedAttribute) {
 			javaWrapperType = getCapitalizedJSFReservedAttributeType();
-		} else {
-			javaWrapperType = getJavaScriptType();
+		} else if (javaScriptType != null){
+			javaWrapperType = TypeUtil.getFacesJavaScriptType(javaScriptType);
 
 			if (javaWrapperType.equals(TypeUtil.COMPLEX_BOOLEAN) ||
 				javaWrapperType.equals(TypeUtil.COMPLEX_NUMBER)) {
@@ -56,8 +58,24 @@ public class FacesAttribute extends Attribute {
 			javaWrapperType = TypeUtil.getInputJavaType(javaWrapperType, true);
 			javaWrapperType = TypeUtil.getJavaWrapperType(javaWrapperType);
 		}
+		else {
+			javaWrapperType = super.getJavaWrapperType();
+		}
 
 		return javaWrapperType;
+	}
+
+	public String getFacesJavaScriptType() {
+		String javaScriptType = getJavaScriptType();
+
+		if (javaScriptType != null) {
+			javaScriptType = TypeUtil.getFacesJavaScriptType(javaScriptType);
+		}
+		else {
+			javaScriptType = TypeUtil.removeJavaPrefix(getType());
+		}
+
+		return javaScriptType;
 	}
 
 	public String getJSFReservedAttributeType() {
@@ -81,28 +99,49 @@ public class FacesAttribute extends Attribute {
 	public void initialize(Element facesAttributeElement, Component component) {
 		super.initialize(facesAttributeElement, component);
 
+//		if (getJavaScriptType() != null) {
+//		String type = getType();
+//		String javaWrapperType = TypeUtil.getJavaWrapperType(type);
+//		javaWrapperType = "java.lang." + javaWrapperType;
+//		setType(javaWrapperType);
+//		}
+
+		String javaScriptType = getJavaScriptType();
+
+		String defaultType = DEFAULT_TYPE;
+
+		if (javaScriptType != null) {
+			defaultType = TypeUtil.getFacesJavaScriptType(javaScriptType);
+
+			if (!(defaultType.equalsIgnoreCase("string") || defaultType.equalsIgnoreCase("boolean"))) {
+				defaultType = "Object";
+			}
+			
+			defaultType = TypeUtil.getJavaWrapperType(defaultType);
+			defaultType = "java.lang." + defaultType;
+		}
+
+		String type = Convert.toString(
+			facesAttributeElement.elementText("type"), defaultType);
+		setType(type);
+		
 		_getterDefaultReturnValue = Convert.toString(
 			facesAttributeElement.elementText("getterDefaultReturnValue"),
 			"null");
 		_methodSignature = facesAttributeElement
-			.elementText("method-signature");
+				.elementText("method-signature");
 		_outputUnsafe = Convert.toBoolean(facesAttributeElement
 			.elementText("outputUnsafe"), false);
-
-		String type = Convert.toString(
-			facesAttributeElement.elementText("type"), DEFAULT_TYPE);
-		String rawJavaScriptType = Convert.toString(
-			facesAttributeElement.elementText("rawJavaScriptType"), type);
-		setJavaScriptType(rawJavaScriptType);
 
 		boolean jsfReservedAttributeDefault =
 			ReservedAttributeUtil.isJSFReservedAttribute(getName());
 		_jsfReservedAttribute = Convert.toBoolean(facesAttributeElement
 			.elementText("jsfReservedAttribute"), jsfReservedAttributeDefault);
 
-		_jsfReservedAttributeType = type;
+		_jsfReservedAttributeType = getType();
 
 		if (_jsfReservedAttribute) {
+
 			String jsfReservedAttributeTypeDefault =
 				ReservedAttributeUtil.getJSFReservedAttributeType(getName());
 			_jsfReservedAttributeType = Convert.toString(facesAttributeElement

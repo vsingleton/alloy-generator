@@ -37,7 +37,7 @@ http://java.sun.com/xml/ns/javaee/web-facelettaglibrary_2_0.xsd http://vdldoc.or
 			<#if !attribute.isEvent() && attribute.isJSFReservedAttribute()>
 			<type>${attribute.getJSFReservedAttributeType()}</type>
 			<#else>
-			<type>${attribute.getJavaWrapperType()}</type>
+			<type>${attribute.getType()}</type>
 			</#if>
 			<#if !attribute.isEvent() && attribute.getMethodSignature()??>
 			<method-signature>${attribute.getMethodSignature()}</method-signature>
