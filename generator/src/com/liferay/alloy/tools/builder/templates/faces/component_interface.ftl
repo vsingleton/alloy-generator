@@ -30,11 +30,11 @@ public interface ${component.getCamelizedName()}${INTERFACE_CLASS_SUFFIX} {
 	<#if attribute.isGenerateJava()>
 	<#if attribute.isGettable()>
 
-	public <#if !attribute.isEvent() && attribute.isJSFReservedAttribute()>${attribute.getJSFReservedAttributeType()}<#else>${attribute.getJavaWrapperType()}</#if> ${attribute.getGetterMethodPrefix()}${attribute.getJavaBeanPropertyName()}();
+	public <#if !attribute.isEvent() && attribute.isJSFReservedAttribute()>${attribute.getJSFReservedAttributeType()?replace('java.lang.','')}<#else>${attribute.getJavaWrapperType()}</#if> ${attribute.getGetterMethodPrefix()}${attribute.getJavaBeanPropertyName()}();
 	</#if>
 	<#if attribute.isSettable()>
 
-	public void set${attribute.getJavaBeanPropertyName()}(<#if !attribute.isEvent() && attribute.isJSFReservedAttribute()>${attribute.getJSFReservedAttributeType()}<#else>${attribute.getJavaWrapperType()}</#if> ${attribute.getJavaSafeName()});
+	public void set${attribute.getJavaBeanPropertyName()}(<#if !attribute.isEvent() && attribute.isJSFReservedAttribute()>${attribute.getJSFReservedAttributeType()?replace('java.lang.','')}<#else>${attribute.getJavaWrapperType()}</#if> ${attribute.getJavaSafeName()});
 	</#if>
 	</#if>
 	</#list>

@@ -16,7 +16,6 @@ package com.liferay.alloy.tools.builder.faces.model;
 
 import com.liferay.alloy.tools.model.Attribute;
 import com.liferay.alloy.tools.model.Component;
-import com.liferay.alloy.util.ReservedAttributeUtil;
 import com.liferay.alloy.util.StringUtil;
 import com.liferay.alloy.util.TypeUtil;
 
@@ -26,7 +25,8 @@ import org.dom4j.Element;
 public class FacesAttribute extends Attribute {
 
 	public String getCapitalizedJSFReservedAttributeType() {
-		return StringUtil.capitalize(_jsfReservedAttributeType);
+		return StringUtil.capitalize(TypeUtil.removeJavaPrefix(
+				_jsfReservedAttributeType));
 	}
 
 	@Override
@@ -117,24 +117,16 @@ public class FacesAttribute extends Attribute {
 		_outputUnsafe = Convert.toBoolean(facesAttributeElement
 			.elementText("outputUnsafe"), false);
 
-		boolean jsfReservedAttributeDefault =
-			ReservedAttributeUtil.isJSFReservedAttribute(getName());
 		_jsfReservedAttribute = Convert.toBoolean(facesAttributeElement
-			.elementText("jsfReservedAttribute"), jsfReservedAttributeDefault);
-
-		_jsfReservedAttributeType = getType();
+			.elementText("jsfReservedAttribute"), false);
 
 		if (_jsfReservedAttribute) {
 
-			String jsfReservedAttributeTypeDefault =
-				ReservedAttributeUtil.getJSFReservedAttributeType(getName());
 			_jsfReservedAttributeType = Convert.toString(facesAttributeElement
 				.elementText("jsfReservedAttributeType"),
-				jsfReservedAttributeTypeDefault);
-			_jsfReservedAttributeType = TypeUtil.removeJavaPrefix(_jsfReservedAttributeType);
+				type);
 		}
 	}
-
 	public boolean isJSFReservedAttribute() {
 		return _jsfReservedAttribute;
 	}

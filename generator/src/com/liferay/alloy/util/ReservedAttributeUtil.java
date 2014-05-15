@@ -18,9 +18,7 @@ import com.liferay.alloy.tools.model.Attribute;
 import com.liferay.alloy.tools.model.Component;
 
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import jodd.util.StringPool;
 
@@ -34,8 +32,6 @@ public class ReservedAttributeUtil {
 
 	public static final List<String> JAVA_RESERVED_WORDS = Arrays.asList(
 		PropsUtil.getStringArray("builder.java.reserved.words"));
-
-	public static final Map<String, String> JSF_RESERVED_ATTRIBUTES_MAP;
 
 	public static final String NAMESPACE = PropsUtil.getString("builder.namespace", null);
 
@@ -58,17 +54,6 @@ public class ReservedAttributeUtil {
 		}
 
 		return name;
-	}
-
-	public static String getJSFReservedAttributeType(String name) {
-
-		String reservedAttributeType = null;
-
-		if (isJSFReservedAttribute(name)) {
-			reservedAttributeType = JSF_RESERVED_ATTRIBUTES_MAP.get(name);
-		}
-
-		return reservedAttributeType;
 	}
 
 	public static String getOriginalName(
@@ -109,10 +94,6 @@ public class ReservedAttributeUtil {
 		return JAVA_RESERVED_WORDS.contains(attribute.getName());
 	}
 
-	public static boolean isJSFReservedAttribute(String name) {
-		return JSF_RESERVED_ATTRIBUTES_MAP.containsKey(name);
-	}
-
 	public static boolean isNamespaced(Attribute attribute) {
 		return isNamespaced(attribute.getName());
 	}
@@ -120,24 +101,4 @@ public class ReservedAttributeUtil {
 	public static boolean isNamespaced(String attributeName) {
 		return NAMESPACED_ATTRIBUTES.contains(attributeName);
 	}
-
-	private static final List<String> _JSF_RESERVED_ATTRIBUTES_AND_TYPES = Arrays.asList(
-		PropsUtil.getStringArray("builder.jsf.reserved.attributes"));
-
-	static {
-
-		Map<String, String> jsfReservedAttributesMap = null;
-
-		if (_JSF_RESERVED_ATTRIBUTES_AND_TYPES != null) {
-			jsfReservedAttributesMap = new HashMap<String, String>();
-
-			for (String keyValuePair : _JSF_RESERVED_ATTRIBUTES_AND_TYPES) {
-				String[] pair = keyValuePair.split("\\|");
-				jsfReservedAttributesMap.put(pair[0], pair[1]);
-			}
-		}
-
-		JSF_RESERVED_ATTRIBUTES_MAP = jsfReservedAttributesMap;
-	}
-
 }
