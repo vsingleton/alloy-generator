@@ -114,7 +114,7 @@ public class TypeUtil {
 					facesJavaScriptType = getJavaScriptType("Object");
 				}
 			} else {
-				facesJavaScriptType = getJavaScriptType(facesJavaScriptType.replace("java.lang.", ""));
+				facesJavaScriptType = getJavaScriptType(removeJavaPrefix(facesJavaScriptType));
 			}
 		}
 
