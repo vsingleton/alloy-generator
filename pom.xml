@@ -167,7 +167,7 @@
 								</goals>
 								<phase>generate-sources</phase>
 								<configuration>
-									<mainClass>com.liferay.alloy.tools.builder.FacesBuilder</mainClass>
+									<mainClass>com.liferay.alloy.tools.builder.faces.FacesBuilder</mainClass>
 								</configuration>
 							</execution>
 						</executions>
@@ -190,7 +190,7 @@
 								</goals>
 								<phase>generate-sources</phase>
 								<configuration>
-									<mainClass>com.liferay.alloy.tools.builder.TagBuilder</mainClass>
+									<mainClass>com.liferay.alloy.tools.builder.taglib.TagBuilder</mainClass>
 								</configuration>
 							</execution>
 						</executions>
