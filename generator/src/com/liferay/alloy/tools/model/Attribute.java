@@ -99,6 +99,10 @@ public class Attribute extends BaseModel {
 		return safeName;
 	}
 
+	public String getTypeSimpleClassName() {
+		return getTypeSimpleClassName(_type);
+	}
+
 	public String getTypeSimpleClassName(String type) {
 		if (TypeUtil.isPrimitiveType(type)) {
 			return type;

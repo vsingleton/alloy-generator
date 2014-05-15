@@ -9,7 +9,7 @@
 
 package ${packagePath}.${component.getPackage()}.base;
 
-<#if component.getWriteJSP() == true>
+<#if component.isWriteJSP() == true>
 import javax.servlet.http.HttpServletRequest;
 </#if>
 import javax.servlet.jsp.JspException;
@@ -33,7 +33,7 @@ public class Base${component.getClassName()} extends ${component.getParentClass(
 
 	<#list component.getAttributesAndEvents() as attribute>
 	<#if attribute.isGettable()>
-	public ${attribute.getRawInputType()} get${attribute.getCapitalizedName()}() {
+	public <#if attribute.isEvent()>${attribute.getType()}<#else>${attribute.getRawInputType()}</#if> get${attribute.getCapitalizedName()}() {
 		return _${attribute.getSafeName()};
 	}
 
@@ -41,7 +41,7 @@ public class Base${component.getClassName()} extends ${component.getParentClass(
 	</#list>
 	<#list component.getAttributesAndEvents() as attribute>
 	<#if attribute.isSettable()>
-	public void set${attribute.getCapitalizedName()}(${attribute.getRawInputType()} ${attribute.getSafeName()}) {
+	public void set${attribute.getCapitalizedName()}(<#if attribute.isEvent()>${attribute.getType()}<#else>${attribute.getRawInputType()}</#if> ${attribute.getSafeName()}) {
 		_${attribute.getSafeName()} = ${attribute.getSafeName()};
 		<#if isChildClassOfAttributeTagSupport == true>
 
@@ -57,7 +57,10 @@ public class Base${component.getClassName()} extends ${component.getParentClass(
 	protected void cleanUp() {
 	<#list component.getAttributesAndEvents() as attribute>
 		<#compress>
-		<#assign outputSimpleClassName = attribute.getOutputTypeSimpleClassName()>
+		<#assign outputSimpleClassName = attribute.getTypeSimpleClassName()>
+		<#if !attribute.isEvent()>
+			<#assign outputSimpleClassName = attribute.getOutputTypeSimpleClassName()>
+		</#if>
 
 		<#assign defaultValue = "">
 
@@ -97,7 +100,7 @@ public class Base${component.getClassName()} extends ${component.getParentClass(
 	}
 	</#if>
 
-	<#if component.getWriteJSP() == true>
+	<#if component.isWriteJSP() == true>
 	<#if isChildClassOfIncludeTag == true>
 	@Override
 	</#if>
@@ -129,7 +132,10 @@ public class Base${component.getClassName()} extends ${component.getParentClass(
 
 	<#list component.getAttributesAndEvents() as attribute>
 	<#compress>
-	<#assign outputSimpleClassName = attribute.getOutputTypeSimpleClassName()>
+	<#assign outputSimpleClassName = attribute.getTypeSimpleClassName()>
+	<#if !attribute.isEvent()>
+		<#assign outputSimpleClassName = attribute.getOutputTypeSimpleClassName()>
+	</#if>
 
 	<#assign defaultValue = "">
 
@@ -141,7 +147,7 @@ public class Base${component.getClassName()} extends ${component.getParentClass(
 
 	</#compress>
 	<#if attribute.isGettable() || attribute.isSettable()>
-	private ${attribute.getRawInputType()} _${attribute.getSafeName()} = ${defaultValue};
+	private <#if attribute.isEvent()>${attribute.getType()}<#else>${attribute.getRawInputType()}</#if> _${attribute.getSafeName()} = ${defaultValue};
 	</#if>
 	</#list>
 

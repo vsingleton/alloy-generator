@@ -37,8 +37,11 @@ if ((dynamicAttributes != null) && !dynamicAttributes.isEmpty()) {
 <#compress>
 <#list component.getAttributesAndEvents() as attribute>
 	<#assign defaultValueSuffix = BLANK>
-	<#assign outputSimpleClassName = attribute.getOutputTypeSimpleClassName()>
-
+	<#assign outputSimpleClassName = attribute.getTypeSimpleClassName()>
+	<#if !attribute.isEvent()>
+		<#assign outputSimpleClassName = attribute.getOutputTypeSimpleClassName()>
+	</#if>
+	
 	<#if attribute.getDefaultValue()??>
 		<#assign defaultValueSuffix = getDefaultValueSuffix(outputSimpleClassName, attribute.getDefaultValue())>
 	</#if>
@@ -49,17 +52,21 @@ if ((dynamicAttributes != null) && !dynamicAttributes.isEmpty()) {
 		<#if (isPrimitiveType(outputSimpleClassName) || isNumericAttribute(outputSimpleClassName))>
 			<#assign value = "String.valueOf(request.getAttribute(" + namespacedName + "))">
 		<#else>
-			<#assign value = "(" + attribute.getRawInputType() + ")request.getAttribute(" + namespacedName + ")">
+			<#assign rawInputType = attribute.getType()>
+			<#if !attribute.isEvent()>
+				<#assign rawInputType = attribute.getRawInputType()>
+			</#if>
+			<#assign value = "(" + rawInputType + ")request.getAttribute(" + namespacedName + ")">
 		</#if>
 
 		<#if outputSimpleClassName == "ArrayList">
-			${attribute.getOutputType()} ${attribute.getSafeName()} = _toArrayList(GetterUtil.getObject(${value}${defaultValueSuffix}));
+			<#if attribute.isEvent()>${attribute.getType()}<#else>${attribute.getOutputType()}</#if> ${attribute.getSafeName()} = _toArrayList(GetterUtil.getObject(${value}${defaultValueSuffix}));
 		<#elseif outputSimpleClassName == "HashMap">
-			${attribute.getOutputType()} ${attribute.getSafeName()} = _toHashMap(GetterUtil.getObject(${value}${defaultValueSuffix}));
+			<#if attribute.isEvent()>${attribute.getType()}<#else>${attribute.getOutputType()}</#if> ${attribute.getSafeName()} = _toHashMap(GetterUtil.getObject(${value}${defaultValueSuffix}));
 		<#elseif hasGetter(outputSimpleClassName)>
-			${attribute.getOutputType()} ${attribute.getSafeName()} = GetterUtil.get${getGetterSuffix(outputSimpleClassName)}(${value}${defaultValueSuffix});
+			<#if attribute.isEvent()>${attribute.getType()}<#else>${attribute.getOutputType()}</#if> ${attribute.getSafeName()} = GetterUtil.get${getGetterSuffix(outputSimpleClassName)}(${value}${defaultValueSuffix});
 		<#else>
-			${attribute.getRawOutputType()} ${attribute.getSafeName()} = (${attribute.getRawOutputType()})request.getAttribute(${namespacedName});
+			<#if attribute.isEvent()>${attribute.getType()}<#else>${attribute.getRawOutputType()}</#if> ${attribute.getSafeName()} = (<#if attribute.isEvent()>${attribute.getType()}<#else>${attribute.getRawOutputType()}</#if>)request.getAttribute(${namespacedName});
 		</#if>
 	</#if>
 </#list>
