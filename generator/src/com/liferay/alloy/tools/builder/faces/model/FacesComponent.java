@@ -113,7 +113,12 @@ public class FacesComponent extends Component {
 		for (Element attributeElement : attributeElements) {
 			FacesAttribute facesAttribute = new FacesAttribute();
 			facesAttribute.initialize(attributeElement, this);
-			attributes.add(facesAttribute);
+
+			boolean readOnly = facesAttribute.isReadOnly();
+
+			if (!readOnly) {
+				attributes.add(facesAttribute);
+			}
 		}
 
 		return attributes;

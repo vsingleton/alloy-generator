@@ -148,6 +148,8 @@ public class Attribute extends BaseModel {
 			attributeElement.elementText("required"), false);
 		_settable = Convert.toBoolean(
 			attributeElement.elementText("settable"), true);
+		_readOnly = Convert.toBoolean(
+			attributeElement.elementText("readOnly"), false);
 	}
 
 	public boolean isEvent() {
@@ -184,6 +186,14 @@ public class Attribute extends BaseModel {
 		_javaScriptType = javaScriptType;
 	}
 
+	public boolean isReadOnly() {
+		return _readOnly;
+	}
+
+	public void setReadOnly(boolean readOnly) {
+		_readOnly = readOnly;
+	}
+
 	public void setRequired(boolean required) {
 		_required = required;
 	}
@@ -214,6 +224,7 @@ public class Attribute extends BaseModel {
 	private String _defaultValue;
 	private boolean _gettable = true;
 	private String _javaScriptType;
+	private boolean _readOnly;
 	private boolean _required;
 	private boolean _settable = true;
 	private String _type;

@@ -29,15 +29,6 @@ public class FacesAttribute extends Attribute {
 		return StringUtil.capitalize(_jsfReservedAttributeType);
 	}
 
-	public String getGetterDefaultReturnValue() {
-		return _getterDefaultReturnValue;
-	}
-
-//	@Override
-//	public String getJavaScriptType() {
-//		return TypeUtil.getFacesJavaScriptType(getRawJavaScriptType());
-//	}
-
 	@Override
 	public String getJavaWrapperType() {
 
@@ -98,13 +89,6 @@ public class FacesAttribute extends Attribute {
 	@Override
 	public void initialize(Element facesAttributeElement, Component component) {
 		super.initialize(facesAttributeElement, component);
-
-//		if (getJavaScriptType() != null) {
-//		String type = getType();
-//		String javaWrapperType = TypeUtil.getJavaWrapperType(type);
-//		javaWrapperType = "java.lang." + javaWrapperType;
-//		setType(javaWrapperType);
-//		}
 
 		String javaScriptType = getJavaScriptType();
 

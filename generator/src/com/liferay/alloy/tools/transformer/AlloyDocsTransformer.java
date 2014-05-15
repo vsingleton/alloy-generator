@@ -214,11 +214,13 @@ public class AlloyDocsTransformer {
 				Element javaScriptTypeNode = attributeNode.addElement(
 					"javaScriptType");
 				Element nameNode = attributeNode.addElement("name");
+				Element readOnlyNode = attributeNode.addElement("readOnly");
 
 				defaultValueNode.setText(attribute.getDefaultValue());
 				attributeDescriptionNode.addCDATA(_getAttributeDescription(attribute));
 				javaScriptTypeNode.setText(attribute.getJavaScriptType());
 				nameNode.setText(attribute.getName());
+				readOnlyNode.setText(Boolean.toString(attribute.isReadOnly()));
 			}
 
 			for (Attribute event : component.getEvents()) {
@@ -367,6 +369,16 @@ public class AlloyDocsTransformer {
 						JSONUtil.getString(attributeJSON, "description"),
 						StringPool.EMPTY);
 
+					String readOnlyString = JSONUtil.getString(attributeJSON,
+						"readonly");
+
+					boolean readOnly = false;
+
+					if (readOnlyString != null) {
+						readOnly = readOnlyString.equals(StringPool.EMPTY) ||
+							Boolean.parseBoolean(readOnlyString);
+					}
+
 					boolean required = Convert.toBoolean(
 						JSONUtil.getString(attributeJSON, "required"), false);
 
@@ -377,6 +389,7 @@ public class AlloyDocsTransformer {
 					attribute.setDefaultValue(defaultValue);
 					attribute.setDescription(description);
 					attribute.setRequired(required);
+					attribute.setReadOnly(readOnly);
 
 					attributes.add(attribute);
 				}
