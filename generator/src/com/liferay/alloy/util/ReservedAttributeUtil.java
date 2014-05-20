@@ -14,6 +14,9 @@
 
 package com.liferay.alloy.util;
 
+import com.liferay.alloy.tools.model.Attribute;
+import com.liferay.alloy.tools.model.Component;
+
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -23,14 +26,21 @@ import jodd.util.StringPool;
 
 import org.apache.commons.lang.StringUtils;
 
-import com.liferay.alloy.tools.model.Attribute;
-import com.liferay.alloy.tools.model.Component;
-
 /**
  * @author Eduardo Lundgren
  * @author Bruno Basto
  */
 public class ReservedAttributeUtil {
+
+	public static final List<String> JAVA_RESERVED_WORDS = Arrays.asList(
+		PropsUtil.getStringArray("builder.java.reserved.words"));
+
+	public static final Map<String, String> JSF_RESERVED_ATTRIBUTES_MAP;
+
+	public static final String NAMESPACE = PropsUtil.getString("builder.namespace", null);
+
+	public static final List<String> NAMESPACED_ATTRIBUTES = Arrays.asList(
+		PropsUtil.getStringArray("builder.namespaced.attributes"));
 
 	public static String getJavaSafeName(Attribute attribute) {
 		String name = attribute.getName();
@@ -79,7 +89,6 @@ public class ReservedAttributeUtil {
 		String name = attribute.getName();
 
 		if (isNamespaced(attribute)) {
-
 			String capitalizedAttributeName = StringUtils.capitalize(name);
 
 			if (NAMESPACE != null) {
@@ -88,7 +97,7 @@ public class ReservedAttributeUtil {
 				Component component = attribute.getComponent();
 
 				String componentUncapitalizedName =
-						component.getUncapitalizedName();
+					component.getUncapitalizedName();
 				name = componentUncapitalizedName.concat(capitalizedAttributeName);
 			}
 		}
@@ -112,25 +121,14 @@ public class ReservedAttributeUtil {
 		return NAMESPACED_ATTRIBUTES.contains(attributeName);
 	}
 
-	public static final List<String> JAVA_RESERVED_WORDS = Arrays.asList(
-		PropsUtil.getStringArray("builder.java.reserved.words"));
-
-	public static final Map<String, String> JSF_RESERVED_ATTRIBUTES_MAP;
-
-	public static final String NAMESPACE = PropsUtil.getString("builder.namespace", null);
-
-	public static final List<String> NAMESPACED_ATTRIBUTES = Arrays.asList(
-		PropsUtil.getStringArray("builder.namespaced.attributes"));
-
 	private static final List<String> _JSF_RESERVED_ATTRIBUTES_AND_TYPES = Arrays.asList(
-			PropsUtil.getStringArray("builder.jsf.reserved.attributes"));
+		PropsUtil.getStringArray("builder.jsf.reserved.attributes"));
 
 	static {
 
 		Map<String, String> jsfReservedAttributesMap = null;
 
 		if (_JSF_RESERVED_ATTRIBUTES_AND_TYPES != null) {
-
 			jsfReservedAttributesMap = new HashMap<String, String>();
 
 			for (String keyValuePair : _JSF_RESERVED_ATTRIBUTES_AND_TYPES) {

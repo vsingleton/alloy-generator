@@ -14,15 +14,25 @@
 
 package com.liferay.alloy.tools.builder.taglib;
 
+import com.liferay.alloy.tools.builder.base.BaseBuilder;
+import com.liferay.alloy.tools.builder.taglib.model.TagComponent;
+import com.liferay.alloy.tools.model.Component;
+import com.liferay.alloy.util.PropsUtil;
+import com.liferay.alloy.util.xml.SAXReaderUtil;
+import com.liferay.alloy.util.xml.xpath.AlloyGeneratorNamespaceContext;
+
 import java.io.ByteArrayInputStream;
 import java.io.File;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import jodd.io.FileUtil;
+
 import jodd.typeconverter.Convert;
+
 import jodd.util.StringPool;
 
 import org.dom4j.Document;
@@ -30,15 +40,8 @@ import org.dom4j.DocumentFactory;
 import org.dom4j.Element;
 import org.dom4j.Node;
 import org.dom4j.XPath;
+
 import org.jaxen.NamespaceContext;
-
-import com.liferay.alloy.tools.builder.base.BaseBuilder;
-import com.liferay.alloy.tools.model.Component;
-import com.liferay.alloy.tools.builder.taglib.model.TagComponent;
-import com.liferay.alloy.util.PropsUtil;
-import com.liferay.alloy.util.xml.SAXReaderUtil;
-import com.liferay.alloy.util.xml.xpath.AlloyGeneratorNamespaceContext;
-
 public class TagBuilder extends BaseBuilder {
 
 	public static void main(String[] args) throws Exception {
@@ -87,7 +90,7 @@ public class TagBuilder extends BaseBuilder {
 		List<Component> components = getAllComponents();
 
 		for (Component component : components) {
-			TagComponent tagComponent = (TagComponent) component;
+			TagComponent tagComponent = (TagComponent)component;
 			Map<String, Object> context = getTemplateContext(tagComponent);
 
 			_createBaseTag(tagComponent, context);
@@ -246,7 +249,7 @@ public class TagBuilder extends BaseBuilder {
 						"name");
 
 					String xpathAttributeValue = "//tld:attribute[tld:name='" +
-							attributeName + "']";
+						attributeName + "']";
 
 					XPath xpathAttribute = factory.createXPath(
 						xpathTagValue + xpathAttributeValue);

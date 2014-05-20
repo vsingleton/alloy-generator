@@ -15,7 +15,6 @@
 package com.liferay.alloy.tools.model;
 
 import com.liferay.alloy.util.StringUtil;
-
 public class Event extends Attribute {
 
 	public Event(Attribute attribute) {
@@ -50,29 +49,25 @@ public class Event extends Attribute {
 		return _isOn || !(_isOn || _isAfter);
 	}
 
-	public boolean isAfter() {
-		return _isAfter;
-	}
-
 	public String getConstantUnprefixedName() {
 		return StringUtil.toConstantName(_unprefixedName);
 	}
 
-	public boolean isOn() {
-		return _isOn;
+	@Override
+	public String getJavaWrapperType() {
+		return "String";
 	}
 
 	public String getUnprefixedName() {
 		return _unprefixedName;
 	}
 
-	public void setUnprefixedName(String _unprefixedName) {
-		this._unprefixedName = _unprefixedName;
+	public boolean isAfter() {
+		return _isAfter;
 	}
 
-	@Override
-	public String getJavaWrapperType() {
-		return "String";
+	public boolean isOn() {
+		return _isOn;
 	}
 
 	public void setAfter(boolean after) {
@@ -85,7 +80,12 @@ public class Event extends Attribute {
 		_isOn = on;
 	}
 
+	public void setUnprefixedName(String _unprefixedName) {
+		this._unprefixedName = _unprefixedName;
+	}
+
 	private static final String _AFTER = "after";
+
 	private static final String _ON = "on";
 
 	private boolean _isAfter = false;

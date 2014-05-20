@@ -156,7 +156,7 @@ public class AlloyDocsTransformer {
 		List<String> excludedComponentsList = Arrays.asList(_componentExcluded);
 
 		return (!module.startsWith(AUI_PREFIX) ||
-				excludedComponentsList.contains(component.getName()));
+			excludedComponentsList.contains(component.getName()));
 	}
 
 	private String _cleanName(String name) {

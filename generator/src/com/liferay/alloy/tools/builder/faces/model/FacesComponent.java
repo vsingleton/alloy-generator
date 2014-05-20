@@ -14,18 +14,44 @@
 
 package com.liferay.alloy.tools.builder.faces.model;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import jodd.util.StringPool;
-
 import com.liferay.alloy.tools.model.Attribute;
 import com.liferay.alloy.tools.model.Component;
 import com.liferay.alloy.util.PropsUtil;
-import jodd.typeconverter.Convert;
-import org.dom4j.Element;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import jodd.typeconverter.Convert;
+
+import jodd.util.StringPool;
+
+import org.dom4j.Element;
 public class FacesComponent extends Component {
+
+	public String getRendererBaseClass() {
+
+		String rendererBaseClass = getRendererParentClass();
+
+		if (isAlloyComponent()) {
+			rendererBaseClass = _getDefaultAlloyRendererBaseClass();
+		}
+
+		return rendererBaseClass;
+	}
+
+	public String getRendererParentClass() {
+		return _rendererParentClass;
+	}
+
+	public String getUnqualifiedRendererBaseClass() {
+		return getRendererBaseClass().substring(
+			getRendererBaseClass().lastIndexOf(StringPool.DOT) + 1);
+	}
+
+	public String getUnqualifiedRendererParentClass() {
+		return getRendererParentClass().substring(
+			getRendererParentClass().lastIndexOf(StringPool.DOT) + 1);
+	}
 
 	@Override
 	public void initialize(Element facesComponentElement,
@@ -57,14 +83,26 @@ public class FacesComponent extends Component {
 
 		String defaultRendererParentClass = _DEFAULT_RENDERER_BASE_CLASS;
 
-		if (isAlloyComponent() && _DEFAULT_ALLOY_RENDERER_PARENT_CLASS != null
-				&& _DEFAULT_ALLOY_RENDERER_PARENT_CLASS.length() > 0) {
+		if (isAlloyComponent() && _DEFAULT_ALLOY_RENDERER_PARENT_CLASS != null &&
+			_DEFAULT_ALLOY_RENDERER_PARENT_CLASS.length() > 0) {
 			defaultRendererParentClass = _DEFAULT_ALLOY_RENDERER_PARENT_CLASS;
 		}
 
 		_rendererParentClass = Convert.toString(
 			facesComponentElement.attributeValue("rendererParentClass"),
 			defaultRendererParentClass);
+	}
+
+	public boolean isStyleable() {
+		return _styleable;
+	}
+
+	public void setRendererParentClass(String rendererParentClass) {
+		_rendererParentClass = rendererParentClass;
+	}
+
+	public void setStyleable(boolean _styleable) {
+		this._styleable = _styleable;
 	}
 
 	@Override
@@ -92,53 +130,15 @@ public class FacesComponent extends Component {
 		return sb.toString();
 	}
 
-	
-	public String getRendererBaseClass() {
-
-		String rendererBaseClass = getRendererParentClass();
-
-		if (isAlloyComponent()) {
-			rendererBaseClass = _getDefaultAlloyRendererBaseClass();
-		}
-
-		return rendererBaseClass;
-	}
-
-	public String getUnqualifiedRendererBaseClass() {
-		return getRendererBaseClass().substring(
-				getRendererBaseClass().lastIndexOf(StringPool.DOT) + 1);
-	}
-
-	public String getRendererParentClass() {
-		return _rendererParentClass;
-	}
-
-	public String getUnqualifiedRendererParentClass() {
-		return getRendererParentClass().substring(
-				getRendererParentClass().lastIndexOf(StringPool.DOT) + 1);
-	}
-
-	public void setRendererParentClass(String rendererParentClass) {
-		_rendererParentClass = rendererParentClass;
-	}
-
-	public boolean isStyleable() {
-		return _styleable;
-	}
-
-	public void setStyleable(boolean _styleable) {
-		this._styleable = _styleable;
-	}
-
-	private static final String _DEFAULT_RENDERER_BASE_CLASS =
-		"javax.faces.render.Renderer";
-
 	private static final String _COMPONENT_DEFAULT_PARENT_CLASS =
-			PropsUtil.getString("builder.faces.component.default.parent.class");
+		PropsUtil.getString("builder.faces.component.default.parent.class");
 
 	private static final String _DEFAULT_ALLOY_RENDERER_PARENT_CLASS =
 		PropsUtil.getString("builder.faces.default.alloy.renderer.parent.class");
 
+	private static final String _DEFAULT_RENDERER_BASE_CLASS =
+		"javax.faces.render.Renderer";
 	private boolean _styleable;
+
 	private String _rendererParentClass;
 }

@@ -19,42 +19,15 @@ import com.liferay.alloy.util.StringUtil;
 import com.liferay.alloy.util.TypeUtil;
 
 import java.util.List;
+
 import jodd.typeconverter.Convert;
 
 import jodd.util.StringPool;
 
 import org.apache.commons.lang.StringUtils;
+
 import org.dom4j.Element;
-
 public class Attribute extends BaseModel {
-
-	public void initialize(Element attributeElement, Component component) {
-
-		setComponent(component);
-		String description = attributeElement.elementText("description");
-		setDescription(description);
-		String name = attributeElement.elementText("name");
-		setName(name);
-		_defaultValue = attributeElement.elementText("defaultValue");
-		String type = Convert.toString(
-			attributeElement.elementText("type"), DEFAULT_TYPE);
-		_inputType = Convert.toString(
-			attributeElement.elementText("inputType"), type);
-		_javaScriptType = Convert.toString(
-			attributeElement.elementText("javaScriptType"), type);
-		_outputType = Convert.toString(
-			attributeElement.elementText("outputType"), type);
-		boolean generateJava = Convert.toBoolean(
-			attributeElement.elementText("generateJava"), true);
-		setGenerateJava(generateJava);
-
-		_gettable = Convert.toBoolean(
-			attributeElement.elementText("gettable"), true);
-		_required = Convert.toBoolean(
-			attributeElement.elementText("required"), false);
-		_settable = Convert.toBoolean(
-			attributeElement.elementText("settable"), true);
-	}
 
 	public String getCapitalizedName() {
 		return StringUtils.capitalize(getSafeName());
@@ -167,6 +140,34 @@ public class Attribute extends BaseModel {
 		}
 
 		return StringPool.EMPTY;
+	}
+
+	public void initialize(Element attributeElement, Component component) {
+
+		setComponent(component);
+		String description = attributeElement.elementText("description");
+		setDescription(description);
+		String name = attributeElement.elementText("name");
+		setName(name);
+		_defaultValue = attributeElement.elementText("defaultValue");
+		String type = Convert.toString(
+			attributeElement.elementText("type"), DEFAULT_TYPE);
+		_inputType = Convert.toString(
+			attributeElement.elementText("inputType"), type);
+		_javaScriptType = Convert.toString(
+			attributeElement.elementText("javaScriptType"), type);
+		_outputType = Convert.toString(
+			attributeElement.elementText("outputType"), type);
+		boolean generateJava = Convert.toBoolean(
+			attributeElement.elementText("generateJava"), true);
+		setGenerateJava(generateJava);
+
+		_gettable = Convert.toBoolean(
+			attributeElement.elementText("gettable"), true);
+		_required = Convert.toBoolean(
+			attributeElement.elementText("required"), false);
+		_settable = Convert.toBoolean(
+			attributeElement.elementText("settable"), true);
 	}
 
 	public boolean isEvent() {

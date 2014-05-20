@@ -15,7 +15,6 @@
 package com.liferay.alloy.util;
 
 import jodd.util.StringPool;
-
 public class StringUtil extends jodd.util.StringUtil {
 
 	public static String toConstantName(String name) {

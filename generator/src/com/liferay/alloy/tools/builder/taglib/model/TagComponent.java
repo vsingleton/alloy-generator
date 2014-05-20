@@ -16,10 +16,21 @@ package com.liferay.alloy.tools.builder.taglib.model;
 
 import com.liferay.alloy.tools.model.Component;
 import com.liferay.alloy.util.StringUtil;
-import jodd.typeconverter.Convert;
-import org.dom4j.Element;
 
+import jodd.typeconverter.Convert;
+
+import org.dom4j.Element;
 public class TagComponent extends Component {
+
+	public String getClassName() {
+		String className = _className;
+
+		if (StringUtil.isBlank(className)) {
+			className = getSafeName().concat(_CLASS_NAME_SUFFIX);
+		}
+
+		return className;
+	}
 
 	public void initialize(Element tagComponentElement, String defaultPackage) {
 		super.initialize(tagComponentElement, defaultPackage);
@@ -37,40 +48,30 @@ public class TagComponent extends Component {
 			tagComponentElement.attributeValue("writeJSP"), true);
 	}
 
-	public void setClassName(String className) {
-		this._className = className;
-	}
-
-	public String getClassName() {
-		String className = _className;
-
-		if (StringUtil.isBlank(className)) {
-			className = getSafeName().concat(_CLASS_NAME_SUFFIX);
-		}
-
-		return className;
-	}
-	
-	public void setDynamicAttributes(boolean dynamicAttributes) {
-		_dynamicAttributes = dynamicAttributes;
-	}
-
 	public boolean isDynamicAttributes() {
 		return _dynamicAttributes;
-	}
-
-	public void setWriteJSP(boolean writeJSP) {
-		_writeJSP = writeJSP;
 	}
 
 	public boolean isWriteJSP() {
 		return _writeJSP;
 	}
 
-	private final static String _CLASS_NAME_SUFFIX = "Tag";
+	public void setClassName(String className) {
+		this._className = className;
+	}
+
+	public void setDynamicAttributes(boolean dynamicAttributes) {
+		_dynamicAttributes = dynamicAttributes;
+	}
+
+	public void setWriteJSP(boolean writeJSP) {
+		_writeJSP = writeJSP;
+	}
 
 	private static final String _COMPONENT_DEFAULT_PARENT_CLASS =
 		"com.liferay.taglib.util.IncludeTag";
+
+	private final static String _CLASS_NAME_SUFFIX = "Tag";
 
 	private String _className;
 	private boolean _dynamicAttributes;

@@ -14,26 +14,27 @@
 
 package com.liferay.alloy.tools.builder.faces;
 
+import com.liferay.alloy.tools.builder.base.BaseBuilder;
+import com.liferay.alloy.tools.builder.faces.model.FacesAttribute;
+import com.liferay.alloy.tools.builder.faces.model.FacesComponent;
+import com.liferay.alloy.tools.model.Attribute;
+import com.liferay.alloy.tools.model.Component;
+import com.liferay.alloy.tools.model.Event;
+import com.liferay.alloy.util.PropsUtil;
+
 import java.io.File;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import jodd.typeconverter.Convert;
+
 import jodd.util.StringPool;
 
 import org.dom4j.Document;
 import org.dom4j.Element;
-
-import com.liferay.alloy.tools.builder.base.BaseBuilder;
-import com.liferay.alloy.tools.builder.faces.model.FacesAttribute;
-import com.liferay.alloy.tools.model.Component;
-import com.liferay.alloy.tools.builder.faces.model.FacesComponent;
-import com.liferay.alloy.tools.model.Attribute;
-import com.liferay.alloy.tools.model.Event;
-import com.liferay.alloy.util.PropsUtil;
-
 public class FacesBuilder extends BaseBuilder {
 
 	public static void main(String[] args) throws Exception {
@@ -69,10 +70,9 @@ public class FacesBuilder extends BaseBuilder {
 		List<Component> components = getAllComponents();
 
 		for (Component component : components) {
-			FacesComponent facesComponent = (FacesComponent) component;
-			
-			if (facesComponent.isGenerateJava()) {
+			FacesComponent facesComponent = (FacesComponent)component;
 
+			if (facesComponent.isGenerateJava()) {
 				Map<String, Object> context = getTemplateContext(component);
 
 				context.put("BASE_CLASS_SUFFIX", _BASE_CLASS_SUFFIX);
@@ -93,13 +93,13 @@ public class FacesBuilder extends BaseBuilder {
 				if (additionalAttributes.size() > 0) {
 					facesComponent.getAttributes().removeAll(additionalAttributes);
 				}
-	
+
 				if (facesComponent.isAlloyComponent()) {
 					_buildComponentInterface(facesComponent, context);
 				}
-	
+
 				_buildRenderer(facesComponent, context);
-	
+
 				if (facesComponent.isAlloyComponent()) {
 					_buildRendererBase(facesComponent, context);
 				}
@@ -108,13 +108,26 @@ public class FacesBuilder extends BaseBuilder {
 
 		_buildTaglibsXML();
 
-		System.out.println("Finished looping over " + components.size()
-				+ " components.");
+		System.out.println("Finished looping over " + components.size() +
+			" components.");
 	}
 
 	@Override
 	public String getTemplatesDir() {
 		return _TEMPLATES_DIR;
+	}
+
+	protected String getComponentOutputDir(Component component) {
+		StringBuilder sb = new StringBuilder(6);
+
+		sb.append(_baseOutputDir);
+		sb.append(StringPool.SLASH);
+		sb.append(_COMPONENTS_PACKAGE.replaceAll("\\.", StringPool.SLASH));
+		sb.append(StringPool.SLASH);
+		sb.append(component.getUncamelizedName(StringPool.EMPTY));
+		sb.append(StringPool.SLASH);
+
+		return sb.toString();
 	}
 
 	@Override
@@ -156,54 +169,6 @@ public class FacesBuilder extends BaseBuilder {
 		return facesComponents;
 	}
 
-	protected void recursivelyAddExtensionAttributesAndEvents(Component component, Map<String, Component> facesComponentsMap) {
-
-		String extensionName = component.getExtends();
-
-		if (extensionName != null) {
-
-			Component extensionComponent = facesComponentsMap.get(extensionName);
-			recursivelyAddExtensionAttributesAndEvents(extensionComponent, facesComponentsMap);
-			List<Attribute> extensionAttributes = extensionComponent.getAttributesAndEvents();
-
-			if (extensionAttributes.size() > 0) {
-
-				List<Attribute> attributes = component.getAttributes();
-				List<Event> events = component.getEvents();
-
-				for (Attribute extensionAttribute : extensionAttributes) {
-
-					if (extensionAttribute instanceof Event) {
-
-						Event event = (Event) extensionAttribute;
-
-						if (!events.contains(event)) {
-							events.add(event);
-						}
-					} else {
-
-						if (!attributes.contains(extensionAttribute)) {
-							attributes.add(extensionAttribute);
-						}
-					}
-				}
-			}	
-		}
-	} 
-
-	protected String getComponentOutputDir(Component component) {
-		StringBuilder sb = new StringBuilder(6);
-
-		sb.append(_baseOutputDir);
-		sb.append(StringPool.SLASH);
-		sb.append(_COMPONENTS_PACKAGE.replaceAll("\\.", StringPool.SLASH));
-		sb.append(StringPool.SLASH);
-		sb.append(component.getUncamelizedName(StringPool.EMPTY));
-		sb.append(StringPool.SLASH);
-
-		return sb.toString();
-	}
-
 	@Override
 	protected Map<String, Object> getDefaultTemplateContext() {
 		Map<String, Object> context = super.getDefaultTemplateContext();
@@ -223,6 +188,37 @@ public class FacesBuilder extends BaseBuilder {
 		return sb.toString();
 	}
 
+	protected void recursivelyAddExtensionAttributesAndEvents(Component component, Map<String, Component> facesComponentsMap) {
+
+		String extensionName = component.getExtends();
+
+		if (extensionName != null) {
+			Component extensionComponent = facesComponentsMap.get(extensionName);
+			recursivelyAddExtensionAttributesAndEvents(extensionComponent, facesComponentsMap);
+			List<Attribute> extensionAttributes = extensionComponent.getAttributesAndEvents();
+
+			if (extensionAttributes.size() > 0) {
+				List<Attribute> attributes = component.getAttributes();
+				List<Event> events = component.getEvents();
+
+				for (Attribute extensionAttribute : extensionAttributes) {
+					if (extensionAttribute instanceof Event) {
+						Event event = (Event)extensionAttribute;
+
+						if (!events.contains(event)) {
+							events.add(event);
+						}
+					} else {
+
+						if (!attributes.contains(extensionAttribute)) {
+							attributes.add(extensionAttribute);
+						}
+					}
+				}
+			}
+		}
+	}
+
 	private void _buildComponent(FacesComponent facesComponent,
 			Map<String, Object> context) throws Exception {
 
@@ -231,55 +227,9 @@ public class FacesBuilder extends BaseBuilder {
 		String componentContent = processTemplate(_tplComponent, context);
 
 		File componentFile = new File(path.concat(facesComponent
-				.getCamelizedName().concat(_JAVA_EXT)));
+			.getCamelizedName().concat(_JAVA_EXT)));
 
 		writeFile(componentFile, componentContent, false);
-	}
-
-	private List<FacesAttribute> _getAdditionalAttributes(FacesComponent facesComponent) {
-
-		List<FacesAttribute> additionalAttributes = new ArrayList<FacesAttribute>();
-		
-		for (Document doc : getComponentDefinitionDocs()) {
-			Element root = doc.getRootElement();
-
-			Element extensionElement = root.element("extension");
-
-			if (extensionElement != null) {
-
-				if (facesComponent.isAlloyComponent()) {
-					List<FacesAttribute> clientComponentAttributes =
-						_getInterfaceAttributes(extensionElement, "clientComponentAttributes", facesComponent);
-					additionalAttributes.addAll(clientComponentAttributes);
-				}
-
-				if (facesComponent.isStyleable()) {
-					List<FacesAttribute> styleableAttributes =
-						_getInterfaceAttributes(extensionElement, "styleableAttributes", facesComponent);
-					additionalAttributes.addAll(styleableAttributes);
-				}
-			}
-		}
-
-		return additionalAttributes;
-	}
-
-	private List<FacesAttribute> _getInterfaceAttributes(
-		Element extensionElement, String interfaceAttributesElementName,
-			FacesComponent facesComponent) {
-
-		Element interfaceAttributesElement = extensionElement.element(interfaceAttributesElementName);
-
-		List<Element> interfaceAttributeElementList = interfaceAttributesElement.elements("attribute");
-		List<FacesAttribute> facesAttributeList = new ArrayList<FacesAttribute>();
-
-		for (Element interfaceAttributeElement : interfaceAttributeElementList) {
-			FacesAttribute facesAttribute = new FacesAttribute();
-			facesAttribute.initialize(interfaceAttributeElement, facesComponent);
-			facesAttributeList.add(facesAttribute);
-		}
-
-		return facesAttributeList;
 	}
 
 	private void _buildComponentBase(FacesComponent facesComponent,
@@ -288,7 +238,7 @@ public class FacesBuilder extends BaseBuilder {
 		String path = getComponentOutputDir(facesComponent);
 
 		String componentBaseContent = processTemplate(_tplComponentBase,
-				context);
+			context);
 
 		StringBuilder fileNameSb = new StringBuilder(4);
 
@@ -308,7 +258,7 @@ public class FacesBuilder extends BaseBuilder {
 		String path = getComponentOutputDir(facesComponent);
 
 		String componentBaseContent = processTemplate(_tplComponentInterface,
-				context);
+			context);
 
 		StringBuilder fileNameSb = new StringBuilder(4);
 
@@ -368,10 +318,10 @@ public class FacesBuilder extends BaseBuilder {
 			Element root = doc.getRootElement();
 
 			String namespace = Convert.toString(root
-					.attributeValue("namespace"));
+				.attributeValue("namespace"));
 
 			String namespaceURI = Convert.toString(root
-					.attributeValue("namespaceURI"));
+				.attributeValue("namespaceURI"));
 
 			Element descriptionElement = root.element("description");
 
@@ -384,25 +334,23 @@ public class FacesBuilder extends BaseBuilder {
 			Element extensionElement = root.element("extension");
 
 			if (extensionElement != null) {
-
 				List<Element> functions = extensionElement.elements("function");
 				List<Map<String, String>> functionsList = new ArrayList<Map<String, String>>();
 
 				for (Element function : functions) {
-
 					Map<String, String> functionMap = new HashMap<String, String>();
 
 					String functionDescription = function
-							.element("description").getText();
+						.element("description").getText();
 					functionMap.put("description", functionDescription);
 					String functionName = function.element("function-name")
-							.getText();
+						.getText();
 					functionMap.put("name", functionName);
 					String functionClass = function.element("function-class")
-							.getText();
+						.getText();
 					functionMap.put("class", functionClass);
 					String functionSignature = function.element(
-							"function-signature").getText();
+						"function-signature").getText();
 					functionMap.put("signature", functionSignature);
 
 					functionsList.add(functionMap);
@@ -425,17 +373,62 @@ public class FacesBuilder extends BaseBuilder {
 			String path = getTaglibsXMLOutputDir();
 
 			File rendererFile = new File(path.concat(namespace).concat(
-					_TAGLIB_XML_EXT));
+				_TAGLIB_XML_EXT));
 
 			writeFile(rendererFile, rendererContent, true);
 		}
 	}
 
+	private List<FacesAttribute> _getAdditionalAttributes(FacesComponent facesComponent) {
+
+		List<FacesAttribute> additionalAttributes = new ArrayList<FacesAttribute>();
+
+		for (Document doc : getComponentDefinitionDocs()) {
+			Element root = doc.getRootElement();
+
+			Element extensionElement = root.element("extension");
+
+			if (extensionElement != null) {
+				if (facesComponent.isAlloyComponent()) {
+					List<FacesAttribute> clientComponentAttributes =
+						_getInterfaceAttributes(extensionElement, "clientComponentAttributes", facesComponent);
+					additionalAttributes.addAll(clientComponentAttributes);
+				}
+
+				if (facesComponent.isStyleable()) {
+					List<FacesAttribute> styleableAttributes =
+						_getInterfaceAttributes(extensionElement, "styleableAttributes", facesComponent);
+					additionalAttributes.addAll(styleableAttributes);
+				}
+			}
+		}
+
+		return additionalAttributes;
+	}
+
+	private List<FacesAttribute> _getInterfaceAttributes(
+		Element extensionElement, String interfaceAttributesElementName,
+			FacesComponent facesComponent) {
+
+		Element interfaceAttributesElement = extensionElement.element(interfaceAttributesElementName);
+
+		List<Element> interfaceAttributeElementList = interfaceAttributesElement.elements("attribute");
+		List<FacesAttribute> facesAttributeList = new ArrayList<FacesAttribute>();
+
+		for (Element interfaceAttributeElement : interfaceAttributeElementList) {
+			FacesAttribute facesAttribute = new FacesAttribute();
+			facesAttribute.initialize(interfaceAttributeElement, facesComponent);
+			facesAttributeList.add(facesAttribute);
+		}
+
+		return facesAttributeList;
+	}
+
 	private static final String _BASE_CLASS_SUFFIX = "Base";
 
-	private static final String _INTERFACE_CLASS_SUFFIX = "Alloy";
-
 	private static final String _COMPONENTS_PACKAGE = "com.liferay.faces.alloy.component";
+
+	private static final String _INTERFACE_CLASS_SUFFIX = "Alloy";
 
 	private static final String _JAVA_EXT = ".java";
 

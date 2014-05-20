@@ -19,49 +19,18 @@ import com.liferay.alloy.tools.model.Component;
 import com.liferay.alloy.util.ReservedAttributeUtil;
 import com.liferay.alloy.util.StringUtil;
 import com.liferay.alloy.util.TypeUtil;
+
 import jodd.typeconverter.Convert;
+
 import org.dom4j.Element;
-
 public class FacesAttribute extends Attribute {
-
-	@Override
-	public void initialize(Element facesAttributeElement, Component component) {
-		super.initialize(facesAttributeElement, component);
-
-		_getterDefaultReturnValue = Convert.toString(
-			facesAttributeElement.elementText("getterDefaultReturnValue"),
-			"null");
-		_methodSignature = facesAttributeElement
-				.elementText("method-signature");
-		_outputUnsafe = Convert.toBoolean(facesAttributeElement
-			.elementText("outputUnsafe"), false);
-		
-		String type = Convert.toString(
-				facesAttributeElement.elementText("type"), DEFAULT_TYPE);
-		String rawJavaScriptType = Convert.toString(
-			facesAttributeElement.elementText("rawJavaScriptType"), type);
-		setJavaScriptType(rawJavaScriptType);
-
-		boolean jsfReservedAttributeDefault =
-			ReservedAttributeUtil.isJSFReservedAttribute(getName());
-		_jsfReservedAttribute = Convert.toBoolean(facesAttributeElement
-			.elementText("jsfReservedAttribute"), jsfReservedAttributeDefault);
-
-		_jsfReservedAttributeType = type;
-
-		if (_jsfReservedAttribute) {
-
-			String jsfReservedAttributeTypeDefault =
-				ReservedAttributeUtil.getJSFReservedAttributeType(getName());
-			_jsfReservedAttributeType = Convert.toString(facesAttributeElement
-				.elementText("jsfReservedAttributeType"),
-				jsfReservedAttributeTypeDefault);
-			_jsfReservedAttributeType = TypeUtil.removeJavaPrefix(_jsfReservedAttributeType);
-		}
-	}
 
 	public String getCapitalizedJSFReservedAttributeType() {
 		return StringUtil.capitalize(_jsfReservedAttributeType);
+	}
+
+	public String getGetterDefaultReturnValue() {
+		return _getterDefaultReturnValue;
 	}
 
 	@Override
@@ -79,8 +48,8 @@ public class FacesAttribute extends Attribute {
 		} else {
 			javaWrapperType = getJavaScriptType();
 
-			if (javaWrapperType.equals(TypeUtil.COMPLEX_BOOLEAN)
-					|| javaWrapperType.equals(TypeUtil.COMPLEX_NUMBER)) {
+			if (javaWrapperType.equals(TypeUtil.COMPLEX_BOOLEAN) ||
+				javaWrapperType.equals(TypeUtil.COMPLEX_NUMBER)) {
 				javaWrapperType = "Object";
 			}
 
@@ -108,12 +77,51 @@ public class FacesAttribute extends Attribute {
 		}
 	}
 
+	@Override
+	public void initialize(Element facesAttributeElement, Component component) {
+		super.initialize(facesAttributeElement, component);
+
+		_getterDefaultReturnValue = Convert.toString(
+			facesAttributeElement.elementText("getterDefaultReturnValue"),
+			"null");
+		_methodSignature = facesAttributeElement
+			.elementText("method-signature");
+		_outputUnsafe = Convert.toBoolean(facesAttributeElement
+			.elementText("outputUnsafe"), false);
+
+		String type = Convert.toString(
+			facesAttributeElement.elementText("type"), DEFAULT_TYPE);
+		String rawJavaScriptType = Convert.toString(
+			facesAttributeElement.elementText("rawJavaScriptType"), type);
+		setJavaScriptType(rawJavaScriptType);
+
+		boolean jsfReservedAttributeDefault =
+			ReservedAttributeUtil.isJSFReservedAttribute(getName());
+		_jsfReservedAttribute = Convert.toBoolean(facesAttributeElement
+			.elementText("jsfReservedAttribute"), jsfReservedAttributeDefault);
+
+		_jsfReservedAttributeType = type;
+
+		if (_jsfReservedAttribute) {
+			String jsfReservedAttributeTypeDefault =
+				ReservedAttributeUtil.getJSFReservedAttributeType(getName());
+			_jsfReservedAttributeType = Convert.toString(facesAttributeElement
+				.elementText("jsfReservedAttributeType"),
+				jsfReservedAttributeTypeDefault);
+			_jsfReservedAttributeType = TypeUtil.removeJavaPrefix(_jsfReservedAttributeType);
+		}
+	}
+
 	public boolean isJSFReservedAttribute() {
 		return _jsfReservedAttribute;
 	}
 
 	public boolean isOutputUnsafe() {
 		return _outputUnsafe;
+	}
+
+	public void setGetterDefaultReturnValue(String _getterDefaultReturnValue) {
+		this._getterDefaultReturnValue = _getterDefaultReturnValue;
 	}
 
 	public void setJSFReservedAttribute(boolean _jsfReservedAttribute) {
@@ -132,14 +140,6 @@ public class FacesAttribute extends Attribute {
 		this._outputUnsafe = _outputUnsafe;
 	}
 
-	public String getGetterDefaultReturnValue() {
-		return _getterDefaultReturnValue;
-	}
-
-	public void setGetterDefaultReturnValue(String _getterDefaultReturnValue) {
-		this._getterDefaultReturnValue = _getterDefaultReturnValue;
-	}
-	
 	private String _getterDefaultReturnValue;
 	private boolean _jsfReservedAttribute;
 	private String _jsfReservedAttributeType;

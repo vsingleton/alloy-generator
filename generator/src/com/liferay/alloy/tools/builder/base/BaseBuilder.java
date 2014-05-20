@@ -255,7 +255,6 @@ public abstract class BaseBuilder {
 			Element doc1Component = getComponentNode(doc1, name);
 
 			if (doc1Component != null) {
-
 				Element doc1ComponentDescriptionElement = doc1Component.element("description");
 
 				if (doc1ComponentDescriptionElement != null) {
@@ -263,8 +262,8 @@ public abstract class BaseBuilder {
 
 					if (descriptionElement != null) {
 						component.remove(descriptionElement);
-					} 
-					
+					}
+
 					component.add(doc1ComponentDescriptionElement.createCopy());
 				}
 
@@ -343,7 +342,6 @@ public abstract class BaseBuilder {
 			}
 		}
 
-
 		Element extensionElement = doc1Root.element("extension");
 
 		if (extensionElement != null) {
@@ -394,7 +392,6 @@ public abstract class BaseBuilder {
 		File parentXML = null;
 
 		if (StringUtil.isNotBlank(parentXMLPath)) {
-
 			parentXML = new File(parentXMLPath);
 
 			if (!parentXML.exists()) {
@@ -418,8 +415,10 @@ public abstract class BaseBuilder {
 					". File does not exist.");
 			}
 		}
+
 		return document;
 	}
+
 	private static final String _ATTRIBUTE = "attribute";
 
 	private static final String _ATTRIBUTES = "attributes";

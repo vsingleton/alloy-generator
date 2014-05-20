@@ -14,7 +14,6 @@
 
 package com.liferay.alloy.tools.model;
 
-import com.liferay.alloy.util.StringUtil;
 import jodd.util.StringPool;
 
 /**
@@ -46,11 +45,11 @@ public abstract class BaseModel implements Comparable<Object> {
 			_cleanDescription = _cleanDescription.trim();
 		}
 
-		return _cleanDescription; 
+		return _cleanDescription;
 	}
 
 	public String getDescription() {
-		return	_description;
+		return _description;
 	}
 
 	public String getName() {
@@ -61,20 +60,20 @@ public abstract class BaseModel implements Comparable<Object> {
 		return _name.hashCode();
 	}
 
-	public void setDescription(String description) {
-		_description = description;
-	}
-
-	public void setName(String name) {
-		_name = name;
-	}
-
 	public boolean isGenerateJava() {
 		return _generateJava;
 	}
 
+	public void setDescription(String description) {
+		_description = description;
+	}
+
 	public void setGenerateJava(boolean _generateJava) {
 		this._generateJava = _generateJava;
+	}
+
+	public void setName(String name) {
+		_name = name;
 	}
 
 	private String _cleanDescription;
