@@ -70,7 +70,8 @@ public class FacesBuilder extends BaseBuilder {
 		List<Component> components = getAllComponents();
 
 		for (Component component : components) {
-			FacesComponent facesComponent = (FacesComponent)component;
+			FacesComponent facesComponent = (FacesComponent) component;
+			List<FacesAttribute> additionalAttributes = _getAdditionalAttributes(facesComponent);
 
 			if (facesComponent.isGenerateJava()) {
 				Map<String, Object> context = getTemplateContext(component);
@@ -79,8 +80,6 @@ public class FacesBuilder extends BaseBuilder {
 				context.put("RENDERER_CLASS_SUFFIX", _RENDERER_CLASS_SUFFIX);
 				context.put("INTERFACE_CLASS_SUFFIX", _INTERFACE_CLASS_SUFFIX);
 				context.put("RENDERER_BASE_CLASS_SUFFIX", _RENDERER_CLASS_SUFFIX + _BASE_CLASS_SUFFIX);
-
-				List<FacesAttribute> additionalAttributes = _getAdditionalAttributes(facesComponent);
 
 				_buildComponent(facesComponent, context);
 
@@ -104,9 +103,13 @@ public class FacesBuilder extends BaseBuilder {
 					_buildRendererBase(facesComponent, context);
 				}
 			}
+
+			if (additionalAttributes.size() > 0) {
+				facesComponent.getAttributes().addAll(additionalAttributes);
+			}
 		}
 
-		_buildTaglibsXML();
+		_buildTaglibsXML(components);
 
 		System.out.println("Finished looping over " + components.size() +
 			" components.");
@@ -133,11 +136,6 @@ public class FacesBuilder extends BaseBuilder {
 	@Override
 	protected List<Component> getComponents(Document doc) throws Exception {
 		Element root = doc.getRootElement();
-		return getComponents(doc, false);
-	}
-
-	protected List<Component> getComponents(Document doc, boolean addAdditionalAttributes) throws Exception {
-		Element root = doc.getRootElement();
 
 		Map<String, Component> facesComponentsMap = new HashMap<String, Component>();
 
@@ -147,16 +145,6 @@ public class FacesBuilder extends BaseBuilder {
 		for (Element node : allComponentNodes) {
 			FacesComponent facesComponent = new FacesComponent();
 			facesComponent.initialize(node, defaultPackage);
-
-			if (addAdditionalAttributes) {
-				List<FacesAttribute> additionalAttributes = new ArrayList<FacesAttribute>();
-				additionalAttributes = _getAdditionalAttributes(facesComponent);
-
-				if (additionalAttributes.size() > 0) {
-					facesComponent.getAttributes().addAll(additionalAttributes);
-				}
-			}
-
 			facesComponentsMap.put(facesComponent.getName(), facesComponent);
 		}
 
@@ -311,7 +299,7 @@ public class FacesBuilder extends BaseBuilder {
 		writeFile(rendererBaseFile, rendererBaseContent);
 	}
 
-	private void _buildTaglibsXML() throws Exception {
+	private void _buildTaglibsXML(List<Component> components) throws Exception {
 		Map<String, Object> context = getDefaultTemplateContext();
 
 		for (Document doc : getComponentDefinitionDocs()) {
@@ -359,7 +347,7 @@ public class FacesBuilder extends BaseBuilder {
 				context.put("functions", functionsList);
 			}
 
-			context.put("components", getComponents(doc, true));
+			context.put("components", components);
 			context.put("namespaceURI", namespaceURI);
 			context.put("description", description);
 			context.put("version", _version);
