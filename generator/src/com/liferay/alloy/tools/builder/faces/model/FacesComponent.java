@@ -58,6 +58,8 @@ public class FacesComponent extends Component {
 			String defaultPackage) {
 		super.initialize(facesComponentElement, defaultPackage);
 
+		_generateTaglibXML = Convert.toBoolean(
+			facesComponentElement.attributeValue("generateTaglibXML"), true);
 		_styleable = Convert.toBoolean(
 			facesComponentElement.attributeValue("styleable"), true);
 
@@ -143,6 +145,16 @@ public class FacesComponent extends Component {
 
 	private static final String _DEFAULT_RENDERER_BASE_CLASS =
 		"javax.faces.render.Renderer";
+
+	public boolean isGenerateTaglibXML() {
+		return _generateTaglibXML;
+	}
+
+	public void setGenerateTaglibXML(boolean _generateTaglibXML) {
+		this._generateTaglibXML = _generateTaglibXML;
+	}
+
+	private boolean _generateTaglibXML;
 	private boolean _styleable;
 
 	private String _rendererParentClass;

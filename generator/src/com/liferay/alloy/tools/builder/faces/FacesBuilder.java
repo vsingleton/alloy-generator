@@ -35,6 +35,16 @@ import jodd.util.StringPool;
 
 import org.dom4j.Document;
 import org.dom4j.Element;
+
+import com.liferay.alloy.tools.builder.base.BaseBuilder;
+import com.liferay.alloy.tools.builder.faces.model.FacesAttribute;
+import com.liferay.alloy.tools.model.Component;
+import com.liferay.alloy.tools.builder.faces.model.FacesComponent;
+import com.liferay.alloy.tools.model.Attribute;
+import com.liferay.alloy.tools.model.Event;
+import com.liferay.alloy.util.PropsUtil;
+import java.util.Iterator;
+
 public class FacesBuilder extends BaseBuilder {
 
 	public static void main(String[] args) throws Exception {
@@ -68,10 +78,11 @@ public class FacesBuilder extends BaseBuilder {
 	@Override
 	public void build() throws Exception {
 		List<Component> components = getAllComponents();
+		Iterator<Component> iterator = components.iterator();
 
-		for (Component component : components) {
+		while (iterator.hasNext()) {
+			Component component = iterator.next();
 			FacesComponent facesComponent = (FacesComponent) component;
-			List<FacesAttribute> additionalAttributes = _getAdditionalAttributes(facesComponent);
 
 			if (facesComponent.isGenerateJava()) {
 				Map<String, Object> context = getTemplateContext(component);
@@ -80,32 +91,34 @@ public class FacesBuilder extends BaseBuilder {
 				context.put("RENDERER_CLASS_SUFFIX", _RENDERER_CLASS_SUFFIX);
 				context.put("INTERFACE_CLASS_SUFFIX", _INTERFACE_CLASS_SUFFIX);
 				context.put("RENDERER_BASE_CLASS_SUFFIX", _RENDERER_CLASS_SUFFIX + _BASE_CLASS_SUFFIX);
+		
+				_buildRenderer(facesComponent, context);
+
+				if (facesComponent.isAlloyComponent()) {
+					_buildRendererBase(facesComponent, context);
+					_buildComponentInterface(facesComponent, context);
+				}
 
 				_buildComponent(facesComponent, context);
+ 
+				List<FacesAttribute> additionalAttributes = _getAdditionalAttributes(facesComponent);
 
 				if (additionalAttributes.size() > 0) {
 					facesComponent.getAttributes().addAll(additionalAttributes);
 				}
 
 				_buildComponentBase(facesComponent, context);
+			} else {
+
+				List<FacesAttribute> additionalAttributes = _getAdditionalAttributes(facesComponent);
 
 				if (additionalAttributes.size() > 0) {
-					facesComponent.getAttributes().removeAll(additionalAttributes);
-				}
-
-				if (facesComponent.isAlloyComponent()) {
-					_buildComponentInterface(facesComponent, context);
-				}
-
-				_buildRenderer(facesComponent, context);
-
-				if (facesComponent.isAlloyComponent()) {
-					_buildRendererBase(facesComponent, context);
+					facesComponent.getAttributes().addAll(additionalAttributes);
 				}
 			}
 
-			if (additionalAttributes.size() > 0) {
-				facesComponent.getAttributes().addAll(additionalAttributes);
+			if (!facesComponent.isGenerateTaglibXML()) {
+				iterator.remove();
 			}
 		}
 
