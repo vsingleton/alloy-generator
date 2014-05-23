@@ -191,7 +191,7 @@ public class FacesBuilder extends BaseBuilder {
 
 	protected void recursivelyAddExtensionAttributesAndEvents(Component component, Map<String, Component> facesComponentsMap) {
 
-		String extensionName = component.getExtends();
+		String extensionName = component.getExtendsTag();
 
 		if (extensionName != null) {
 			Component extensionComponent = facesComponentsMap.get(extensionName);

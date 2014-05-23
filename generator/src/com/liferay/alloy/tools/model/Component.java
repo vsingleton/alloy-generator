@@ -76,8 +76,12 @@ public class Component extends BaseModel {
 		return _events;
 	}
 
-	public String getExtends() {
-		return _extends;
+	public String getExtendsTag() {
+		return _extendsTag;
+	}
+
+	public void setExtendsTag(String _extends) {
+		this._extendsTag = _extends;
 	}
 
 	public String getInterface() {
@@ -152,12 +156,12 @@ public class Component extends BaseModel {
 		if (descriptionElement != null) {
 			description = Convert.toString(descriptionElement.getText());
 		}
-
+		
 		setDescription(description);
 
 		Element authorsElement = componentElement.element("authors");
-
 		if (authorsElement != null) {
+
 			List<String> authors = new ArrayList<String>();
 			List<Element> authorElementsList = authorsElement.elements("author");
 
@@ -178,8 +182,8 @@ public class Component extends BaseModel {
 			componentElement.attributeValue("bodyContent"), false);
 		_componentInterface = Convert.toString(
 			componentElement.attributeValue("componentInterface"), null);
-		_extends = Convert.toString(
-			componentElement.attributeValue("extends"), null);
+		_extendsTag = Convert.toString(
+			componentElement.attributeValue("extendsTag"), null);
 		_module = Convert.toString(
 			componentElement.attributeValue("module"), null);
 		_package = Convert.toString(
@@ -192,7 +196,6 @@ public class Component extends BaseModel {
 
 		Element attributesElement = componentElement.element("attributes");
 		_attributes = new ArrayList<Attribute>();
-
 		if (attributesElement != null) {
 			List<Element> attributeElementsList = attributesElement.elements("attribute");
 			_attributes.addAll(getAttributesFromElements(attributeElementsList));
@@ -200,10 +203,9 @@ public class Component extends BaseModel {
 
 		Element eventsElement = componentElement.element("events");
 		_events = new ArrayList<Event>();
-
 		if (eventsElement != null) {
 			List<Element> eventElementsList = eventsElement.elements("event");
-			_events.addAll(getEventsFromElements(eventElementsList));
+			_events.addAll(getEventsFromElements(eventElementsList));	
 		}
 	}
 
@@ -299,6 +301,7 @@ public class Component extends BaseModel {
 		List<Event> events = new ArrayList<Event>();
 
 		for (Element eventElement : eventElements) {
+
 			Attribute attribute = new Attribute();
 			attribute.initialize(eventElement, this);
 
@@ -325,5 +328,6 @@ public class Component extends BaseModel {
 	private String _module;
 	private String _package;
 	private String _parentClass;
+	private String _extendsTag;
 
 }
