@@ -51,45 +51,6 @@ public abstract class ${component.getCamelizedName()}${RENDERER_BASE_CLASS_SUFFI
 		}
 		</#if>
 		</#list>
-
-		// Begin encoding "after" object
-		encodeObject(responseWriter, AlloyConstants.AFTER, StringPool.BLANK, first);
-		responseWriter.write(StringPool.OPEN_CURLY_BRACE);
-
-		first = true;
-		<#list component.getAfterEvents()?sort_by("javaSafeName") as event>
-
-		${event.getJavaWrapperType()} ${event.getJavaSafeName()} = ${component.getUncapitalizedName()}${INTERFACE_CLASS_SUFFIX}.get${event.getJavaBeanPropertyName()}();
-
-		if (${event.getJavaSafeName()} != null) {
-
-			encode${event.getCapitalizedName()}(responseWriter, ${component.getUncapitalizedName()}${INTERFACE_CLASS_SUFFIX}, ${event.getJavaSafeName()}, first);
-			first = false;
-		}
-		</#list>
-
-		// End encoding "after" object
-		responseWriter.write(StringPool.CLOSE_CURLY_BRACE);
-
-		// Begin encoding "on" object
-		first = false;
-		encodeObject(responseWriter, AlloyConstants.ON, StringPool.BLANK, first);
-		responseWriter.write(StringPool.OPEN_CURLY_BRACE);
-
-		first = true;
-		<#list component.getOnEvents()?sort_by("javaSafeName") as event>
-
-		${event.getJavaWrapperType()} ${event.getJavaSafeName()} = ${component.getUncapitalizedName()}${INTERFACE_CLASS_SUFFIX}.get${event.getJavaBeanPropertyName()}();
-
-		if (${event.getJavaSafeName()} != null) {
-
-			encode${event.getCapitalizedName()}(responseWriter, ${component.getUncapitalizedName()}${INTERFACE_CLASS_SUFFIX}, ${event.getJavaSafeName()}, first);
-			first = false;
-		}
-		</#list>
-
-		// End encoding "on" object
-		responseWriter.write(StringPool.CLOSE_CURLY_BRACE);
 	}
 
 	@Override
@@ -101,13 +62,8 @@ public abstract class ${component.getCamelizedName()}${RENDERER_BASE_CLASS_SUFFI
 	protected String[] getModules() {
 		return MODULES;
 	}
-	<#list component.getAttributesAndEvents()?sort_by("capitalizedName") as attribute>
-	<#if attribute.isEvent()>
-
-	protected void encode${attribute.getCapitalizedName()}(ResponseWriter responseWriter, ${component.getCamelizedName()}${INTERFACE_CLASS_SUFFIX} ${component.getUncapitalizedName()}${INTERFACE_CLASS_SUFFIX}, ${attribute.getJavaWrapperType()} ${attribute.getJavaSafeName()}, boolean first) throws IOException {
-		encodeEvent(responseWriter, ${attribute.getConstantUnprefixedName()}, ${attribute.getJavaSafeName()}, first);
-	}
-	<#elseif attribute.isGettable() && attribute.isGenerateJava() && attribute.isJavaScript()>
+	<#list component.getAttributes()?sort_by("capitalizedName") as attribute>
+	<#if attribute.isGettable() && attribute.isGenerateJava() && attribute.isJavaScript()>
 
 	protected void encode${attribute.getCapitalizedName()}(ResponseWriter responseWriter, ${component.getCamelizedName()}${INTERFACE_CLASS_SUFFIX} ${component.getUncapitalizedName()}${INTERFACE_CLASS_SUFFIX}, ${attribute.getJavaWrapperType()} ${attribute.getJavaSafeName()}, boolean first) throws IOException {
 		encode${attribute.getFacesJavaScriptType()}(responseWriter, ${component.getCamelizedName()}${INTERFACE_CLASS_SUFFIX}.${attribute.getConstantName()}, ${attribute.getJavaSafeName()}, first);

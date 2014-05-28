@@ -21,20 +21,20 @@ import javax.annotation.Generated;
 public interface ${component.getCamelizedName()}${INTERFACE_CLASS_SUFFIX} {
 
 	// Public Constants
-	<#list component.getAttributesAndEvents()?sort_by("constantName") as attribute>
-	<#if attribute.isGenerateJava() && (attribute.isEvent() || attribute.isJavaScript())>
+	<#list component.getAttributes()?sort_by("constantName") as attribute>
+	<#if attribute.isGenerateJava() && attribute.isJavaScript()>
 	public static final String ${attribute.getConstantName()} = "${attribute.getName()}";
 	</#if>
 	</#list>
-	<#list component.getAttributesAndEvents()?sort_by("javaBeanPropertyName") as attribute>
-	<#if attribute.isGenerateJava() && (attribute.isEvent() || attribute.isJavaScript())>
+	<#list component.getAttributes()?sort_by("javaBeanPropertyName") as attribute>
+	<#if attribute.isGenerateJava() && attribute.isJavaScript()>
 	<#if attribute.isGettable()>
 
-	public <#if !attribute.isEvent() && attribute.isJSFReservedAttribute()>${attribute.getJSFReservedAttributeType()?replace('java.lang.','')}<#else>${attribute.getJavaWrapperType()}</#if> ${attribute.getGetterMethodPrefix()}${attribute.getJavaBeanPropertyName()}();
+	public <#if attribute.isJSFReservedAttribute()>${attribute.getJSFReservedAttributeType()?replace('java.lang.','')}<#else>${attribute.getJavaWrapperType()}</#if> ${attribute.getGetterMethodPrefix()}${attribute.getJavaBeanPropertyName()}();
 	</#if>
 	<#if attribute.isSettable()>
 
-	public void set${attribute.getJavaBeanPropertyName()}(<#if !attribute.isEvent() && attribute.isJSFReservedAttribute()>${attribute.getJSFReservedAttributeType()?replace('java.lang.','')}<#else>${attribute.getJavaWrapperType()}</#if> ${attribute.getJavaSafeName()});
+	public void set${attribute.getJavaBeanPropertyName()}(<#if attribute.isJSFReservedAttribute()>${attribute.getJSFReservedAttributeType()?replace('java.lang.','')}<#else>${attribute.getJavaWrapperType()}</#if> ${attribute.getJavaSafeName()});
 	</#if>
 	</#if>
 	</#list>

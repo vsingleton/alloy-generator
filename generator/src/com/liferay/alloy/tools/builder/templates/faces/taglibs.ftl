@@ -26,7 +26,7 @@ http://java.sun.com/xml/ns/javaee/web-facelettaglibrary_2_0.xsd http://vdldoc.or
 			<component-type>${packagePath}.${component.getUncamelizedName(BLANK)}.${component.getCamelizedName()}</component-type>
 			<renderer-type>${packagePath}.${component.getUncamelizedName(BLANK)}.${component.getCamelizedName()}${RENDERER_CLASS_SUFFIX}</renderer-type>
 		</component>
-		<#list component.getAttributesAndEvents()?sort_by("safeName") as attribute>
+		<#list component.getAttributes()?sort_by("safeName") as attribute>
 		<#if attribute.isSettable() || attribute.isGettable()>
 		<attribute>
 			<#if attribute.getDescription()??>
@@ -34,12 +34,12 @@ http://java.sun.com/xml/ns/javaee/web-facelettaglibrary_2_0.xsd http://vdldoc.or
 			</#if>
 			<name>${attribute.getSafeName()}</name>
 			<required>${attribute.isRequired()?string("true", "false")}</required>
-			<#if !attribute.isEvent() && attribute.isJSFReservedAttribute()>
+			<#if attribute.isJSFReservedAttribute()>
 			<type>${attribute.getJSFReservedAttributeType()}</type>
 			<#else>
 			<type>${attribute.getType()}</type>
 			</#if>
-			<#if !attribute.isEvent() && attribute.getMethodSignature()??>
+			<#if attribute.getMethodSignature()??>
 			<method-signature><#compress>${attribute.getMethodSignature()}</#compress></method-signature>
 			</#if>
 		</attribute>
