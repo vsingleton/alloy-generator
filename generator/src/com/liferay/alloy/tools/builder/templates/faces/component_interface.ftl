@@ -22,12 +22,12 @@ public interface ${component.getCamelizedName()}${INTERFACE_CLASS_SUFFIX} {
 
 	// Public Constants
 	<#list component.getAttributesAndEvents()?sort_by("constantName") as attribute>
-	<#if attribute.isGenerateJava()>
+	<#if attribute.isGenerateJava() && (attribute.isEvent() || attribute.isJavaScript())>
 	public static final String ${attribute.getConstantName()} = "${attribute.getName()}";
 	</#if>
 	</#list>
 	<#list component.getAttributesAndEvents()?sort_by("javaBeanPropertyName") as attribute>
-	<#if attribute.isGenerateJava()>
+	<#if attribute.isGenerateJava() && (attribute.isEvent() || attribute.isJavaScript())>
 	<#if attribute.isGettable()>
 
 	public <#if !attribute.isEvent() && attribute.isJSFReservedAttribute()>${attribute.getJSFReservedAttributeType()?replace('java.lang.','')}<#else>${attribute.getJavaWrapperType()}</#if> ${attribute.getGetterMethodPrefix()}${attribute.getJavaBeanPropertyName()}();

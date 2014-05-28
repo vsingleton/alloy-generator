@@ -112,6 +112,8 @@ public class FacesAttribute extends Attribute {
 		_getterDefaultReturnValue = Convert.toString(
 			facesAttributeElement.elementText("getterDefaultReturnValue"),
 			"null");
+		_javaScript = Convert.toBoolean(facesAttributeElement
+			.elementText("javaScript"), true);
 		_methodSignature = facesAttributeElement
 				.elementText("method-signature");
 		_outputUnsafe = Convert.toBoolean(facesAttributeElement
@@ -127,16 +129,13 @@ public class FacesAttribute extends Attribute {
 				type);
 		}
 	}
+
 	public boolean isJSFReservedAttribute() {
 		return _jsfReservedAttribute;
 	}
 
 	public boolean isOutputUnsafe() {
 		return _outputUnsafe;
-	}
-
-	public void setGetterDefaultReturnValue(String _getterDefaultReturnValue) {
-		this._getterDefaultReturnValue = _getterDefaultReturnValue;
 	}
 
 	public void setJSFReservedAttribute(boolean _jsfReservedAttribute) {
@@ -155,7 +154,24 @@ public class FacesAttribute extends Attribute {
 		this._outputUnsafe = _outputUnsafe;
 	}
 
+	public String getGetterDefaultReturnValue() {
+		return _getterDefaultReturnValue;
+	}
+
+	public void setGetterDefaultReturnValue(String _getterDefaultReturnValue) {
+		this._getterDefaultReturnValue = _getterDefaultReturnValue;
+	}
+
+	public boolean isJavaScript() {
+		return _javaScript;
+	}
+
+	public void setJavaScript(boolean _javaScript) {
+		this._javaScript = _javaScript;
+	}
+
 	private String _getterDefaultReturnValue;
+	private boolean _javaScript;
 	private boolean _jsfReservedAttribute;
 	private String _jsfReservedAttributeType;
 	private String _methodSignature;
