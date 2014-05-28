@@ -40,7 +40,7 @@ http://java.sun.com/xml/ns/javaee/web-facelettaglibrary_2_0.xsd http://vdldoc.or
 			<type>${attribute.getType()}</type>
 			</#if>
 			<#if !attribute.isEvent() && attribute.getMethodSignature()??>
-			<method-signature>${attribute.getMethodSignature()}</method-signature>
+			<method-signature><#compress>${attribute.getMethodSignature()}</#compress></method-signature>
 			</#if>
 		</attribute>
 		</#if>
