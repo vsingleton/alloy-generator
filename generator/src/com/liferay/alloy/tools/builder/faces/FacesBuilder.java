@@ -14,14 +14,6 @@
 
 package com.liferay.alloy.tools.builder.faces;
 
-import com.liferay.alloy.tools.builder.base.BaseBuilder;
-import com.liferay.alloy.tools.builder.faces.model.FacesAttribute;
-import com.liferay.alloy.tools.builder.faces.model.FacesComponent;
-import com.liferay.alloy.tools.model.Attribute;
-import com.liferay.alloy.tools.model.Component;
-import com.liferay.alloy.tools.model.Event;
-import com.liferay.alloy.util.PropsUtil;
-
 import java.io.File;
 
 import java.util.ArrayList;
@@ -91,29 +83,14 @@ public class FacesBuilder extends BaseBuilder {
 				context.put("RENDERER_CLASS_SUFFIX", _RENDERER_CLASS_SUFFIX);
 				context.put("INTERFACE_CLASS_SUFFIX", _INTERFACE_CLASS_SUFFIX);
 				context.put("RENDERER_BASE_CLASS_SUFFIX", _RENDERER_CLASS_SUFFIX + _BASE_CLASS_SUFFIX);
-		
+
+				_buildComponent(facesComponent, context);
+				_buildComponentBase(facesComponent, context);
 				_buildRenderer(facesComponent, context);
 
 				if (facesComponent.isAlloyComponent()) {
 					_buildRendererBase(facesComponent, context);
 					_buildComponentInterface(facesComponent, context);
-				}
-
-				_buildComponent(facesComponent, context);
- 
-				List<FacesAttribute> additionalAttributes = _getAdditionalAttributes(facesComponent);
-
-				if (additionalAttributes.size() > 0) {
-					facesComponent.getAttributes().addAll(additionalAttributes);
-				}
-
-				_buildComponentBase(facesComponent, context);
-			} else {
-
-				List<FacesAttribute> additionalAttributes = _getAdditionalAttributes(facesComponent);
-
-				if (additionalAttributes.size() > 0) {
-					facesComponent.getAttributes().addAll(additionalAttributes);
 				}
 			}
 
@@ -191,28 +168,34 @@ public class FacesBuilder extends BaseBuilder {
 
 	protected void recursivelyAddExtensionAttributesAndEvents(Component component, Map<String, Component> facesComponentsMap) {
 
-		String extensionName = component.getExtendsTag();
+		String[] extensionNames = component.getExtendsTags();
 
-		if (extensionName != null) {
-			Component extensionComponent = facesComponentsMap.get(extensionName);
-			recursivelyAddExtensionAttributesAndEvents(extensionComponent, facesComponentsMap);
-			List<Attribute> extensionAttributes = extensionComponent.getAttributesAndEvents();
+		if (extensionNames != null) {
 
-			if (extensionAttributes.size() > 0) {
-				List<Attribute> attributes = component.getAttributes();
-				List<Event> events = component.getEvents();
+			for(String extensionName : extensionNames) {
+				Component extensionComponent = facesComponentsMap.get(extensionName);
+				recursivelyAddExtensionAttributesAndEvents(extensionComponent, facesComponentsMap);
+				List<Attribute> extensionAttributes = extensionComponent.getAttributesAndEvents();
 
-				for (Attribute extensionAttribute : extensionAttributes) {
-					if (extensionAttribute instanceof Event) {
-						Event event = (Event)extensionAttribute;
+				if (extensionAttributes.size() > 0) {
 
-						if (!events.contains(event)) {
-							events.add(event);
-						}
-					} else {
+					List<Attribute> attributes = component.getAttributes();
+					List<Event> events = component.getEvents();
 
-						if (!attributes.contains(extensionAttribute)) {
-							attributes.add(extensionAttribute);
+					for (Attribute extensionAttribute : extensionAttributes) {
+
+						if (extensionAttribute instanceof Event) {
+
+							Event event = (Event) extensionAttribute;
+
+							if (!events.contains(event)) {
+								events.add(event);
+							}
+						} else {
+
+							if (!attributes.contains(extensionAttribute)) {
+								attributes.add(extensionAttribute);
+							}
 						}
 					}
 				}

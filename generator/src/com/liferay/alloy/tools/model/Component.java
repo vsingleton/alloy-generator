@@ -76,12 +76,12 @@ public class Component extends BaseModel {
 		return _events;
 	}
 
-	public String getExtendsTag() {
-		return _extendsTag;
+	public String[] getExtendsTags() {
+		return _extendsTags;
 	}
 
-	public void setExtendsTag(String _extends) {
-		this._extendsTag = _extends;
+	public void setExtendsTags(String[] _extendsTags) {
+		this._extendsTags = _extendsTags;
 	}
 
 	public String getInterface() {
@@ -182,8 +182,15 @@ public class Component extends BaseModel {
 			componentElement.attributeValue("bodyContent"), false);
 		_componentInterface = Convert.toString(
 			componentElement.attributeValue("componentInterface"), null);
-		_extendsTag = Convert.toString(
-			componentElement.attributeValue("extendsTag"), null);
+		String extendsTagsString = Convert.toString(
+			componentElement.attributeValue("extendsTags"), null);
+
+		if (extendsTagsString == null) {
+			_extendsTags = null;
+		} else {
+			_extendsTags = extendsTagsString.split(StringPool.SPACE);
+		}
+
 		_module = Convert.toString(
 			componentElement.attributeValue("module"), null);
 		_package = Convert.toString(
@@ -328,6 +335,6 @@ public class Component extends BaseModel {
 	private String _module;
 	private String _package;
 	private String _parentClass;
-	private String _extendsTag;
+	private String[] _extendsTags;
 
 }
