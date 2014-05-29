@@ -25,11 +25,6 @@ public abstract class ${component.getCamelizedName()}${RENDERER_BASE_CLASS_SUFFI
 	// Private Constants
 	private static final String ALLOY_CLASS_NAME = "${component.getCamelizedName()}";
 	private static final String ALLOY_MODULE_NAME = ${component.getModuleString()};
-	<#list component.getOnEvents()?sort_by("constantUnprefixedName") as event>
-	<#if event.createConstant()>
-	private static final String ${event.getConstantUnprefixedName()} = "${event.getUnprefixedName()}";
-	</#if>
-	</#list>
 
 	// Protected Constants
 	protected static final String[] MODULES = {ALLOY_MODULE_NAME};
