@@ -11,8 +11,6 @@ import javax.faces.component.UIComponent;
 import javax.faces.context.ResponseWriter;
 
 import ${component.getRendererParentClass()};
-import com.liferay.faces.alloy.util.AlloyConstants;
-import com.liferay.faces.util.lang.StringPool;
 
 /**
 <#list component.getAuthors()?sort as author>
