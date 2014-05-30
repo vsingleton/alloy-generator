@@ -14,18 +14,18 @@
 
 package com.liferay.alloy.tools.builder.faces.model;
 
-import com.liferay.alloy.tools.model.Attribute;
-import com.liferay.alloy.tools.model.Component;
-import com.liferay.alloy.util.PropsUtil;
-
 import java.util.ArrayList;
 import java.util.List;
 
-import jodd.typeconverter.Convert;
-
 import jodd.util.StringPool;
 
+import com.liferay.alloy.tools.model.Attribute;
+import com.liferay.alloy.tools.model.Component;
+import com.liferay.alloy.util.PropsUtil;
+import com.liferay.alloy.util.StringUtil;
+import jodd.typeconverter.Convert;
 import org.dom4j.Element;
+
 public class FacesComponent extends Component {
 
 	public String getRendererBaseClass() {
@@ -78,6 +78,8 @@ public class FacesComponent extends Component {
 
 		String preferredName = Convert.toString(
 			facesComponentElement.attributeValue("preferredName"), null);
+		
+		_alloyName = getName();
 
 		if (preferredName != null) {
 			setName(preferredName);
@@ -154,8 +156,21 @@ public class FacesComponent extends Component {
 		this._generateTaglibXML = _generateTaglibXML;
 	}
 
+	public String getAlloyName() {
+		return _alloyName;
+	}
+
+	public void setAlloyName(String _realName) {
+		this._alloyName = _realName;
+	}
+
+	public String getAlloyClassName() {
+		return StringUtil.toCamelCase(
+			_alloyName, true, StringPool.DASH.charAt(0));
+	}
+
 	private boolean _generateTaglibXML;
 	private boolean _styleable;
-
+	private String _alloyName;
 	private String _rendererParentClass;
 }

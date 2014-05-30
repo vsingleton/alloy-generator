@@ -21,7 +21,7 @@ import ${component.getRendererParentClass()};
 public abstract class ${component.getCamelizedName()}${RENDERER_BASE_CLASS_SUFFIX} extends ${component.getUnqualifiedRendererParentClass()} {
 
 	// Private Constants
-	private static final String ALLOY_CLASS_NAME = "${component.getCamelizedName()}";
+	private static final String ALLOY_CLASS_NAME = "${component.getAlloyClassName()}";
 	private static final String ALLOY_MODULE_NAME = ${component.getModuleString()};
 
 	// Protected Constants
