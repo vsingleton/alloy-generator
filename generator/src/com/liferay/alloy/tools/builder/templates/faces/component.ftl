@@ -28,7 +28,8 @@ public class ${component.getCamelizedName()} extends ${component.getCamelizedNam
 	@Override
 	public String getStyleClass() {
 
-		String styleClass = super.getStyleClass();
+		String styleClass = (String) getStateHelper().eval(STYLE_CLASS, null);
+
 		return ComponentUtil.concatAllCssClasses(styleClass, STYLE_CLASS_NAME);
 	}
 }
