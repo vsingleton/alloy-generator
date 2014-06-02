@@ -29,14 +29,6 @@ public class ${component.getCamelizedName()} extends ${component.getCamelizedNam
 	public String getStyleClass() {
 
 		String styleClass = super.getStyleClass();
-
-		if (styleClass == null) {
-			styleClass = STYLE_CLASS_NAME;
-		}
-		else {
-			styleClass = styleClass + StringPool.SPACE + STYLE_CLASS_NAME;
-		}
-
-		return styleClass;
+		return ComponentUtil.concatAllCssClasses(styleClass, STYLE_CLASS_NAME);
 	}
 }
