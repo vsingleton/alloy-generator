@@ -28,8 +28,10 @@ public class ${component.getCamelizedName()} extends ${component.getCamelizedNam
 	@Override
 	public String getStyleClass() {
 
+		// getStateHelper().eval(STYLE_CLASS, null) is called because super.getStyleClass() may return the
+		// STYLE_CLASS_NAME of the super class.
 		String styleClass = (String) getStateHelper().eval(STYLE_CLASS, null);
 
-		return ComponentUtil.concatAllCssClasses(styleClass, STYLE_CLASS_NAME);
+		return ComponentUtil.concatCssClasses(styleClass, STYLE_CLASS_NAME);
 	}
 }
