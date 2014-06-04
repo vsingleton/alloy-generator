@@ -28,14 +28,10 @@ public interface ${component.getCamelizedName()}${INTERFACE_CLASS_SUFFIX} {
 	</#list>
 	<#list component.getAttributes()?sort_by("javaBeanPropertyName") as attribute>
 	<#if attribute.isGenerateJava() && attribute.isJavaScript()>
-	<#if attribute.isGettable()>
 
 	public <#if attribute.isJSFReservedAttribute()>${attribute.getJSFReservedAttributeType()?replace('java.lang.','')}<#else>${attribute.getJavaWrapperType()}</#if> ${attribute.getGetterMethodPrefix()}${attribute.getJavaBeanPropertyName()}();
-	</#if>
-	<#if attribute.isSettable()>
 
 	public void set${attribute.getJavaBeanPropertyName()}(<#if attribute.isJSFReservedAttribute()>${attribute.getJSFReservedAttributeType()?replace('java.lang.','')}<#else>${attribute.getJavaWrapperType()}</#if> ${attribute.getJavaSafeName()});
-	</#if>
 	</#if>
 	</#list>
 }

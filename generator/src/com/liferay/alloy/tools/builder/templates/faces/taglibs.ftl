@@ -27,7 +27,6 @@ http://java.sun.com/xml/ns/javaee/web-facelettaglibrary_2_0.xsd http://vdldoc.or
 			<renderer-type>${packagePath}.${component.getUncamelizedName(BLANK)}.${component.getCamelizedName()}${RENDERER_CLASS_SUFFIX}</renderer-type>
 		</component>
 		<#list component.getAttributes()?sort_by("safeName") as attribute>
-		<#if attribute.isSettable() || attribute.isGettable()>
 		<attribute>
 			<#if attribute.getDescription()??>
 			<description><![CDATA[${attribute.getCleanDescription()}]]></description>
@@ -43,7 +42,6 @@ http://java.sun.com/xml/ns/javaee/web-facelettaglibrary_2_0.xsd http://vdldoc.or
 			<method-signature><#compress>${attribute.getMethodSignature()}</#compress></method-signature>
 			</#if>
 		</attribute>
-		</#if>
 		</#list>
 		<tag-extension>
 			<vdldoc:since>${version}</vdldoc:since>

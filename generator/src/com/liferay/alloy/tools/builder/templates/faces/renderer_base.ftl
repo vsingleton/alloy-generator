@@ -33,7 +33,7 @@ public abstract class ${component.getCamelizedName()}${RENDERER_BASE_CLASS_SUFFI
 		${component.getCamelizedName()}${INTERFACE_CLASS_SUFFIX} ${component.getUncapitalizedName()}${INTERFACE_CLASS_SUFFIX} = (${component.getCamelizedName()}${INTERFACE_CLASS_SUFFIX}) uiComponent;
 		boolean first = true;
 		<#list component.getAttributes()?sort_by("javaSafeName") as attribute>
-		<#if attribute.isGettable() && attribute.isGenerateJava() && attribute.isJavaScript()>
+		<#if attribute.isGenerateJava() && attribute.isJavaScript()>
 
 		${attribute.getJavaWrapperType()} ${attribute.getJavaSafeName()} = ${component.getUncapitalizedName()}${INTERFACE_CLASS_SUFFIX}.${attribute.getGetterMethodPrefix()}${attribute.getJavaBeanPropertyName()}();
 
@@ -56,7 +56,7 @@ public abstract class ${component.getCamelizedName()}${RENDERER_BASE_CLASS_SUFFI
 		return MODULES;
 	}
 	<#list component.getAttributes()?sort_by("capitalizedName") as attribute>
-	<#if attribute.isGettable() && attribute.isGenerateJava() && attribute.isJavaScript()>
+	<#if attribute.isGenerateJava() && attribute.isJavaScript()>
 
 	protected void encode${attribute.getCapitalizedName()}(ResponseWriter responseWriter, ${component.getCamelizedName()}${INTERFACE_CLASS_SUFFIX} ${component.getUncapitalizedName()}${INTERFACE_CLASS_SUFFIX}, ${attribute.getJavaWrapperType()} ${attribute.getJavaSafeName()}, boolean first) throws IOException {
 		encode${attribute.getFacesJavaScriptType()}(responseWriter, ${component.getCamelizedName()}${INTERFACE_CLASS_SUFFIX}.${attribute.getConstantName()}, ${attribute.getJavaSafeName()}, first);

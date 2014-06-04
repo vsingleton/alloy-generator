@@ -36,7 +36,6 @@ public abstract class ${component.getCamelizedName()}${BASE_CLASS_SUFFIX} extend
 	</#if>
 	<#list component.getAttributes()?sort_by("javaBeanPropertyName") as attribute>
 	<#if attribute.isGenerateJava() && !attribute.isJSFReservedAttribute()>
-	<#if attribute.isGettable()>
 
 	<#if component.isAlloyComponent()>
 	@Override
@@ -44,8 +43,6 @@ public abstract class ${component.getCamelizedName()}${BASE_CLASS_SUFFIX} extend
 	public ${attribute.getJavaWrapperType()} ${attribute.getGetterMethodPrefix()}${attribute.getJavaBeanPropertyName()}() {
 		return (${attribute.getJavaWrapperType()}) getStateHelper().eval(${attribute.getConstantName()}, ${attribute.getGetterDefaultReturnValue()});
 	}
-	</#if>
-	<#if attribute.isSettable()>
 
 	<#if component.isAlloyComponent()>
 	@Override
@@ -53,7 +50,6 @@ public abstract class ${component.getCamelizedName()}${BASE_CLASS_SUFFIX} extend
 	public void set${attribute.getJavaBeanPropertyName()}(${attribute.getJavaWrapperType()} ${attribute.getJavaSafeName()}) {
 		getStateHelper().put(${attribute.getConstantName()}, ${attribute.getJavaSafeName()});
 	}
-	</#if>
 	</#if>
 	</#list>
 }
