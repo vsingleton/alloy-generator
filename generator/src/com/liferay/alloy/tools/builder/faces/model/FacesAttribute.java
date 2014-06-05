@@ -113,11 +113,13 @@ public class FacesAttribute extends Attribute {
 			facesAttributeElement.elementText("getterDefaultReturnValue"),
 			"null");
 		_javaScript = Convert.toBoolean(facesAttributeElement
-			.elementText("javaScript"), true);
+			.elementText("javaScript"), false);
 		_methodSignature = facesAttributeElement
 				.elementText("method-signature");
 		_outputUnsafe = Convert.toBoolean(facesAttributeElement
 			.elementText("outputUnsafe"), false);
+		_override = Convert.toBoolean(facesAttributeElement
+			.elementText("override"), false);
 
 		_jsfReservedAttribute = Convert.toBoolean(facesAttributeElement
 			.elementText("jsfReservedAttribute"), false);
@@ -170,10 +172,19 @@ public class FacesAttribute extends Attribute {
 		this._javaScript = _javaScript;
 	}
 
+	public boolean isOverride() {
+		return _override;
+	}
+
+	public void setOverride(boolean _override) {
+		this._override = _override;
+	}
+
 	private String _getterDefaultReturnValue;
 	private boolean _javaScript;
 	private boolean _jsfReservedAttribute;
 	private String _jsfReservedAttributeType;
 	private String _methodSignature;
 	private boolean _outputUnsafe;
+	private boolean _override;
 }

@@ -22,7 +22,7 @@ public abstract class ${component.getCamelizedName()}${RENDERER_BASE_CLASS_SUFFI
 
 	// Private Constants
 	private static final String ALLOY_CLASS_NAME = "${component.getAlloyClassName()}";
-	private static final String ALLOY_MODULE_NAME = ${component.getModuleString()};
+	private static final String ALLOY_MODULE_NAME = "aui-${component.getAlloyClassName()?lower_case}";
 
 	// Protected Constants
 	protected static final String[] MODULES = {ALLOY_MODULE_NAME};
@@ -44,6 +44,8 @@ public abstract class ${component.getCamelizedName()}${RENDERER_BASE_CLASS_SUFFI
 		}
 		</#if>
 		</#list>
+
+		encodeHiddenAttributes(responseWriter, uiComponent, first);
 	}
 
 	@Override
@@ -63,5 +65,9 @@ public abstract class ${component.getCamelizedName()}${RENDERER_BASE_CLASS_SUFFI
 	}
 	</#if>
 	</#list>
+
+	protected void encodeHiddenAttributes(ResponseWriter responseWriter, UIComponent uiComponent, boolean first) throws IOException {
+		// no-op
+	}
 }
 //J+
