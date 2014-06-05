@@ -397,7 +397,13 @@ public abstract class BaseBuilder {
 				try {
 					Document parentDoc = SAXReaderUtil.read(parentXML);
 
+					Element extensionElement = document.getRootElement().element("extension");
+
 					document = mergeXMLAttributes(document, parentDoc);
+
+					if (extensionElement != null) {
+						document.getRootElement().add(extensionElement.createCopy());
+					}
 				}
 				catch (DocumentException e) {
 					e.printStackTrace();
