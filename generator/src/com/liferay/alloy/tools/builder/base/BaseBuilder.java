@@ -342,12 +342,6 @@ public abstract class BaseBuilder {
 			}
 		}
 
-		Element extensionElement = doc1Root.element("extension");
-
-		if (extensionElement != null) {
-			docRoot.add(extensionElement.createCopy());
-		}
-
 		return doc;
 	}
 
