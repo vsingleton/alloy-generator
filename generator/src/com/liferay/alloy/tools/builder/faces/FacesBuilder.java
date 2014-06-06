@@ -29,7 +29,6 @@ import org.dom4j.Document;
 import org.dom4j.Element;
 
 import com.liferay.alloy.tools.builder.base.BaseBuilder;
-import com.liferay.alloy.tools.builder.faces.model.FacesAttribute;
 import com.liferay.alloy.tools.model.Component;
 import com.liferay.alloy.tools.builder.faces.model.FacesComponent;
 import com.liferay.alloy.tools.model.Attribute;
@@ -71,17 +70,18 @@ public class FacesBuilder extends BaseBuilder {
 		List<Component> components = getAllComponents();
 		Iterator<Component> iterator = components.iterator();
 
+		Map<String, Object> context = getDefaultTemplateContext();
+		context.put("packagePath", _COMPONENTS_PACKAGE);
+		context.put("BASE_CLASS_SUFFIX", _BASE_CLASS_SUFFIX);
+		context.put("RENDERER_CLASS_SUFFIX", _RENDERER_CLASS_SUFFIX);
+		context.put("RENDERER_BASE_CLASS_SUFFIX", _RENDERER_CLASS_SUFFIX + _BASE_CLASS_SUFFIX);
+
 		while (iterator.hasNext()) {
-			Component component = iterator.next();
-			FacesComponent facesComponent = (FacesComponent) component;
+			FacesComponent facesComponent = (FacesComponent) iterator.next();
 
 			if (facesComponent.isGenerateJava()) {
-				Map<String, Object> context = getTemplateContext(component);
 
-				context.put("BASE_CLASS_SUFFIX", _BASE_CLASS_SUFFIX);
-				context.put("RENDERER_CLASS_SUFFIX", _RENDERER_CLASS_SUFFIX);
-				context.put("RENDERER_BASE_CLASS_SUFFIX", _RENDERER_CLASS_SUFFIX + _BASE_CLASS_SUFFIX);
-
+				context.put("component", facesComponent);
 				_buildComponent(facesComponent, context);
 				_buildComponentBase(facesComponent, context);
 				_buildRenderer(facesComponent, context);
@@ -89,6 +89,8 @@ public class FacesBuilder extends BaseBuilder {
 				if (facesComponent.isYui()) {
 					_buildRendererBase(facesComponent, context);
 				}
+
+				context.remove("component");
 			}
 
 			if (!facesComponent.isGenerateTaglibXML()) {
@@ -96,7 +98,7 @@ public class FacesBuilder extends BaseBuilder {
 			}
 		}
 
-		_buildTaglibsXML(components);
+		_buildTaglibsXML(components, context);
 
 		System.out.println("Finished looping over " + components.size() +
 			" components.");
@@ -272,25 +274,27 @@ public class FacesBuilder extends BaseBuilder {
 		writeFile(rendererBaseFile, rendererBaseContent);
 	}
 
-	private void _buildTaglibsXML(List<Component> components) throws Exception {
-		Map<String, Object> context = getDefaultTemplateContext();
+	private void _buildTaglibsXML(List<Component> components, Map<String, Object> context) throws Exception {
+		context.put("components", components);
+		context.put("version", _version);
 
 		for (Document doc : getComponentDefinitionDocs()) {
 			Element root = doc.getRootElement();
 
 			String namespace = Convert.toString(root
-				.attributeValue("namespace"));
-
+					.attributeValue("namespace"));
 			String namespaceURI = Convert.toString(root
-				.attributeValue("namespaceURI"));
+					.attributeValue("namespaceURI"));
+			context.put("namespaceURI", namespaceURI);
 
 			Element descriptionElement = root.element("description");
-
 			String description = null;
 
 			if (descriptionElement != null) {
 				description = descriptionElement.getTextTrim();
 			}
+
+			context.put("description", description);
 
 			Element extensionElement = root.element("extension");
 
@@ -320,15 +324,6 @@ public class FacesBuilder extends BaseBuilder {
 				context.put("functions", functionsList);
 			}
 
-			context.put("components", components);
-			context.put("namespaceURI", namespaceURI);
-			context.put("description", description);
-			context.put("version", _version);
-			context.put("BASE_CLASS_SUFFIX", _BASE_CLASS_SUFFIX);
-			context.put("RENDERER_CLASS_SUFFIX", _RENDERER_CLASS_SUFFIX);
-			context.put("INTERFACE_CLASS_SUFFIX", _INTERFACE_CLASS_SUFFIX);
-			context.put("RENDERER_BASE_CLASS_SUFFIX", _RENDERER_CLASS_SUFFIX + _BASE_CLASS_SUFFIX);
-
 			String rendererContent = processTemplate(_tplTaglibsXML, context);
 
 			String path = getTaglibsXMLOutputDir();
@@ -340,56 +335,9 @@ public class FacesBuilder extends BaseBuilder {
 		}
 	}
 
-	private List<FacesAttribute> _getAdditionalAttributes(FacesComponent facesComponent) {
-
-		List<FacesAttribute> additionalAttributes = new ArrayList<FacesAttribute>();
-
-		for (Document doc : getComponentDefinitionDocs()) {
-			Element root = doc.getRootElement();
-
-			Element extensionElement = root.element("extension");
-
-			if (extensionElement != null) {
-				if (facesComponent.isAlloyComponent()) {
-					List<FacesAttribute> clientComponentAttributes =
-						_getInterfaceAttributes(extensionElement, "clientComponentAttributes", facesComponent);
-					additionalAttributes.addAll(clientComponentAttributes);
-				}
-
-				if (facesComponent.isStyleable()) {
-					List<FacesAttribute> styleableAttributes =
-						_getInterfaceAttributes(extensionElement, "styleableAttributes", facesComponent);
-					additionalAttributes.addAll(styleableAttributes);
-				}
-			}
-		}
-
-		return additionalAttributes;
-	}
-
-	private List<FacesAttribute> _getInterfaceAttributes(
-		Element extensionElement, String interfaceAttributesElementName,
-			FacesComponent facesComponent) {
-
-		Element interfaceAttributesElement = extensionElement.element(interfaceAttributesElementName);
-
-		List<Element> interfaceAttributeElementList = interfaceAttributesElement.elements("attribute");
-		List<FacesAttribute> facesAttributeList = new ArrayList<FacesAttribute>();
-
-		for (Element interfaceAttributeElement : interfaceAttributeElementList) {
-			FacesAttribute facesAttribute = new FacesAttribute();
-			facesAttribute.initialize(interfaceAttributeElement, facesComponent);
-			facesAttributeList.add(facesAttribute);
-		}
-
-		return facesAttributeList;
-	}
-
 	private static final String _BASE_CLASS_SUFFIX = "Base";
 
 	private static final String _COMPONENTS_PACKAGE = "com.liferay.faces.alloy.component";
-
-	private static final String _INTERFACE_CLASS_SUFFIX = "Alloy";
 
 	private static final String _JAVA_EXT = ".java";
 
