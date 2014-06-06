@@ -57,7 +57,6 @@ public class FacesBuilder extends BaseBuilder {
 
 		_tplComponent = getTemplatesDir() + "component.ftl";
 		_tplComponentBase = getTemplatesDir() + "component_base.ftl";
-		_tplComponentInterface = getTemplatesDir() + "component_interface.ftl";
 		_tplRenderer = getTemplatesDir() + "renderer.ftl";
 		_tplRendererBase = getTemplatesDir() + "renderer_base.ftl";
 		_tplTaglibsXML = getTemplatesDir() + "taglibs.ftl";
@@ -81,7 +80,6 @@ public class FacesBuilder extends BaseBuilder {
 
 				context.put("BASE_CLASS_SUFFIX", _BASE_CLASS_SUFFIX);
 				context.put("RENDERER_CLASS_SUFFIX", _RENDERER_CLASS_SUFFIX);
-				context.put("INTERFACE_CLASS_SUFFIX", _INTERFACE_CLASS_SUFFIX);
 				context.put("RENDERER_BASE_CLASS_SUFFIX", _RENDERER_CLASS_SUFFIX + _BASE_CLASS_SUFFIX);
 
 				_buildComponent(facesComponent, context);
@@ -90,7 +88,6 @@ public class FacesBuilder extends BaseBuilder {
 
 				if (facesComponent.isAlloyComponent()) {
 					_buildRendererBase(facesComponent, context);
-					_buildComponentInterface(facesComponent, context);
 				}
 			}
 
@@ -234,26 +231,6 @@ public class FacesBuilder extends BaseBuilder {
 		File componentBaseFile = new File(fileNameSb.toString());
 
 		writeFile(componentBaseFile, componentBaseContent);
-	}
-
-	private void _buildComponentInterface(FacesComponent facesComponent,
-			Map<String, Object> context) throws Exception {
-
-		String path = getComponentOutputDir(facesComponent);
-
-		String componentBaseContent = processTemplate(_tplComponentInterface,
-			context);
-
-		StringBuilder fileNameSb = new StringBuilder(4);
-
-		fileNameSb.append(path);
-		fileNameSb.append(facesComponent.getCamelizedName());
-		fileNameSb.append(_INTERFACE_CLASS_SUFFIX);
-		fileNameSb.append(_JAVA_EXT);
-
-		File componentInterfaceFile = new File(fileNameSb.toString());
-
-		writeFile(componentInterfaceFile, componentBaseContent);
 	}
 
 	private void _buildRenderer(FacesComponent facesComponent,
@@ -426,7 +403,6 @@ public class FacesBuilder extends BaseBuilder {
 	private String _taglibXMLOutputDir;
 	private String _tplComponent;
 	private String _tplComponentBase;
-	private String _tplComponentInterface;
 	private String _tplRenderer;
 	private String _tplRendererBase;
 	private String _tplTaglibsXML;
