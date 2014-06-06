@@ -112,15 +112,12 @@ public class FacesAttribute extends Attribute {
 		_getterDefaultReturnValue = Convert.toString(
 			facesAttributeElement.elementText("getterDefaultReturnValue"),
 			"null");
-		_javaScript = Convert.toBoolean(facesAttributeElement
-			.elementText("javaScript"), false);
 		_methodSignature = facesAttributeElement
 				.elementText("method-signature");
 		_outputUnsafe = Convert.toBoolean(facesAttributeElement
 			.elementText("outputUnsafe"), false);
 		_override = Convert.toBoolean(facesAttributeElement
 			.elementText("override"), false);
-
 		_jsfReservedAttribute = Convert.toBoolean(facesAttributeElement
 			.elementText("jsfReservedAttribute"), false);
 
@@ -130,6 +127,12 @@ public class FacesAttribute extends Attribute {
 				.elementText("jsfReservedAttributeType"),
 				type);
 		}
+
+		_yui = Convert.toBoolean(facesAttributeElement
+			.elementText("yui"), false);
+		_yuiName = Convert.toString(
+			facesAttributeElement.elementText("yuiName"),
+			null);
 	}
 
 	public boolean isJSFReservedAttribute() {
@@ -164,14 +167,6 @@ public class FacesAttribute extends Attribute {
 		this._getterDefaultReturnValue = _getterDefaultReturnValue;
 	}
 
-	public boolean isJavaScript() {
-		return _javaScript;
-	}
-
-	public void setJavaScript(boolean _javaScript) {
-		this._javaScript = _javaScript;
-	}
-
 	public boolean isOverride() {
 		return _override;
 	}
@@ -180,11 +175,32 @@ public class FacesAttribute extends Attribute {
 		this._override = _override;
 	}
 
+	public boolean isYui() {
+		return _yui;
+	}
+
+	public void setYui(boolean _yui) {
+		this._yui = _yui;
+	}
+
+	public String getYuiName() {
+		return _yuiName;
+	}
+
+	public void setYuiName(String _yuiName) {
+		this._yuiName = _yuiName;
+	}
+
+	public String getYuiConstantName() {
+		return StringUtil.fromCamelCase(_yuiName, '_').toUpperCase();
+	}
+
 	private String _getterDefaultReturnValue;
-	private boolean _javaScript;
 	private boolean _jsfReservedAttribute;
 	private String _jsfReservedAttributeType;
 	private String _methodSignature;
 	private boolean _outputUnsafe;
 	private boolean _override;
+	private boolean _yui;
+	private String _yuiName;
 }

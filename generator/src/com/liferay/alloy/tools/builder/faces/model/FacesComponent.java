@@ -32,7 +32,7 @@ public class FacesComponent extends Component {
 
 		String rendererBaseClass = getRendererParentClass();
 
-		if (isAlloyComponent()) {
+		if (isYui()) {
 			rendererBaseClass = _getDefaultAlloyRendererBaseClass();
 		}
 
@@ -62,10 +62,10 @@ public class FacesComponent extends Component {
 			facesComponentElement.attributeValue("generateTaglibXML"), true);
 		_styleable = Convert.toBoolean(
 			facesComponentElement.attributeValue("styleable"), true);
-
-		boolean alloyComponent = Convert.toBoolean(
-			facesComponentElement.attributeValue("alloyComponent"), false);
-		setAlloyComponent(alloyComponent);
+		_yui = Convert.toBoolean(
+			facesComponentElement.attributeValue("yui"), false);
+		_yuiName = Convert.toString(
+			facesComponentElement.attributeValue("yuiName"), getName());
 
 		boolean generateJava = Convert.toBoolean(
 			facesComponentElement.attributeValue("generateJava"), true);
@@ -76,19 +76,10 @@ public class FacesComponent extends Component {
 			_COMPONENT_DEFAULT_PARENT_CLASS);
 		setParentClass(parentClass);
 
-		String preferredName = Convert.toString(
-			facesComponentElement.attributeValue("preferredName"), null);
-		
-		_alloyName = getName();
-
-		if (preferredName != null) {
-			setName(preferredName);
-		}
-
 		String defaultRendererParentClass = _DEFAULT_RENDERER_BASE_CLASS;
 
-		if (isAlloyComponent() && _DEFAULT_ALLOY_RENDERER_PARENT_CLASS != null &&
-			_DEFAULT_ALLOY_RENDERER_PARENT_CLASS.length() > 0) {
+		if (isYui() && _DEFAULT_ALLOY_RENDERER_PARENT_CLASS != null
+				&& _DEFAULT_ALLOY_RENDERER_PARENT_CLASS.length() > 0) {
 			defaultRendererParentClass = _DEFAULT_ALLOY_RENDERER_PARENT_CLASS;
 		}
 
@@ -156,21 +147,26 @@ public class FacesComponent extends Component {
 		this._generateTaglibXML = _generateTaglibXML;
 	}
 
-	public String getAlloyName() {
-		return _alloyName;
+	public String getYuiName() {
+		return _yuiName;
 	}
 
-	public void setAlloyName(String _realName) {
-		this._alloyName = _realName;
-	}
-
-	public String getAlloyClassName() {
+	public String getYuiClassName() {
 		return StringUtil.toCamelCase(
-			_alloyName, true, StringPool.DASH.charAt(0));
+			_yuiName, true, StringPool.DASH.charAt(0));
+	}
+
+	public boolean isYui() {
+		return _yui;
+	}
+
+	public void setYui(boolean _yui) {
+		this._yui = _yui;
 	}
 
 	private boolean _generateTaglibXML;
 	private boolean _styleable;
-	private String _alloyName;
+	private String _yuiName;
 	private String _rendererParentClass;
+	private boolean _yui;
 }

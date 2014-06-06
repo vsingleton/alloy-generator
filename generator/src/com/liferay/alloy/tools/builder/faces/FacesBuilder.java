@@ -86,7 +86,7 @@ public class FacesBuilder extends BaseBuilder {
 				_buildComponentBase(facesComponent, context);
 				_buildRenderer(facesComponent, context);
 
-				if (facesComponent.isAlloyComponent()) {
+				if (facesComponent.isYui()) {
 					_buildRendererBase(facesComponent, context);
 				}
 			}

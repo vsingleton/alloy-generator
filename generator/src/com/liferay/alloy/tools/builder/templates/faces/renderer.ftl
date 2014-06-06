@@ -3,7 +3,7 @@
 
 package ${packagePath}.${component.getUncamelizedName(BLANK)};
 
-<#if !component.isAlloyComponent()>
+<#if !component.isYui()>
 import ${component.getRendererBaseClass()};
 <#else>
 import javax.faces.application.ResourceDependencies;
@@ -17,7 +17,7 @@ import javax.faces.render.FacesRenderer;
 </#list>
  */
 @FacesRenderer(componentFamily = ${component.getCamelizedName()}.COMPONENT_FAMILY, rendererType = ${component.getCamelizedName()}.RENDERER_TYPE)
-<#if component.isAlloyComponent()>
+<#if component.isYui()>
 @ResourceDependencies(
 	{
 		@ResourceDependency(library = "liferay-faces-alloy", name = "build/aui-css/css/bootstrap.min.css"),

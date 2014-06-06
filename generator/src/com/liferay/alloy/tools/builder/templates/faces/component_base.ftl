@@ -14,7 +14,7 @@ import javax.annotation.Generated;
 import ${component.getParentClass()};
 
 import com.liferay.faces.util.component.Styleable;
-<#if component.isAlloyComponent()>
+<#if component.isYui()>
 import com.liferay.faces.util.component.ClientComponent;
 </#if>
 
@@ -24,25 +24,25 @@ import com.liferay.faces.util.component.ClientComponent;
 </#list>
  */
 @Generated(value = "com.liferay.alloy.tools.builder.FacesBuilder")
-public abstract class ${component.getCamelizedName()}${BASE_CLASS_SUFFIX} extends ${component.getUnqualifiedParentClass()} implements Styleable<#if component.isAlloyComponent()>, ClientComponent, ${component.getCamelizedName()}Alloy</#if> {
+public abstract class ${component.getCamelizedName()}${BASE_CLASS_SUFFIX} extends ${component.getUnqualifiedParentClass()} implements Styleable<#if component.isYui()>, ClientComponent</#if> {
 
 	// Public Constants
 	<#list component.getAttributes()?sort_by("constantName") as attribute>
-	<#if attribute.isGenerateJava() && !attribute.isJavaScript() && !attribute.isJSFReservedAttribute()>
+	<#if attribute.isGenerateJava()>
 	public static final String ${attribute.getConstantName()} = "${attribute.getName()}";
 	</#if>
 	</#list>
 	<#list component.getAttributes()?sort_by("javaBeanPropertyName") as attribute>
-	<#if attribute.isGenerateJava() && !attribute.isJSFReservedAttribute()>
+	<#if attribute.isGenerateJava()>
 
-	<#if attribute.isJavaScript() || attribute.isOverride()>
+	<#if attribute.isOverride()>
 	@Override
 	</#if>
 	public ${attribute.getJavaWrapperType()} ${attribute.getGetterMethodPrefix()}${attribute.getJavaBeanPropertyName()}() {
 		return (${attribute.getJavaWrapperType()}) getStateHelper().eval(${attribute.getConstantName()}, ${attribute.getGetterDefaultReturnValue()});
 	}
 
-	<#if attribute.isJavaScript() || attribute.isOverride()>
+	<#if attribute.isOverride()>
 	@Override
 	</#if>
 	public void set${attribute.getJavaBeanPropertyName()}(${attribute.getJavaWrapperType()} ${attribute.getJavaSafeName()}) {

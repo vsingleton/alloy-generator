@@ -21,8 +21,13 @@ import ${component.getRendererParentClass()};
 public abstract class ${component.getCamelizedName()}${RENDERER_BASE_CLASS_SUFFIX} extends ${component.getUnqualifiedRendererParentClass()} {
 
 	// Private Constants
-	private static final String ALLOY_CLASS_NAME = "${component.getAlloyClassName()}";
-	private static final String ALLOY_MODULE_NAME = "aui-${component.getAlloyClassName()?lower_case}";
+	private static final String ALLOY_CLASS_NAME = "${component.getYuiClassName()}";
+	private static final String ALLOY_MODULE_NAME = "aui-${component.getYuiClassName()?lower_case}";
+	<#list component.getAttributes() as attribute>
+	<#if attribute.isGenerateJava() && attribute.getYuiName()??>
+	private static final String ${attribute.getYuiConstantName()} = "${attribute.getYuiName()}";
+	</#if>
+	</#list>
 
 	// Protected Constants
 	protected static final String[] MODULES = {ALLOY_MODULE_NAME};
@@ -30,22 +35,22 @@ public abstract class ${component.getCamelizedName()}${RENDERER_BASE_CLASS_SUFFI
 	@Override
 	public void encodeAlloyAttributes(ResponseWriter responseWriter, UIComponent uiComponent) throws IOException {
 
-		${component.getCamelizedName()}${INTERFACE_CLASS_SUFFIX} ${component.getUncapitalizedName()}${INTERFACE_CLASS_SUFFIX} = (${component.getCamelizedName()}${INTERFACE_CLASS_SUFFIX}) uiComponent;
+		${component.getCamelizedName()} ${component.getUncapitalizedName()} = (${component.getCamelizedName()}) uiComponent;
 		boolean first = true;
 		<#list component.getAttributes()?sort_by("javaSafeName") as attribute>
-		<#if attribute.isGenerateJava() && attribute.isJavaScript()>
+		<#if attribute.isGenerateJava() && (attribute.isYui() || attribute.getYuiName()??)>
 
-		${attribute.getJavaWrapperType()} ${attribute.getJavaSafeName()} = ${component.getUncapitalizedName()}${INTERFACE_CLASS_SUFFIX}.${attribute.getGetterMethodPrefix()}${attribute.getJavaBeanPropertyName()}();
+		${attribute.getJavaWrapperType()} ${attribute.getJavaSafeName()} = ${component.getUncapitalizedName()}.${attribute.getGetterMethodPrefix()}${attribute.getJavaBeanPropertyName()}();
 
 		if (${attribute.getJavaSafeName()} != null) {
 
-			encode${attribute.getCapitalizedName()}(responseWriter, ${component.getUncapitalizedName()}Alloy, ${attribute.getJavaSafeName()}, first);
+			encode<#if attribute.isYui()>${attribute.getCapitalizedName()}<#else>${attribute.getYuiName()?cap_first}</#if>(responseWriter, ${component.getUncapitalizedName()}, ${attribute.getJavaSafeName()}, first);
 			first = false;
 		}
 		</#if>
 		</#list>
 
-		encodeHiddenAttributes(responseWriter, uiComponent, first);
+		encodeHiddenAttributes(responseWriter, ${component.getUncapitalizedName()}, first);
 	}
 
 	@Override
@@ -58,15 +63,15 @@ public abstract class ${component.getCamelizedName()}${RENDERER_BASE_CLASS_SUFFI
 		return MODULES;
 	}
 	<#list component.getAttributes()?sort_by("capitalizedName") as attribute>
-	<#if attribute.isGenerateJava() && attribute.isJavaScript()>
+	<#if attribute.isGenerateJava() && (attribute.isYui() || attribute.getYuiName()??)>
 
-	protected void encode${attribute.getCapitalizedName()}(ResponseWriter responseWriter, ${component.getCamelizedName()}${INTERFACE_CLASS_SUFFIX} ${component.getUncapitalizedName()}${INTERFACE_CLASS_SUFFIX}, ${attribute.getJavaWrapperType()} ${attribute.getJavaSafeName()}, boolean first) throws IOException {
-		encode${attribute.getFacesJavaScriptType()}(responseWriter, ${component.getCamelizedName()}${INTERFACE_CLASS_SUFFIX}.${attribute.getConstantName()}, ${attribute.getJavaSafeName()}, first);
+	protected void encode<#if attribute.isYui()>${attribute.getCapitalizedName()}<#else>${attribute.getYuiName()?cap_first}</#if>(ResponseWriter responseWriter, ${component.getCamelizedName()} ${component.getUncapitalizedName()}, ${attribute.getJavaWrapperType()} ${attribute.getJavaSafeName()}, boolean first) throws IOException {
+		encode${attribute.getFacesJavaScriptType()}(responseWriter, <#if attribute.isYui()>${component.getCamelizedName()}.${attribute.getConstantName()}<#else>${attribute.getYuiConstantName()}</#if>, ${attribute.getJavaSafeName()}, first);
 	}
 	</#if>
 	</#list>
 
-	protected void encodeHiddenAttributes(ResponseWriter responseWriter, UIComponent uiComponent, boolean first) throws IOException {
+	protected void encodeHiddenAttributes(ResponseWriter responseWriter, ${component.getCamelizedName()} ${component.getUncapitalizedName()}, boolean first) throws IOException {
 		// no-op
 	}
 }
