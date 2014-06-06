@@ -87,40 +87,6 @@ public class TypeUtil {
 		"node | string", "string", "string | node", "string | int"
 	};
 
-	public static String getFacesJavaScriptType(String javaScriptType) {
-
-		String facesJavaScriptType = javaScriptType;
-
-		if (facesJavaScriptType != null) {
-			if (facesJavaScriptType.contains("|")) {
-
-				// TODO maybe add logic for functions
-
-				boolean containsString = facesJavaScriptType.contains(StringUtil.capitalize(STRING)) || facesJavaScriptType.contains(STRING);
-				boolean containsBoolean = facesJavaScriptType.contains(StringUtil.capitalize(BOOLEAN)) || facesJavaScriptType.contains(BOOLEAN);
-				boolean containsNumber = facesJavaScriptType.contains(StringUtil.capitalize(NUMBER)) || facesJavaScriptType.contains(NUMBER);
-
-				if (containsString && containsBoolean) {
-					facesJavaScriptType = COMPLEX_BOOLEAN;
-				} else if (containsString && containsNumber) {
-					facesJavaScriptType = COMPLEX_NUMBER;
-				} else if (containsString) {
-					facesJavaScriptType = getJavaScriptType(StringUtil.capitalize(STRING));
-				} else if (containsBoolean) {
-					facesJavaScriptType = getJavaScriptType(StringUtil.capitalize(BOOLEAN));
-				} else if (containsNumber) {
-					facesJavaScriptType = getJavaScriptType(StringUtil.capitalize(NUMBER));
-				} else {
-					facesJavaScriptType = getJavaScriptType("Object");
-				}
-			} else {
-				facesJavaScriptType = getJavaScriptType(removeJavaPrefix(facesJavaScriptType));
-			}
-		}
-
-		return facesJavaScriptType;
-	}
-
 	public static String getInputJavaType(
 		String type, boolean removeGenericsType) {
 

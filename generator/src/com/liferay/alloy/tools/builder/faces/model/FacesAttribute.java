@@ -24,147 +24,55 @@ import jodd.typeconverter.Convert;
 import org.dom4j.Element;
 public class FacesAttribute extends Attribute {
 
-	public String getCapitalizedJSFReservedAttributeType() {
-		return StringUtil.capitalize(TypeUtil.removeJavaPrefix(
-				_jsfReservedAttributeType));
-	}
-
 	@Override
 	public String getJavaWrapperType() {
 
-		String javaWrapperType;
+		String javaWrapperType = TypeUtil.removeJavaPrefix(getType());
 
-		String javaScriptType = getJavaScriptType();
-
-		if (_jsfReservedAttribute) {
-			javaWrapperType = getCapitalizedJSFReservedAttributeType();
-		} else if (javaScriptType != null){
-			javaWrapperType = TypeUtil.getFacesJavaScriptType(javaScriptType);
-
-			if (javaWrapperType.equals(TypeUtil.COMPLEX_BOOLEAN) ||
-				javaWrapperType.equals(TypeUtil.COMPLEX_NUMBER)) {
-				javaWrapperType = "Object";
-			}
-
-			javaWrapperType = TypeUtil.getInputJavaType(javaWrapperType, true);
-			javaWrapperType = TypeUtil.getJavaWrapperType(javaWrapperType);
+		if (javaWrapperType.equals("int")) {
+			javaWrapperType = "Integer";
 		}
 		else {
-			javaWrapperType = super.getJavaWrapperType();
+			javaWrapperType = StringUtil.capitalize(javaWrapperType);
 		}
-
+		
 		return javaWrapperType;
 	}
-
-	public String getFacesJavaScriptType() {
-		String javaScriptType = getJavaScriptType();
-
-		if (javaScriptType != null) {
-			javaScriptType = TypeUtil.getFacesJavaScriptType(javaScriptType);
-		}
-		else {
-			javaScriptType = TypeUtil.removeJavaPrefix(getType());
-		}
-
-		return javaScriptType;
-	}
-
-	public String getJSFReservedAttributeType() {
-		return _jsfReservedAttributeType;
-	}
-
+	
 	public String getMethodSignature() {
 		return _methodSignature;
-	}
-
-	@Override
-	public String getSafeName() {
-		if (_outputUnsafe || !isGenerateJava() || isJSFReservedAttribute()) {
-			return super.getName();
-		} else {
-			return super.getSafeName();
-		}
 	}
 
 	@Override
 	public void initialize(Element facesAttributeElement, Component component) {
 		super.initialize(facesAttributeElement, component);
 
-		String javaScriptType = getJavaScriptType();
+		String type = Convert.toString(facesAttributeElement
+				.elementText("type"), DEFAULT_TYPE);
+		setType(type);
 
-		String defaultType = DEFAULT_TYPE;
+		String defaultJavaScriptType = "Object";
 
-		if (javaScriptType != null) {
-			defaultType = TypeUtil.getFacesJavaScriptType(javaScriptType);
-
-			if (!(defaultType.equalsIgnoreCase("string") || defaultType.equalsIgnoreCase("boolean"))) {
-				defaultType = "Object";
-			}
-			
-			defaultType = TypeUtil.getJavaWrapperType(defaultType);
-			defaultType = "java.lang." + defaultType;
+		if (type.contains("String")) {
+			defaultJavaScriptType = "String";
 		}
 
-		String type = Convert.toString(
-			facesAttributeElement.elementText("type"), defaultType);
-		setType(type);
-		
-		_getterDefaultReturnValue = Convert.toString(
-			facesAttributeElement.elementText("getterDefaultReturnValue"),
-			"null");
+		String javaScriptType = Convert.toString(facesAttributeElement
+				.elementText("javaScriptType"), defaultJavaScriptType);
+		setJavaScriptType(javaScriptType);
+
 		_methodSignature = facesAttributeElement
 				.elementText("method-signature");
-		_outputUnsafe = Convert.toBoolean(facesAttributeElement
-			.elementText("outputUnsafe"), false);
 		_override = Convert.toBoolean(facesAttributeElement
-			.elementText("override"), false);
-		_jsfReservedAttribute = Convert.toBoolean(facesAttributeElement
-			.elementText("jsfReservedAttribute"), false);
-
-		if (_jsfReservedAttribute) {
-
-			_jsfReservedAttributeType = Convert.toString(facesAttributeElement
-				.elementText("jsfReservedAttributeType"),
-				type);
-		}
-
+				.elementText("override"), false);
 		_yui = Convert.toBoolean(facesAttributeElement
-			.elementText("yui"), false);
-		_yuiName = Convert.toString(
-			facesAttributeElement.elementText("yuiName"),
-			null);
-	}
-
-	public boolean isJSFReservedAttribute() {
-		return _jsfReservedAttribute;
-	}
-
-	public boolean isOutputUnsafe() {
-		return _outputUnsafe;
-	}
-
-	public void setJSFReservedAttribute(boolean _jsfReservedAttribute) {
-		this._jsfReservedAttribute = _jsfReservedAttribute;
-	}
-
-	public void setJSFReservedAttributeType(String _jsfReservedAttributeType) {
-		this._jsfReservedAttributeType = _jsfReservedAttributeType;
+				.elementText("yui"), false);
+		_yuiName = Convert.toString(facesAttributeElement
+				.elementText("yuiName"), null);
 	}
 
 	public void setMethodSignature(String methodSignature) {
 		_methodSignature = methodSignature;
-	}
-
-	public void setOutputUnsafe(boolean _outputUnsafe) {
-		this._outputUnsafe = _outputUnsafe;
-	}
-
-	public String getGetterDefaultReturnValue() {
-		return _getterDefaultReturnValue;
-	}
-
-	public void setGetterDefaultReturnValue(String _getterDefaultReturnValue) {
-		this._getterDefaultReturnValue = _getterDefaultReturnValue;
 	}
 
 	public boolean isOverride() {
@@ -195,11 +103,7 @@ public class FacesAttribute extends Attribute {
 		return StringUtil.fromCamelCase(_yuiName, '_').toUpperCase();
 	}
 
-	private String _getterDefaultReturnValue;
-	private boolean _jsfReservedAttribute;
-	private String _jsfReservedAttributeType;
 	private String _methodSignature;
-	private boolean _outputUnsafe;
 	private boolean _override;
 	private boolean _yui;
 	private String _yuiName;

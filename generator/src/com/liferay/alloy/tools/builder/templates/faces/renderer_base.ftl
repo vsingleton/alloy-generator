@@ -66,7 +66,7 @@ public abstract class ${component.getCamelizedName()}${RENDERER_BASE_CLASS_SUFFI
 	<#if attribute.isGenerateJava() && (attribute.isYui() || attribute.getYuiName()??)>
 
 	protected void encode<#if attribute.isYui()>${attribute.getCapitalizedName()}<#else>${attribute.getYuiName()?cap_first}</#if>(ResponseWriter responseWriter, ${component.getCamelizedName()} ${component.getUncapitalizedName()}, ${attribute.getJavaWrapperType()} ${attribute.getJavaSafeName()}, boolean first) throws IOException {
-		encode${attribute.getFacesJavaScriptType()}(responseWriter, <#if attribute.isYui()>${component.getCamelizedName()}.${attribute.getConstantName()}<#else>${attribute.getYuiConstantName()}</#if>, ${attribute.getJavaSafeName()}, first);
+		encode${attribute.getJavaScriptType()}(responseWriter, <#if attribute.isYui()>${component.getCamelizedName()}.${attribute.getConstantName()}<#else>${attribute.getYuiConstantName()}</#if>, ${attribute.getJavaSafeName()}, first);
 	}
 	</#if>
 	</#list>

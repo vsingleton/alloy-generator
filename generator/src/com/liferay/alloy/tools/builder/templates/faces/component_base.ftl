@@ -38,14 +38,14 @@ public abstract class ${component.getCamelizedName()}${BASE_CLASS_SUFFIX} extend
 	<#if attribute.isOverride()>
 	@Override
 	</#if>
-	public ${attribute.getJavaWrapperType()} ${attribute.getGetterMethodPrefix()}${attribute.getJavaBeanPropertyName()}() {
-		return (${attribute.getJavaWrapperType()}) getStateHelper().eval(${attribute.getConstantName()}, ${attribute.getGetterDefaultReturnValue()});
+	public ${attribute.getUnprefixedType()} ${attribute.getGetterMethodPrefix()}${attribute.getJavaBeanPropertyName()}() {
+		return (${attribute.getJavaWrapperType()}) getStateHelper().eval(${attribute.getConstantName()}, null);
 	}
 
 	<#if attribute.isOverride()>
 	@Override
 	</#if>
-	public void set${attribute.getJavaBeanPropertyName()}(${attribute.getJavaWrapperType()} ${attribute.getJavaSafeName()}) {
+	public void set${attribute.getJavaBeanPropertyName()}(${attribute.getUnprefixedType()} ${attribute.getJavaSafeName()}) {
 		getStateHelper().put(${attribute.getConstantName()}, ${attribute.getJavaSafeName()});
 	}
 	</#if>

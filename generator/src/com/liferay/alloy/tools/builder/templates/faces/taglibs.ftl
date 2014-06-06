@@ -33,11 +33,7 @@ http://java.sun.com/xml/ns/javaee/web-facelettaglibrary_2_0.xsd http://vdldoc.or
 			</#if>
 			<name>${attribute.getSafeName()}</name>
 			<required>${attribute.isRequired()?string("true", "false")}</required>
-			<#if attribute.isJSFReservedAttribute()>
-			<type>${attribute.getJSFReservedAttributeType()}</type>
-			<#else>
 			<type>${attribute.getType()}</type>
-			</#if>
 			<#if attribute.getMethodSignature()??>
 			<method-signature><#compress>${attribute.getMethodSignature()}</#compress></method-signature>
 			</#if>
