@@ -63,7 +63,9 @@ public class FacesAttribute extends Attribute {
 		String javaScriptType = Convert.toString(facesAttributeElement
 				.elementText("javaScriptType"), defaultJavaScriptType);
 		setJavaScriptType(javaScriptType);
-
+		
+		_inherited = Convert.toBoolean(facesAttributeElement
+				.elementText("inherited"), false);
 		_methodSignature = facesAttributeElement
 				.elementText("method-signature");
 		_override = Convert.toBoolean(facesAttributeElement
@@ -106,6 +108,15 @@ public class FacesAttribute extends Attribute {
 		return StringUtil.fromCamelCase(_yuiName, '_').toUpperCase();
 	}
 
+	public boolean isInherited() {
+		return _inherited;
+	}
+
+	public void setInherited(boolean _inherited) {
+		this._inherited = _inherited;
+	}
+
+	private boolean _inherited;
 	private String _methodSignature;
 	private boolean _override;
 	private boolean _yui;

@@ -33,7 +33,7 @@ public abstract class ${component.getCamelizedName()}${BASE_CLASS_SUFFIX} extend
 	</#if>
 	</#list>
 	<#list component.getAttributes()?sort_by("javaBeanPropertyName") as attribute>
-	<#if attribute.isGenerateJava()>
+	<#if attribute.isGenerateJava() && !attribute.isInherited()>
 
 	<#if attribute.isOverride()>
 	@Override
