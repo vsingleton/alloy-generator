@@ -47,6 +47,9 @@ public class FacesAttribute extends Attribute {
 	public void initialize(Element facesAttributeElement, Component component) {
 		super.initialize(facesAttributeElement, component);
 
+		String defaultValue = Convert.toString(facesAttributeElement
+				.elementText("defaultValue"), "null");
+		setDefaultValue(defaultValue);
 		String type = Convert.toString(facesAttributeElement
 				.elementText("type"), DEFAULT_TYPE);
 		setType(type);

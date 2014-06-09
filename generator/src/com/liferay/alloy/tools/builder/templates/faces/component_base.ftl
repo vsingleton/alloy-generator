@@ -39,7 +39,7 @@ public abstract class ${component.getCamelizedName()}${BASE_CLASS_SUFFIX} extend
 	@Override
 	</#if>
 	public ${attribute.getUnprefixedType()} ${attribute.getGetterMethodPrefix()}${attribute.getJavaBeanPropertyName()}() {
-		return (${attribute.getJavaWrapperType()}) getStateHelper().eval(${attribute.getConstantName()}, null);
+		return (${attribute.getJavaWrapperType()}) getStateHelper().eval(${attribute.getConstantName()}, ${attribute.getDefaultValue()});
 	}
 
 	<#if attribute.isOverride()>
