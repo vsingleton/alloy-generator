@@ -53,16 +53,6 @@ public class FacesAttribute extends Attribute {
 		String type = Convert.toString(facesAttributeElement
 				.elementText("type"), DEFAULT_TYPE);
 		setType(type);
-
-		String defaultJavaScriptType = "Object";
-
-		if (type.contains("String")) {
-			defaultJavaScriptType = "String";
-		}
-
-		String javaScriptType = Convert.toString(facesAttributeElement
-				.elementText("javaScriptType"), defaultJavaScriptType);
-		setJavaScriptType(javaScriptType);
 		
 		_inherited = Convert.toBoolean(facesAttributeElement
 				.elementText("inherited"), false);
@@ -74,6 +64,8 @@ public class FacesAttribute extends Attribute {
 				.elementText("yui"), false);
 		_yuiName = Convert.toString(facesAttributeElement
 				.elementText("yuiName"), null);
+		_yuiType = Convert.toString(facesAttributeElement
+				.elementText("yuiType"), getJavaWrapperType());
 	}
 
 	public void setMethodSignature(String methodSignature) {
@@ -116,9 +108,18 @@ public class FacesAttribute extends Attribute {
 		this._inherited = _inherited;
 	}
 
+	public String getYuiType() {
+		return _yuiType;
+	}
+
+	public void setYuiType(String _yuiType) {
+		this._yuiType = _yuiType;
+	}
+
 	private boolean _inherited;
 	private String _methodSignature;
 	private boolean _override;
 	private boolean _yui;
 	private String _yuiName;
+	private String _yuiType;
 }
