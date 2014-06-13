@@ -23,7 +23,7 @@ public abstract class ${component.getCamelizedName()}${RENDERER_BASE_CLASS_SUFFI
 	// Private Constants
 	private static final String ALLOY_CLASS_NAME = "${component.getYuiClassName()}";
 	private static final String ALLOY_MODULE_NAME = "${component.getModule()}";
-	<#list component.getAttributes() as attribute>
+	<#list component.getAttributes()?sort_by("yuiName") as attribute>
 	<#if attribute.isGenerateJava() && attribute.isYui() && (attribute.getName() != attribute.getYuiName())>
 	protected static final String ${attribute.getYuiConstantName()} = "${attribute.getYuiName()}";
 	</#if>
