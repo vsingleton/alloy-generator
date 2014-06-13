@@ -24,7 +24,7 @@ public abstract class ${component.getCamelizedName()}${RENDERER_BASE_CLASS_SUFFI
 	private static final String ALLOY_CLASS_NAME = "${component.getYuiClassName()}";
 	private static final String ALLOY_MODULE_NAME = "${component.getModule()}";
 	<#list component.getAttributes() as attribute>
-	<#if attribute.isGenerateJava() && attribute.getYuiName()??>
+	<#if attribute.isGenerateJava() && attribute.isYui() && (attribute.getName() != attribute.getYuiName())>
 	protected static final String ${attribute.getYuiConstantName()} = "${attribute.getYuiName()}";
 	</#if>
 	</#list>
@@ -38,13 +38,13 @@ public abstract class ${component.getCamelizedName()}${RENDERER_BASE_CLASS_SUFFI
 		${component.getCamelizedName()} ${component.getUncapitalizedName()} = (${component.getCamelizedName()}) uiComponent;
 		boolean first = true;
 		<#list component.getAttributes()?sort_by("javaSafeName") as attribute>
-		<#if attribute.isGenerateJava() && (attribute.isYui() || attribute.getYuiName()??)>
+		<#if attribute.isGenerateJava() && attribute.isYui()>
 
 		${attribute.getJavaWrapperType()} ${attribute.getJavaSafeName()} = ${component.getUncapitalizedName()}.${attribute.getGetterMethodPrefix()}${attribute.getJavaBeanPropertyName()}();
 
 		if (${attribute.getJavaSafeName()} != null) {
 
-			encode<#if attribute.isYui()>${attribute.getCapitalizedName()}<#else>${attribute.getYuiName()?cap_first}</#if>(responseWriter, ${component.getUncapitalizedName()}, ${attribute.getJavaSafeName()}, first);
+			encode${attribute.getYuiName()?cap_first}(responseWriter, ${component.getUncapitalizedName()}, ${attribute.getJavaSafeName()}, first);
 			first = false;
 		}
 		</#if>
@@ -63,10 +63,10 @@ public abstract class ${component.getCamelizedName()}${RENDERER_BASE_CLASS_SUFFI
 		return MODULES;
 	}
 	<#list component.getAttributes()?sort_by("capitalizedName") as attribute>
-	<#if attribute.isGenerateJava() && (attribute.isYui() || attribute.getYuiName()??)>
+	<#if attribute.isGenerateJava() && attribute.isYui()>
 
-	protected void encode<#if attribute.isYui()>${attribute.getCapitalizedName()}<#else>${attribute.getYuiName()?cap_first}</#if>(ResponseWriter responseWriter, ${component.getCamelizedName()} ${component.getUncapitalizedName()}, ${attribute.getJavaWrapperType()} ${attribute.getJavaSafeName()}, boolean first) throws IOException {
-		encode${attribute.getYuiType()}(responseWriter, <#if attribute.isYui()>${component.getCamelizedName()}.${attribute.getConstantName()}<#else>${attribute.getYuiConstantName()}</#if>, ${attribute.getJavaSafeName()}, first);
+	protected void encode${attribute.getYuiName()?cap_first}(ResponseWriter responseWriter, ${component.getCamelizedName()} ${component.getUncapitalizedName()}, ${attribute.getJavaWrapperType()} ${attribute.getJavaSafeName()}, boolean first) throws IOException {
+		encode${attribute.getYuiType()}(responseWriter, <#if attribute.getName() == attribute.getYuiName()>${component.getCamelizedName()}.${attribute.getConstantName()}<#else>${attribute.getYuiConstantName()}</#if>, ${attribute.getJavaSafeName()}, first);
 	}
 	</#if>
 	</#list>

@@ -63,7 +63,7 @@ public class FacesAttribute extends Attribute {
 		_yui = Convert.toBoolean(facesAttributeElement
 				.elementText("yui"), false);
 		_yuiName = Convert.toString(facesAttributeElement
-				.elementText("yuiName"), null);
+				.elementText("yuiName"), getName());
 		_yuiType = Convert.toString(facesAttributeElement
 				.elementText("yuiType"), getJavaWrapperType());
 	}
