@@ -3,11 +3,7 @@
 
 package ${packagePath}.${component.getUncamelizedName(BLANK)};
 
-<#if !component.isYui()>
-import ${component.getRendererBaseClass()};
-<#else>
 import javax.faces.application.ResourceDependencies;
-</#if>
 import javax.faces.application.ResourceDependency;
 import javax.faces.render.FacesRenderer;
 
@@ -28,5 +24,6 @@ import javax.faces.render.FacesRenderer;
 <#else>
 @ResourceDependency(library = "liferay-faces-alloy", name = "liferay.js")
 </#if>
-public class ${component.getCamelizedName()}${RENDERER_CLASS_SUFFIX} extends ${component.getUnqualifiedRendererBaseClass()} {
+public class ${component.getCamelizedName()}${RENDERER_CLASS_SUFFIX} extends ${component.getCamelizedName()}${RENDERER_BASE_CLASS_SUFFIX} {
+	// Initial Generation
 }

@@ -85,10 +85,7 @@ public class FacesBuilder extends BaseBuilder {
 				_buildComponent(facesComponent, context);
 				_buildComponentBase(facesComponent, context);
 				_buildRenderer(facesComponent, context);
-
-				if (facesComponent.isYui()) {
-					_buildRendererBase(facesComponent, context);
-				}
+				_buildRendererBase(facesComponent, context);
 
 				context.remove("component");
 			}

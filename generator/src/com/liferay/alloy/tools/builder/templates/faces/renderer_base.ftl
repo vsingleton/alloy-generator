@@ -4,11 +4,15 @@
 package ${packagePath}.${component.getUncamelizedName(BLANK)};
 //J-
 
+<#if component.isYui()>
 import java.io.IOException;
+</#if>
 
 import javax.annotation.Generated;
+<#if component.isYui()>
 import javax.faces.component.UIComponent;
 import javax.faces.context.ResponseWriter;
+</#if>
 
 import ${component.getRendererParentClass()};
 
@@ -20,16 +24,19 @@ import ${component.getRendererParentClass()};
 @Generated(value = "com.liferay.alloy.tools.builder.FacesBuilder")
 public abstract class ${component.getCamelizedName()}${RENDERER_BASE_CLASS_SUFFIX} extends ${component.getUnqualifiedRendererParentClass()} {
 
-	// Private Constants
-	private static final String ALLOY_CLASS_NAME = "${component.getYuiClassName()}";
-	private static final String ALLOY_MODULE_NAME = "${component.getModule()}";
+	// Protected Constants
 	<#list component.getAttributes()?sort_by("yuiName") as attribute>
-	<#if attribute.isGenerateJava() && attribute.isYui() && (attribute.getName() != attribute.getYuiName())>
+	<#if attribute.isGenerateJava()>
 	protected static final String ${attribute.getYuiConstantName()} = "${attribute.getYuiName()}";
 	</#if>
 	</#list>
+	<#if component.isYui()>
 
-	// Protected Constants
+	// Private Constants
+	private static final String ALLOY_CLASS_NAME = "${component.getYuiClassName()}";
+	private static final String ALLOY_MODULE_NAME = "${component.getModule()}";
+
+	// Modules
 	protected static final String[] MODULES = {ALLOY_MODULE_NAME};
 
 	@Override
@@ -66,7 +73,7 @@ public abstract class ${component.getCamelizedName()}${RENDERER_BASE_CLASS_SUFFI
 	<#if attribute.isGenerateJava() && attribute.isYui()>
 
 	protected void encode${attribute.getYuiName()?cap_first}(ResponseWriter responseWriter, ${component.getCamelizedName()} ${component.getUncapitalizedName()}, ${attribute.getJavaWrapperType()} ${attribute.getJavaSafeName()}, boolean first) throws IOException {
-		encode${attribute.getYuiType()}(responseWriter, <#if attribute.getName() == attribute.getYuiName()>${component.getCamelizedName()}.${attribute.getConstantName()}<#else>${attribute.getYuiConstantName()}</#if>, ${attribute.getJavaSafeName()}, first);
+		encode${attribute.getYuiType()}(responseWriter, ${attribute.getYuiConstantName()}, ${attribute.getJavaSafeName()}, first);
 	}
 	</#if>
 	</#list>
@@ -74,5 +81,6 @@ public abstract class ${component.getCamelizedName()}${RENDERER_BASE_CLASS_SUFFI
 	protected void encodeHiddenAttributes(ResponseWriter responseWriter, ${component.getCamelizedName()} ${component.getUncapitalizedName()}, boolean first) throws IOException {
 		// no-op
 	}
+	</#if>
 }
 //J+
