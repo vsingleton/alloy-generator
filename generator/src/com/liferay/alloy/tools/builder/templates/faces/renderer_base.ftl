@@ -18,7 +18,7 @@ import ${component.getRendererParentClass()};
 
 /**
 <#list component.getAuthors()?sort as author>
- * @author  ${author}
+ * @author	${author}
 </#list>
  */
 @Generated(value = "com.liferay.alloy.tools.builder.FacesBuilder")

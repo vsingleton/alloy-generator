@@ -20,7 +20,7 @@ import com.liferay.faces.util.component.ClientComponent;
 
 /**
 <#list component.getAuthors()?sort as author>
- * @author  ${author}
+ * @author	${author}
 </#list>
  */
 @Generated(value = "com.liferay.alloy.tools.builder.FacesBuilder")

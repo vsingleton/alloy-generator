@@ -9,7 +9,7 @@ import com.liferay.faces.util.lang.StringPool;
 
 /**
 <#list component.getAuthors()?sort as author>
- * @author  ${author}
+ * @author	${author}
 </#list>
  */
 @FacesComponent(value = ${component.getCamelizedName()}.COMPONENT_TYPE)

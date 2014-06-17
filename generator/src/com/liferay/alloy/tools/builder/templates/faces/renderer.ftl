@@ -9,7 +9,7 @@ import javax.faces.render.FacesRenderer;
 
 /**
 <#list component.getAuthors()?sort as author>
- * @author  ${author}
+ * @author	${author}
 </#list>
  */
 @FacesRenderer(componentFamily = ${component.getCamelizedName()}.COMPONENT_FAMILY, rendererType = ${component.getCamelizedName()}.RENDERER_TYPE)
