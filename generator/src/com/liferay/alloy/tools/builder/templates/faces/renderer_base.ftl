@@ -23,11 +23,15 @@ import ${component.getRendererParentClass()};
  */
 @Generated(value = "com.liferay.alloy.tools.builder.FacesBuilder")
 public abstract class ${component.getCamelizedName()}${RENDERER_BASE_CLASS_SUFFIX} extends ${component.getUnqualifiedRendererParentClass()} {
-
-	// Protected Constants
+	<#assign first = true>
 	<#list component.getAttributes()?sort_by("yuiName") as attribute>
 	<#if attribute.isGenerateJava()>
+	<#if first>
+
+	// Protected Constants
+	</#if>
 	protected static final String ${attribute.getYuiConstantName()} = "${attribute.getYuiName()}";
+	<#assign first = false>
 	</#if>
 	</#list>
 	<#if component.isYui()>

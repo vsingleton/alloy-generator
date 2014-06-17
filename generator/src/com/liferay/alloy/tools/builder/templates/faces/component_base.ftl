@@ -25,21 +25,25 @@ import com.liferay.faces.util.component.ClientComponent;
  */
 @Generated(value = "com.liferay.alloy.tools.builder.FacesBuilder")
 public abstract class ${component.getCamelizedName()}${BASE_CLASS_SUFFIX} extends ${component.getUnqualifiedParentClass()} implements Styleable<#if component.isYui()>, ClientComponent</#if> {
+	<#assign enumWritten = false>
+	<#list component.getAttributes()?sort_by("constantName") as attribute>
+	<#if attribute.isGenerateJava() && !attribute.isInherited()>
+	<#if !enumWritten>
 
 	// Protected Enumerations
 	protected enum ${component.getCamelizedName()}PropertyKeys {
-	<#assign first = true>
-	<#list component.getAttributes()?sort_by("constantName") as attribute>
-	<#if attribute.isGenerateJava() && !attribute.isInherited()>
-		<#if !first>
-		<#lt>,
-		</#if>
 		<#rt>${attribute.getJavaSafeName()}
-		<#assign first = false>
+		<#assign enumWritten = true>
+	<#else>
+		<#lt>,
+		<#rt>${attribute.getJavaSafeName()}
+	</#if>
 	</#if>
 	</#list>
+	<#if enumWritten>
 
 	}
+	</#if>
 	<#list component.getAttributes()?sort_by("javaBeanPropertyName") as attribute>
 	<#if attribute.isGenerateJava() && !attribute.isInherited()>
 
