@@ -12,6 +12,7 @@ import javax.faces.render.FacesRenderer;
  * @author	${author}
 </#list>
  */
+//J-
 @FacesRenderer(componentFamily = ${component.getCamelizedName()}.COMPONENT_FAMILY, rendererType = ${component.getCamelizedName()}.RENDERER_TYPE)
 <#if component.isYui()>
 @ResourceDependencies(
@@ -24,6 +25,7 @@ import javax.faces.render.FacesRenderer;
 <#else>
 @ResourceDependency(library = "liferay-faces-alloy", name = "liferay.js")
 </#if>
+//J+
 public class ${component.getCamelizedName()}${RENDERER_CLASS_SUFFIX} extends ${component.getCamelizedName()}${RENDERER_BASE_CLASS_SUFFIX} {
 	// Initial Generation
 }
