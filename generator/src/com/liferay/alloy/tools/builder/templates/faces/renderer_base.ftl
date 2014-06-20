@@ -11,6 +11,7 @@ import java.io.IOException;
 import javax.annotation.Generated;
 <#if component.isYui()>
 import javax.faces.component.UIComponent;
+import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 </#if>
 
@@ -44,7 +45,7 @@ public abstract class ${component.getCamelizedName()}${RENDERER_BASE_CLASS_SUFFI
 	protected static final String[] MODULES = {ALLOY_MODULE_NAME};
 
 	@Override
-	public void encodeAlloyAttributes(ResponseWriter responseWriter, UIComponent uiComponent) throws IOException {
+	public void encodeAlloyAttributes(FacesContext facesContext, ResponseWriter responseWriter, UIComponent uiComponent) throws IOException {
 
 		${component.getCamelizedName()} ${component.getUncapitalizedName()} = (${component.getCamelizedName()}) uiComponent;
 		boolean first = true;
@@ -61,7 +62,7 @@ public abstract class ${component.getCamelizedName()}${RENDERER_BASE_CLASS_SUFFI
 		</#if>
 		</#list>
 
-		encodeHiddenAttributes(responseWriter, ${component.getUncapitalizedName()}, first);
+		encodeHiddenAttributes(facesContext, responseWriter, ${component.getUncapitalizedName()}, first);
 	}
 
 	@Override
@@ -82,7 +83,7 @@ public abstract class ${component.getCamelizedName()}${RENDERER_BASE_CLASS_SUFFI
 	</#if>
 	</#list>
 
-	protected void encodeHiddenAttributes(ResponseWriter responseWriter, ${component.getCamelizedName()} ${component.getUncapitalizedName()}, boolean first) throws IOException {
+	protected void encodeHiddenAttributes(FacesContext facesContext, ResponseWriter responseWriter, ${component.getCamelizedName()} ${component.getUncapitalizedName()}, boolean first) throws IOException {
 		// no-op
 	}
 	</#if>
