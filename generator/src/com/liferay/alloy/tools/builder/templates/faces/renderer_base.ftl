@@ -77,7 +77,7 @@ public abstract class ${component.getCamelizedName()}${RENDERER_BASE_CLASS_SUFFI
 	<#if attribute.isGenerateJava() && attribute.isYui()>
 
 	protected void encode${attribute.getYuiName()?cap_first}(ResponseWriter responseWriter, ${component.getCamelizedName()} ${component.getUncapitalizedName()}, ${attribute.getJavaWrapperType()} ${attribute.getJavaSafeName()}, boolean first) throws IOException {
-		encode${attribute.getYuiType()}(responseWriter, ${attribute.getYuiConstantName()}, ${attribute.getJavaSafeName()}, first);
+		encode${attribute.getYuiType()}(responseWriter, ${attribute.getYuiConstantName()}, ${attribute.getJavaSafeName()},<#if attribute.getYuiType() == "ClientId"> ${component.getUncapitalizedName()},</#if> first);
 	}
 	</#if>
 	</#list>
