@@ -20,6 +20,7 @@ import com.liferay.alloy.util.StringUtil;
 import com.liferay.alloy.util.TypeUtil;
 
 import jodd.typeconverter.Convert;
+import jodd.util.StringPool;
 
 import org.dom4j.Element;
 public class FacesAttribute extends Attribute {
@@ -32,7 +33,7 @@ public class FacesAttribute extends Attribute {
 		if (javaWrapperType.equals("int")) {
 			javaWrapperType = "Integer";
 		}
-		else {
+		else if (!javaWrapperType.contains(StringPool.DOT)){
 			javaWrapperType = StringUtil.capitalize(javaWrapperType);
 		}
 		
@@ -66,6 +67,10 @@ public class FacesAttribute extends Attribute {
 				.elementText("yuiName"), getName());
 		_yuiType = Convert.toString(facesAttributeElement
 				.elementText("yuiType"), getJavaWrapperType());
+	}
+
+	public String getUnprefixedType() {
+		return TypeUtil.removeJavaPrefix(getType());
 	}
 
 	public void setMethodSignature(String methodSignature) {
