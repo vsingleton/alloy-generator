@@ -24,7 +24,7 @@ import com.liferay.faces.util.component.ClientComponent;
 </#list>
  */
 @Generated(value = "com.liferay.alloy.tools.builder.FacesBuilder")
-public abstract class ${component.getCamelizedName()}${BASE_CLASS_SUFFIX} extends ${component.getUnqualifiedParentClass()} implements Styleable<#if component.isYui()>, ClientComponent</#if> {
+public abstract class ${component.getCamelizedName()}${BASE_CLASS_SUFFIX} extends ${component.getUnqualifiedParentClass()}<#if component.isStyleable() || component.isYui()> implements<#if component.isStyleable()> Styleable</#if><#if component.isStyleable() && component.isYui()>,</#if><#if component.isYui()> ClientComponent</#if></#if> {
 	<#assign enumWritten = false>
 	<#list component.getAttributes()?sort_by("constantName") as attribute>
 	<#if attribute.isGenerateJava() && !attribute.isInherited()>
