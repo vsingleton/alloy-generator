@@ -13,7 +13,9 @@ package ${packagePath}.${component.getUncamelizedName(BLANK)};
 import javax.annotation.Generated;
 import ${component.getParentClass()};
 
+<#if component.isStyleable()>
 import com.liferay.faces.util.component.Styleable;
+</#if>
 <#if component.isYui()>
 import com.liferay.faces.util.component.ClientComponent;
 </#if>
