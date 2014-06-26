@@ -25,6 +25,9 @@ http://java.sun.com/xml/ns/javaee/web-facelettaglibrary_2_0.xsd http://vdldoc.or
 		<component>
 			<component-type>${packagePath}.${component.getUncamelizedName(BLANK)}.${component.getCamelizedName()}</component-type>
 			<renderer-type>${packagePath}.${component.getUncamelizedName(BLANK)}.${component.getCamelizedName()}${RENDERER_CLASS_SUFFIX}</renderer-type>
+			<#if component.getTagHandlerClass()??>
+			<handler-class>${component.getTagHandlerClass()}</handler-class>
+			</#if>
 		</component>
 		<#list component.getAttributes()?sort_by("safeName") as attribute>
 		<attribute>

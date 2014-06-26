@@ -62,6 +62,8 @@ public class FacesComponent extends Component {
 			facesComponentElement.attributeValue("generateTaglibXML"), true);
 		_styleable = Convert.toBoolean(
 			facesComponentElement.attributeValue("styleable"), true);
+		_tagHandlerClass = Convert.toString(
+			facesComponentElement.attributeValue("tagHandlerClass"), null);
 		_yui = Convert.toBoolean(
 			facesComponentElement.attributeValue("yui"), false);
 		_yuiName = Convert.toString(
@@ -164,8 +166,17 @@ public class FacesComponent extends Component {
 		this._yui = _yui;
 	}
 
+	public String getTagHandlerClass() {
+		return _tagHandlerClass;
+	}
+
+	public void setTagHandlerClass(String _tagHandlerClass) {
+		this._tagHandlerClass = _tagHandlerClass;
+	}
+
 	private boolean _generateTaglibXML;
 	private boolean _styleable;
+	private String _tagHandlerClass;
 	private String _yuiName;
 	private String _rendererParentClass;
 	private boolean _yui;
