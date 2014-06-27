@@ -35,6 +35,7 @@ import com.liferay.alloy.tools.model.Attribute;
 import com.liferay.alloy.tools.model.Event;
 import com.liferay.alloy.util.PropsUtil;
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 public class FacesBuilder extends BaseBuilder {
 
@@ -170,7 +171,14 @@ public class FacesBuilder extends BaseBuilder {
 
 			for(String extensionName : extensionNames) {
 				Component extensionComponent = facesComponentsMap.get(extensionName);
-				recursivelyAddExtensionAttributesAndEvents(extensionComponent, facesComponentsMap);
+
+				try {
+					recursivelyAddExtensionAttributesAndEvents(extensionComponent, facesComponentsMap);
+				}
+				catch (NullPointerException e) {
+					throw new NoSuchElementException(component.getName() + " extends non-existent tag " + extensionName);
+				}
+
 				List<Attribute> extensionAttributes = extensionComponent.getAttributesAndEvents();
 
 				if (extensionAttributes.size() > 0) {
