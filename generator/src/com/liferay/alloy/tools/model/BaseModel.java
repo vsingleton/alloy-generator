@@ -40,6 +40,8 @@ public abstract class BaseModel implements Comparable<Object> {
 			_cleanDescription = _description;
 			_cleanDescription = _cleanDescription.replace(StringPool.NEWLINE,
 				StringPool.SPACE);
+			_cleanDescription = _cleanDescription.replace(StringPool.TAB,
+				StringPool.SPACE);
 			_cleanDescription = _cleanDescription.replaceAll("<!--.*-->",
 				StringPool.EMPTY);
 			_cleanDescription = _cleanDescription.replace(PLACEHOLDER_DESCRIPTION, StringPool.EMPTY);
