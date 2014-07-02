@@ -5,7 +5,7 @@ package ${packagePath}.${component.getUncamelizedName(BLANK)};
 
 import javax.faces.component.FacesComponent;
 
-import com.liferay.faces.util.lang.StringPool;
+import com.liferay.faces.util.component.ComponentUtil;
 
 /**
 <#list component.getAuthors()?sort as author>

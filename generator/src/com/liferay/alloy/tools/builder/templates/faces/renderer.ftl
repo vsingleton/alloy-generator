@@ -3,7 +3,9 @@
 
 package ${packagePath}.${component.getUncamelizedName(BLANK)};
 
+<#if component.isYui()>
 import javax.faces.application.ResourceDependencies;
+</#if>
 import javax.faces.application.ResourceDependency;
 import javax.faces.render.FacesRenderer;
 
