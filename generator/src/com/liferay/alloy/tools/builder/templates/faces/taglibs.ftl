@@ -7,15 +7,10 @@ http://java.sun.com/xml/ns/javaee/web-facelettaglibrary_2_0.xsd http://vdldoc.or
 	<#if description??>
 	<description><![CDATA[${description}]]></description>
 	</#if>
-	<namespace>${namespaceURI}</namespace>
-	<#if functions??>
-	<#list functions?sort_by("name") as function>
-	<function>
-		<description><![CDATA[${function["description"]}]]></description>
-		<function-name>${function["name"]}</function-name>
-		<function-class>${function["class"]}</function-class>
-		<function-signature>${function["signature"]}</function-signature>
-	</function>
+	<namespace>http://liferay.com/faces/${namespace}</namespace>
+	<#if extensionElements??>
+	<#list extensionElements as element>
+	${element.asXML()?replace("\n\t", "\n")}
 	</#list>
 	</#if>
 	<#list components?sort_by("uncapitalizedName") as component>

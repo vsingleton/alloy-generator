@@ -21,8 +21,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import jodd.typeconverter.Convert;
-
 import jodd.util.StringPool;
 
 import org.dom4j.Document;
@@ -286,10 +284,6 @@ public class FacesBuilder extends BaseBuilder {
 		for (Document doc : getComponentDefinitionDocs()) {
 			Element root = doc.getRootElement();
 
-			String namespaceURI = Convert.toString(root
-					.attributeValue("namespaceURI"));
-			context.put("namespaceURI", namespaceURI);
-
 			Element descriptionElement = root.element("description");
 			String description = null;
 
@@ -298,33 +292,14 @@ public class FacesBuilder extends BaseBuilder {
 			}
 
 			context.put("description", description);
+			context.put("namespace", _NAMESPACE);
 
 			Element extensionElement = root.element("extension");
 
 			if (extensionElement != null) {
-				List<Element> functions = extensionElement.elements("function");
-				List<Map<String, String>> functionsList = new ArrayList<Map<String, String>>();
 
-				for (Element function : functions) {
-					Map<String, String> functionMap = new HashMap<String, String>();
-
-					String functionDescription = function
-						.element("description").getText();
-					functionMap.put("description", functionDescription);
-					String functionName = function.element("function-name")
-						.getText();
-					functionMap.put("name", functionName);
-					String functionClass = function.element("function-class")
-						.getText();
-					functionMap.put("class", functionClass);
-					String functionSignature = function.element(
-						"function-signature").getText();
-					functionMap.put("signature", functionSignature);
-
-					functionsList.add(functionMap);
-				}
-
-				context.put("functions", functionsList);
+				List<Element> extensionElements = extensionElement.elements();
+				context.put("extensionElements", extensionElements);
 			}
 
 			String rendererContent = processTemplate(_tplTaglibsXML, context);
