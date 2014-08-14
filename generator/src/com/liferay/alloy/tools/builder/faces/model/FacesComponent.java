@@ -68,6 +68,8 @@ public class FacesComponent extends Component {
 			facesComponentElement.attributeValue("yui"), false);
 		_yuiName = Convert.toString(
 			facesComponentElement.attributeValue("yuiName"), getName());
+		_validatorId = Convert.toString(
+			facesComponentElement.attributeValue("validatorId"), null);
 
 		boolean generateJava = Convert.toBoolean(
 			facesComponentElement.attributeValue("generateJava"), true);
@@ -174,10 +176,19 @@ public class FacesComponent extends Component {
 		this._handlerClass = _handlerClass;
 	}
 
+	public String getValidatorId() {
+		return _validatorId;
+	}
+
+	public void setValidatorId(String _validatorId) {
+		this._validatorId = _validatorId;
+	}
+
 	private boolean _generateTaglibXML;
 	private boolean _styleable;
 	private String _handlerClass;
 	private String _yuiName;
 	private String _rendererParentClass;
+	private String _validatorId;
 	private boolean _yui;
 }
