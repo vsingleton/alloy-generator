@@ -286,8 +286,6 @@ public class FacesBuilder extends BaseBuilder {
 		for (Document doc : getComponentDefinitionDocs()) {
 			Element root = doc.getRootElement();
 
-			String namespace = Convert.toString(root
-					.attributeValue("namespace"));
 			String namespaceURI = Convert.toString(root
 					.attributeValue("namespaceURI"));
 			context.put("namespaceURI", namespaceURI);
@@ -333,16 +331,17 @@ public class FacesBuilder extends BaseBuilder {
 
 			String path = getTaglibsXMLOutputDir();
 
-			File rendererFile = new File(path.concat(namespace).concat(
-				_TAGLIB_XML_EXT));
-
+			File rendererFile = new File(path.concat(_NAMESPACE).concat(
+					_TAGLIB_XML_EXT));
 			writeFile(rendererFile, rendererContent, true);
 		}
 	}
 
 	private static final String _BASE_CLASS_SUFFIX = "Base";
 
-	private static final String _COMPONENTS_PACKAGE = "com.liferay.faces.alloy.component";
+	private static final String _NAMESPACE = PropsUtil.getString("builder.faces.taglib.xml.namespace", "alloy");
+
+	private static final String _COMPONENTS_PACKAGE = "com.liferay.faces." + _NAMESPACE + ".component";
 
 	private static final String _JAVA_EXT = ".java";
 
