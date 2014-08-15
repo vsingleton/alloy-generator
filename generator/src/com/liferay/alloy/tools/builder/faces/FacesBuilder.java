@@ -70,6 +70,7 @@ public class FacesBuilder extends BaseBuilder {
 		Iterator<Component> iterator = components.iterator();
 
 		Map<String, Object> context = getDefaultTemplateContext();
+		context.put("namespace", _NAMESPACE);
 		context.put("packagePath", _COMPONENTS_PACKAGE);
 		context.put("BASE_CLASS_SUFFIX", _BASE_CLASS_SUFFIX);
 		context.put("RENDERER_CLASS_SUFFIX", _RENDERER_CLASS_SUFFIX);
@@ -292,7 +293,6 @@ public class FacesBuilder extends BaseBuilder {
 			}
 
 			context.put("description", description);
-			context.put("namespace", _NAMESPACE);
 
 			Element extensionElement = root.element("extension");
 
