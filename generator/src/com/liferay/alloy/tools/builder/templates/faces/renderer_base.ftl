@@ -71,7 +71,7 @@ public abstract class ${component.getCamelizedName()}${RENDERER_BASE_CLASS_SUFFI
 	}
 
 	@Override
-	protected String[] getModules() {
+	protected String[] getModules(UIComponent uiComponent) {
 		return MODULES;
 	}
 	<#list component.getAttributes()?sort_by("capitalizedName") as attribute>
