@@ -60,6 +60,8 @@ public class FacesComponent extends Component {
 
 		_generateTaglibXML = Convert.toBoolean(
 			facesComponentElement.attributeValue("generateTaglibXML"), true);
+		_handlerClassOnly = Convert.toBoolean(
+			facesComponentElement.attributeValue("handlerClassOnly"), false);
 		_styleable = Convert.toBoolean(
 			facesComponentElement.attributeValue("styleable"), true);
 		_handlerClass = Convert.toString(
@@ -184,7 +186,16 @@ public class FacesComponent extends Component {
 		this._validatorId = _validatorId;
 	}
 
+	public boolean isHandlerClassOnly() {
+		return _handlerClassOnly;
+	}
+
+	public void setHandlerClassOnly(boolean _handlerClassOnly) {
+		this._handlerClassOnly = _handlerClassOnly;
+	}
+
 	private boolean _generateTaglibXML;
+	private boolean _handlerClassOnly;
 	private boolean _styleable;
 	private String _handlerClass;
 	private String _yuiName;

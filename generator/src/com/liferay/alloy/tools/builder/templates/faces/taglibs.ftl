@@ -21,6 +21,8 @@ http://java.sun.com/xml/ns/javaee/web-facelettaglibrary_2_0.xsd http://vdldoc.or
 		<validator>
 			<validator-id>${component.getValidatorId()}</validator-id>
 		</validator>
+		<#elseif component.isHandlerClassOnly()>
+		<handler-class>${component.getHandlerClass()}</handler-class>
 		<#else>
 		<component>
 			<component-type>${packagePath}.${component.getUncamelizedName(BLANK)}.${component.getCamelizedName()}</component-type>
