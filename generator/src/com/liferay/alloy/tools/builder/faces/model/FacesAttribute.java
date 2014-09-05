@@ -33,7 +33,7 @@ public class FacesAttribute extends Attribute {
 		if (javaWrapperType.equals("int")) {
 			javaWrapperType = "Integer";
 		}
-		else if (!javaWrapperType.contains(StringPool.DOT)){
+		else if (!javaWrapperType.contains(StringPool.DOT) && !javaWrapperType.contains("[]")){
 			javaWrapperType = StringUtil.capitalize(javaWrapperType);
 		}
 		
