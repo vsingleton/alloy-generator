@@ -52,6 +52,9 @@ public abstract class ${component.getCamelizedName()}${BASE_CLASS_SUFFIX} extend
 	<#if attribute.isOverride()>
 	@Override
 	</#if>
+	<#if attribute.getJavaWrapperType()?contains("<")>
+	@SuppressWarnings("unchecked")
+	</#if>
 	public ${attribute.getUnprefixedType()} ${attribute.getGetterMethodPrefix()}${attribute.getJavaBeanPropertyName()}() {
 		return (${attribute.getJavaWrapperType()}) getStateHelper().eval(${component.getCamelizedName()}PropertyKeys.${attribute.getJavaSafeName()}, ${attribute.getDefaultValue()});
 	}

@@ -39,7 +39,7 @@ http://java.sun.com/xml/ns/javaee/web-facelettaglibrary_2_0.xsd http://vdldoc.or
 			</#if>
 			<name>${attribute.getSafeName()}</name>
 			<required>${attribute.isRequired()?string("true", "false")}</required>
-			<type>${attribute.getType()}</type>
+			<type>${attribute.getType()?xml}</type>
 			<#if attribute.getMethodSignature()??>
 			<method-signature><#compress>${attribute.getMethodSignature()}</#compress></method-signature>
 			</#if>
