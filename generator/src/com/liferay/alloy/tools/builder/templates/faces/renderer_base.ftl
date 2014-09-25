@@ -66,12 +66,12 @@ public abstract class ${component.getCamelizedName()}${RENDERER_BASE_CLASS_SUFFI
 	}
 
 	@Override
-	public String getAlloyClassName() {
+	public String getAlloyClassName(FacesContext facesContext, UIComponent uiComponent) {
 		return ALLOY_CLASS_NAME;
 	}
 
 	@Override
-	protected String[] getModules(UIComponent uiComponent) {
+	protected String[] getModules(FacesContext facesContext, UIComponent uiComponent) {
 		return MODULES;
 	}
 	<#list component.getAttributes()?sort_by("capitalizedName") as attribute>
