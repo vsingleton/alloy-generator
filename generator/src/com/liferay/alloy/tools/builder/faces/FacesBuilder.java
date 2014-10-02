@@ -206,6 +206,10 @@ public class FacesBuilder extends BaseBuilder {
 		}
 	}
 
+	protected String getRendererOutputDir(Component component) {
+		return getComponentOutputDir(component).concat("internal").concat(StringPool.SLASH);
+	}
+
 	private void _buildComponent(FacesComponent facesComponent,
 			Map<String, Object> context) throws Exception {
 
@@ -242,7 +246,7 @@ public class FacesBuilder extends BaseBuilder {
 	private void _buildRenderer(FacesComponent facesComponent,
 			Map<String, Object> context) throws Exception {
 
-		String path = getComponentOutputDir(facesComponent);
+		String path = getRendererOutputDir(facesComponent);
 
 		String rendererContent = processTemplate(_tplRenderer, context);
 
@@ -261,7 +265,7 @@ public class FacesBuilder extends BaseBuilder {
 	private void _buildRendererBase(FacesComponent facesComponent,
 			Map<String, Object> context) throws Exception {
 
-		String path = getComponentOutputDir(facesComponent);
+		String path = getRendererOutputDir(facesComponent);
 
 		String rendererBaseContent = processTemplate(_tplRendererBase, context);
 
