@@ -31,7 +31,7 @@ public class Base${component.getClassName()} extends ${component.getParentClass(
 		return super.doStartTag();
 	}
 
-	<#list component.getAttributesAndEvents() as attribute>
+	<#list component.getAttributesAndEvents()?sort_by("capitalizedName") as attribute>
 	<#if attribute.isGettable()>
 	public <#if attribute.isEvent()>${attribute.getType()}<#else>${attribute.getRawInputType()}</#if> get${attribute.getCapitalizedName()}() {
 		return _${attribute.getSafeName()};
@@ -39,7 +39,7 @@ public class Base${component.getClassName()} extends ${component.getParentClass(
 
 	</#if>
 	</#list>
-	<#list component.getAttributesAndEvents() as attribute>
+	<#list component.getAttributesAndEvents()?sort_by("capitalizedName") as attribute>
 	<#if attribute.isSettable()>
 	public void set${attribute.getCapitalizedName()}(<#if attribute.isEvent()>${attribute.getType()}<#else>${attribute.getRawInputType()}</#if> ${attribute.getSafeName()}) {
 		_${attribute.getSafeName()} = ${attribute.getSafeName()};
@@ -130,7 +130,7 @@ public class Base${component.getClassName()} extends ${component.getParentClass(
 		"${jspRelativePath}/page.jsp";
 	</#if>
 
-	<#list component.getAttributesAndEvents() as attribute>
+	<#list component.getAttributesAndEvents()?sort_by("safeName") as attribute>
 	<#compress>
 	<#assign outputSimpleClassName = attribute.getTypeSimpleClassName()>
 	<#if !attribute.isEvent()>

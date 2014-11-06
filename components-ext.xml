@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <components extends="./components.xml" namespace="aui">
-<component name="Popover">
+<!-- Example of how to add attribute: -->
+	<!-- <component name="Popover">
 	<attributes>
 	  <attribute>
 		<defaultValue></defaultValue>
@@ -12,5 +13,5 @@
 		<outputType>java.lang.String</outputType>
 	  </attribute>
 	</attributes>
-</component>
+</component> -->
 </components>
