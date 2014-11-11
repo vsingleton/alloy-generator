@@ -39,7 +39,8 @@ public class Event extends Attribute {
 
 		if (isAfter) {
 			setName(_AFTER + capitalizedName);
-		} else {
+		}
+		else {
 			setName(_ON + capitalizedName);
 		}
 	}
@@ -90,4 +91,5 @@ public class Event extends Attribute {
 	private boolean _isAfter = false;
 	private boolean _isOn = false;
 	private String _unprefixedName;
+
 }

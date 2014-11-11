@@ -17,7 +17,7 @@ http://java.sun.com/xml/ns/javaee/web-facelettaglibrary_2_0.xsd http://vdldoc.or
 	<tag>
 		<description><![CDATA[${component.getCleanDescription()}]]></description>
 		<tag-name>${component.getUncapitalizedName()}</tag-name>
-		<#if component.getValidatorId()??>	
+		<#if component.getValidatorId()??>
 		<validator>
 			<validator-id>${component.getValidatorId()}</validator-id>
 		</validator>

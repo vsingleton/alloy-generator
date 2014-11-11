@@ -46,7 +46,6 @@ public class Attribute extends BaseModel {
 	}
 
 	public String getGetterMethodPrefix() {
-
 		String getterMethodPrefix = "get";
 
 		if (getJavaWrapperType().equalsIgnoreCase("Boolean")) {
@@ -73,15 +72,15 @@ public class Attribute extends BaseModel {
 		return ReservedAttributeUtil.getJavaSafeName(this);
 	}
 
+	public String getJavaScriptType() {
+		return _javaScriptType;
+	}
+
 	public String getJavaWrapperType() {
 		String javaWrapperType = getType();
 		javaWrapperType = TypeUtil.getInputJavaType(javaWrapperType, true);
 
 		return TypeUtil.getJavaWrapperType(javaWrapperType);
-	}
-
-	public String getJavaScriptType() {
-		return _javaScriptType;
 	}
 
 	public String getSafeName() {
@@ -97,6 +96,10 @@ public class Attribute extends BaseModel {
 		}
 
 		return safeName;
+	}
+
+	public String getType() {
+		return _type;
 	}
 
 	public String getTypeSimpleClassName() {
@@ -119,7 +122,6 @@ public class Attribute extends BaseModel {
 	}
 
 	public void initialize(Element attributeElement, Component component) {
-
 		setComponent(component);
 		String description = attributeElement.elementText("description");
 		setDescription(description);
@@ -162,6 +164,10 @@ public class Attribute extends BaseModel {
 		return _gettable;
 	}
 
+	public boolean isReadOnly() {
+		return _readOnly;
+	}
+
 	public boolean isRequired() {
 		return _required;
 	}
@@ -186,10 +192,6 @@ public class Attribute extends BaseModel {
 		_javaScriptType = javaScriptType;
 	}
 
-	public boolean isReadOnly() {
-		return _readOnly;
-	}
-
 	public void setReadOnly(boolean readOnly) {
 		_readOnly = readOnly;
 	}
@@ -200,10 +202,6 @@ public class Attribute extends BaseModel {
 
 	public void setSettable(boolean settable) {
 		_settable = settable;
-	}
-
-	public String getType() {
-		return _type;
 	}
 
 	public void setType(String _type) {
@@ -228,4 +226,5 @@ public class Attribute extends BaseModel {
 	private boolean _required;
 	private boolean _settable = true;
 	private String _type;
+
 }

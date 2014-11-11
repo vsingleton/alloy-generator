@@ -20,6 +20,7 @@ import com.liferay.alloy.util.StringUtil;
 import com.liferay.alloy.util.TypeUtil;
 
 import jodd.typeconverter.Convert;
+
 import jodd.util.StringPool;
 
 import org.dom4j.Element;
@@ -27,94 +28,98 @@ public class FacesAttribute extends Attribute {
 
 	@Override
 	public String getJavaWrapperType() {
-
 		String javaWrapperType = TypeUtil.removeJavaPrefix(getType());
 
 		if (javaWrapperType.equals("int")) {
 			javaWrapperType = "Integer";
 		}
-		else if (!javaWrapperType.contains(StringPool.DOT) && !javaWrapperType.contains("[]")){
+		else if (!javaWrapperType.contains(StringPool.DOT) &&
+				 !javaWrapperType.contains("[]")) {
+
 			javaWrapperType = StringUtil.capitalize(javaWrapperType);
 		}
-		
+
 		return javaWrapperType;
 	}
-	
+
 	public String getMethodSignature() {
 		return _methodSignature;
-	}
-
-	@Override
-	public void initialize(Element facesAttributeElement, Component component) {
-		super.initialize(facesAttributeElement, component);
-
-		String defaultValue = Convert.toString(facesAttributeElement
-				.elementText("defaultValue"), "null");
-		setDefaultValue(defaultValue);
-		String type = Convert.toString(facesAttributeElement
-				.elementText("type"), DEFAULT_TYPE);
-		setType(type);
-		
-		_inherited = Convert.toBoolean(facesAttributeElement
-				.elementText("inherited"), false);
-		_methodSignature = facesAttributeElement
-				.elementText("method-signature");
-		_override = Convert.toBoolean(facesAttributeElement
-				.elementText("override"), false);
-		_yui = Convert.toBoolean(facesAttributeElement
-				.elementText("yui"), false);
-		_yuiName = Convert.toString(facesAttributeElement
-				.elementText("yuiName"), getName());
-		_yuiType = Convert.toString(facesAttributeElement
-				.elementText("yuiType"), getJavaWrapperType());
 	}
 
 	public String getUnprefixedType() {
 		return TypeUtil.removeJavaPrefix(getType());
 	}
 
-	public void setMethodSignature(String methodSignature) {
-		_methodSignature = methodSignature;
-	}
-
-	public boolean isOverride() {
-		return _override;
-	}
-
-	public void setOverride(boolean _override) {
-		this._override = _override;
-	}
-
-	public boolean isYui() {
-		return _yui;
-	}
-
-	public void setYui(boolean _yui) {
-		this._yui = _yui;
+	public String getYuiConstantName() {
+		return StringUtil.fromCamelCase(_yuiName, '_').toUpperCase();
 	}
 
 	public String getYuiName() {
 		return _yuiName;
 	}
 
-	public void setYuiName(String _yuiName) {
-		this._yuiName = _yuiName;
+	public String getYuiType() {
+		return _yuiType;
 	}
 
-	public String getYuiConstantName() {
-		return StringUtil.fromCamelCase(_yuiName, '_').toUpperCase();
+	@Override
+	public void initialize(Element facesAttributeElement, Component component) {
+		super.initialize(facesAttributeElement, component);
+
+		String defaultValue = Convert.toString(
+			facesAttributeElement.elementText("defaultValue"), "null");
+
+		setDefaultValue(defaultValue);
+
+		String type = Convert.toString(
+			facesAttributeElement.elementText("type"), DEFAULT_TYPE);
+
+		setType(type);
+
+		_inherited = Convert.toBoolean(
+			facesAttributeElement.elementText("inherited"), false);
+		_methodSignature = facesAttributeElement.elementText(
+			"method-signature");
+		_override = Convert.toBoolean(
+			facesAttributeElement.elementText("override"), false);
+		_yui = Convert.toBoolean(
+			facesAttributeElement.elementText("yui"), false);
+		_yuiName = Convert.toString(
+			facesAttributeElement.elementText("yuiName"), getName());
+		_yuiType = Convert.toString(
+			facesAttributeElement.elementText("yuiType"), getJavaWrapperType());
 	}
 
 	public boolean isInherited() {
 		return _inherited;
 	}
 
+	public boolean isOverride() {
+		return _override;
+	}
+
+	public boolean isYui() {
+		return _yui;
+	}
+
 	public void setInherited(boolean _inherited) {
 		this._inherited = _inherited;
 	}
 
-	public String getYuiType() {
-		return _yuiType;
+	public void setMethodSignature(String methodSignature) {
+		_methodSignature = methodSignature;
+	}
+
+	public void setOverride(boolean _override) {
+		this._override = _override;
+	}
+
+	public void setYui(boolean _yui) {
+		this._yui = _yui;
+	}
+
+	public void setYuiName(String _yuiName) {
+		this._yuiName = _yuiName;
 	}
 
 	public void setYuiType(String _yuiType) {
@@ -127,4 +132,5 @@ public class FacesAttribute extends Attribute {
 	private boolean _yui;
 	private String _yuiName;
 	private String _yuiType;
+
 }

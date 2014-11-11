@@ -20,6 +20,7 @@ import com.liferay.alloy.util.StringUtil;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import jodd.typeconverter.Convert;
 
 import org.dom4j.Element;
@@ -55,20 +56,6 @@ public class TagComponent extends Component {
 		return _dynamicAttributes;
 	}
 
-	@Override
-	protected List<Attribute> getAttributesFromElements(List<Element> attributeElements) {
-
-		List<Attribute> attributes = new ArrayList<Attribute>();
-
-		for (Element attributeElement : attributeElements) {
-			TagAttribute tagAttribute = new TagAttribute();
-			tagAttribute.initialize(attributeElement, this);
-			attributes.add(tagAttribute);
-		}
-
-		return attributes;
-	}
-
 	public boolean isWriteJSP() {
 		return _writeJSP;
 	}
@@ -85,12 +72,28 @@ public class TagComponent extends Component {
 		_writeJSP = writeJSP;
 	}
 
+	@Override
+	protected List<Attribute> getAttributesFromElements(
+		List<Element> attributeElements) {
+
+		List<Attribute> attributes = new ArrayList<Attribute>();
+
+		for (Element attributeElement : attributeElements) {
+			TagAttribute tagAttribute = new TagAttribute();
+			tagAttribute.initialize(attributeElement, this);
+			attributes.add(tagAttribute);
+		}
+
+		return attributes;
+	}
+
+	private static final String _CLASS_NAME_SUFFIX = "Tag";
+
 	private static final String _COMPONENT_DEFAULT_PARENT_CLASS =
 		"com.liferay.taglib.util.IncludeTag";
-
-	private final static String _CLASS_NAME_SUFFIX = "Tag";
 
 	private String _className;
 	private boolean _dynamicAttributes;
 	private boolean _writeJSP;
+
 }

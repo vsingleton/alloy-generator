@@ -106,7 +106,6 @@ public class TypeUtil {
 	}
 
 	public static String getJavaWrapperType(String type) {
-
 		String javaWrapperType = type;
 
 		if (TypeUtil.isPrimitiveType(javaWrapperType)) {
@@ -220,7 +219,8 @@ public class TypeUtil {
 	}
 
 	private String _getJavaScriptType(String type) {
-		String javaScriptType = _JAVASCRIPT_TYPES.get(_removeCurlyBraces(type.toLowerCase()));
+		String javaScriptType = _JAVASCRIPT_TYPES.get(
+			_removeCurlyBraces(type.toLowerCase()));
 
 		if (StringUtil.isBlank(javaScriptType)) {
 			javaScriptType = String.class.getSimpleName();
@@ -301,19 +301,20 @@ public class TypeUtil {
 
 		if (StringUtil.isNotBlank(genericsType)) {
 			type = type.replace(
-				StringPool.LEFT_CHEV.concat(genericsType).concat(
-					StringPool.RIGHT_CHEV), StringPool.EMPTY);
+				StringPool.LEFT_CHEV.concat(
+					genericsType).concat(StringPool.RIGHT_CHEV),
+					StringPool.EMPTY);
 		}
 
 		return type;
 	}
-
-	private static TypeUtil _instance = null;
 
 	private static HashMap<String, String> _INPUT_TYPES = null;
 
 	private static HashMap<String, String> _JAVASCRIPT_TYPES = null;
 
 	private static HashMap<String, String> _OUTPUT_TYPES = null;
+
+	private static TypeUtil _instance = null;
 
 }
