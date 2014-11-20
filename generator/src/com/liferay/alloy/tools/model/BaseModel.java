@@ -35,16 +35,16 @@ public abstract class BaseModel implements Comparable<Object> {
 	}
 
 	public String getCleanDescription() {
-
 		if (_cleanDescription == null) {
 			_cleanDescription = _description;
-			_cleanDescription = _cleanDescription.replace(StringPool.NEWLINE,
-				StringPool.SPACE);
-			_cleanDescription = _cleanDescription.replace(StringPool.TAB,
-				StringPool.SPACE);
-			_cleanDescription = _cleanDescription.replaceAll("<!--.*-->",
-				StringPool.EMPTY);
-			_cleanDescription = _cleanDescription.replace(PLACEHOLDER_DESCRIPTION, StringPool.EMPTY);
+			_cleanDescription = _cleanDescription.replace(
+				StringPool.NEWLINE, StringPool.SPACE);
+			_cleanDescription = _cleanDescription.replace(
+				StringPool.TAB, StringPool.SPACE);
+			_cleanDescription = _cleanDescription.replaceAll(
+				"<!--.*-->", StringPool.EMPTY);
+			_cleanDescription = _cleanDescription.replace(
+				PLACEHOLDER_DESCRIPTION, StringPool.EMPTY);
 			_cleanDescription = _cleanDescription.trim();
 		}
 
@@ -74,12 +74,13 @@ public abstract class BaseModel implements Comparable<Object> {
 	public void setGenerateJava(boolean _generateJava) {
 		this._generateJava = _generateJava;
 	}
-	
-	private static final String PLACEHOLDER_DESCRIPTION = "TODO. Wanna help? Please send a Pull Request.";
 
 	public void setName(String name) {
 		_name = name;
 	}
+
+	private static final String PLACEHOLDER_DESCRIPTION =
+		"TODO. Wanna help? Please send a Pull Request.";
 
 	private String _cleanDescription;
 	private String _description;

@@ -33,7 +33,8 @@ public class ReservedAttributeUtil {
 	public static final List<String> JAVA_RESERVED_WORDS = Arrays.asList(
 		PropsUtil.getStringArray("builder.java.reserved.words"));
 
-	public static final String NAMESPACE = PropsUtil.getString("builder.namespace", null);
+	public static final String NAMESPACE = PropsUtil.getString(
+		"builder.namespace", null);
 
 	public static final List<String> NAMESPACED_ATTRIBUTES = Arrays.asList(
 		PropsUtil.getStringArray("builder.namespaced.attributes"));
@@ -78,12 +79,14 @@ public class ReservedAttributeUtil {
 
 			if (NAMESPACE != null) {
 				name = NAMESPACE.concat(capitalizedAttributeName);
-			} else {
+			}
+			else {
 				Component component = attribute.getComponent();
 
 				String componentUncapitalizedName =
 					component.getUncapitalizedName();
-				name = componentUncapitalizedName.concat(capitalizedAttributeName);
+				name = componentUncapitalizedName.concat(
+					capitalizedAttributeName);
 			}
 		}
 
@@ -101,4 +104,5 @@ public class ReservedAttributeUtil {
 	public static boolean isNamespaced(String attributeName) {
 		return NAMESPACED_ATTRIBUTES.contains(attributeName);
 	}
+
 }

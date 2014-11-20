@@ -2,6 +2,7 @@
 
 <components extends="./components.xml" namespace="aui">
 <!-- Example of how to add attribute: -->
+
 	<!-- <component name="Popover">
 	<attributes>
 	  <attribute>
@@ -14,4 +15,5 @@
 	  </attribute>
 	</attributes>
 </component> -->
+
 </components>

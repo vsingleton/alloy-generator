@@ -14,19 +14,24 @@
 
 package com.liferay.alloy.tools.builder.faces.model;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import jodd.util.StringPool;
-
 import com.liferay.alloy.tools.model.Attribute;
 import com.liferay.alloy.tools.model.Component;
 import com.liferay.alloy.util.PropsUtil;
 import com.liferay.alloy.util.StringUtil;
-import jodd.typeconverter.Convert;
-import org.dom4j.Element;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import jodd.typeconverter.Convert;
+
+import jodd.util.StringPool;
+
+import org.dom4j.Element;
 public class FacesComponent extends Component {
+
+	public String getHandlerClass() {
+		return _handlerClass;
+	}
 
 	public String getRendererParentClass() {
 
@@ -44,9 +49,23 @@ public class FacesComponent extends Component {
 			getRendererParentClass().lastIndexOf(StringPool.DOT) + 1);
 	}
 
+	public String getValidatorId() {
+		return _validatorId;
+	}
+
+	public String getYuiClassName() {
+		return StringUtil.toCamelCase(
+			_yuiName, true, StringPool.DASH.charAt(0));
+	}
+
+	public String getYuiName() {
+		return _yuiName;
+	}
+
 	@Override
-	public void initialize(Element facesComponentElement,
-			String defaultPackage) {
+	public void initialize(
+		Element facesComponentElement, String defaultPackage) {
+
 		super.initialize(facesComponentElement, defaultPackage);
 
 		_generateTaglibXML = Convert.toBoolean(
@@ -75,8 +94,9 @@ public class FacesComponent extends Component {
 
 		String defaultRendererParentClass = _DEFAULT_RENDERER_BASE_CLASS;
 
-		if (isYui() && _DEFAULT_ALLOY_RENDERER_PARENT_CLASS != null
-				&& _DEFAULT_ALLOY_RENDERER_PARENT_CLASS.length() > 0) {
+		if (isYui() && (_DEFAULT_ALLOY_RENDERER_PARENT_CLASS != null) &&
+			(_DEFAULT_ALLOY_RENDERER_PARENT_CLASS.length() > 0)) {
+
 			defaultRendererParentClass = _DEFAULT_ALLOY_RENDERER_PARENT_CLASS;
 		}
 
@@ -85,8 +105,32 @@ public class FacesComponent extends Component {
 			defaultRendererParentClass);
 	}
 
+	public boolean isGenerateTaglibXML() {
+		return _generateTaglibXML;
+	}
+
+	public boolean isHandlerClassOnly() {
+		return _handlerClassOnly;
+	}
+
 	public boolean isStyleable() {
 		return _styleable;
+	}
+
+	public boolean isYui() {
+		return _yui;
+	}
+
+	public void setGenerateTaglibXML(boolean _generateTaglibXML) {
+		this._generateTaglibXML = _generateTaglibXML;
+	}
+
+	public void setHandlerClass(String _handlerClass) {
+		this._handlerClass = _handlerClass;
+	}
+
+	public void setHandlerClassOnly(boolean _handlerClassOnly) {
+		this._handlerClassOnly = _handlerClassOnly;
 	}
 
 	public void setRendererParentClass(String rendererParentClass) {
@@ -97,8 +141,17 @@ public class FacesComponent extends Component {
 		this._styleable = _styleable;
 	}
 
+	public void setValidatorId(String _validatorId) {
+		this._validatorId = _validatorId;
+	}
+
+	public void setYui(boolean _yui) {
+		this._yui = _yui;
+	}
+
 	@Override
-	protected List<Attribute> getAttributesFromElements(List<Element> attributeElements) {
+	protected List<Attribute> getAttributesFromElements(
+		List<Element> attributeElements) {
 
 		List<Attribute> attributes = new ArrayList<Attribute>();
 
@@ -120,66 +173,19 @@ public class FacesComponent extends Component {
 		PropsUtil.getString("builder.faces.component.default.parent.class");
 
 	private static final String _DEFAULT_ALLOY_RENDERER_PARENT_CLASS =
-		PropsUtil.getString("builder.faces.default.alloy.renderer.parent.class");
+		PropsUtil.getString(
+			"builder.faces.default.alloy.renderer.parent.class");
 
 	private static final String _DEFAULT_RENDERER_BASE_CLASS =
 		"javax.faces.render.Renderer";
 
-	public boolean isGenerateTaglibXML() {
-		return _generateTaglibXML;
-	}
-
-	public void setGenerateTaglibXML(boolean _generateTaglibXML) {
-		this._generateTaglibXML = _generateTaglibXML;
-	}
-
-	public String getYuiName() {
-		return _yuiName;
-	}
-
-	public String getYuiClassName() {
-		return StringUtil.toCamelCase(
-			_yuiName, true, StringPool.DASH.charAt(0));
-	}
-
-	public boolean isYui() {
-		return _yui;
-	}
-
-	public void setYui(boolean _yui) {
-		this._yui = _yui;
-	}
-
-	public String getHandlerClass() {
-		return _handlerClass;
-	}
-
-	public void setHandlerClass(String _handlerClass) {
-		this._handlerClass = _handlerClass;
-	}
-
-	public String getValidatorId() {
-		return _validatorId;
-	}
-
-	public void setValidatorId(String _validatorId) {
-		this._validatorId = _validatorId;
-	}
-
-	public boolean isHandlerClassOnly() {
-		return _handlerClassOnly;
-	}
-
-	public void setHandlerClassOnly(boolean _handlerClassOnly) {
-		this._handlerClassOnly = _handlerClassOnly;
-	}
-
 	private boolean _generateTaglibXML;
-	private boolean _handlerClassOnly;
-	private boolean _styleable;
 	private String _handlerClass;
-	private String _yuiName;
+	private boolean _handlerClassOnly;
 	private String _rendererParentClass;
+	private boolean _styleable;
 	private String _validatorId;
 	private boolean _yui;
+	private String _yuiName;
+
 }

@@ -171,7 +171,8 @@ public abstract class BaseBuilder {
 		return null;
 	}
 
-	protected abstract List<Component> getComponents(Document doc) throws Exception;
+	protected abstract List<Component> getComponents(Document doc)
+		throws Exception;
 
 	protected Document getComponentsDocByShortName(String name) {
 		for (Document doc : getComponentDefinitionDocs()) {
@@ -255,10 +256,12 @@ public abstract class BaseBuilder {
 			Element doc1Component = getComponentNode(doc1, name);
 
 			if (doc1Component != null) {
-				Element doc1ComponentDescriptionElement = doc1Component.element("description");
+				Element doc1ComponentDescriptionElement = doc1Component.element(
+					"description");
 
 				if (doc1ComponentDescriptionElement != null) {
-					Element descriptionElement = component.element("description");
+					Element descriptionElement = component.element(
+						"description");
 
 					if (descriptionElement != null) {
 						component.remove(descriptionElement);
@@ -397,12 +400,14 @@ public abstract class BaseBuilder {
 				try {
 					Document parentDoc = SAXReaderUtil.read(parentXML);
 
-					Element extensionElement = document.getRootElement().element("extension");
+					Element extensionElement =
+						document.getRootElement().element("extension");
 
 					document = mergeXMLAttributes(document, parentDoc);
 
 					if (extensionElement != null) {
-						document.getRootElement().add(extensionElement.createCopy());
+						document.getRootElement().add(
+							extensionElement.createCopy());
 					}
 				}
 				catch (DocumentException e) {

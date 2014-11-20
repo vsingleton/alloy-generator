@@ -185,7 +185,9 @@ public class TagBuilder extends BaseBuilder {
 		return sb.toString();
 	}
 
-	protected Map<String, Object> getTemplateContext(TagComponent tagComponent) {
+	protected Map<String, Object> getTemplateContext(
+		TagComponent tagComponent) {
+
 		Map<String, Object> context = super.getTemplateContext(tagComponent);
 
 		String jspRelativePath = getJspDir(tagComponent).concat(
@@ -320,7 +322,8 @@ public class TagBuilder extends BaseBuilder {
 			TagComponent tagComponent, Map<String, Object> context)
 		throws Exception {
 
-		String pathName = tagComponent.getUncamelizedName(StringPool.UNDERSCORE);
+		String pathName = tagComponent.getUncamelizedName(
+			StringPool.UNDERSCORE);
 		String path = getJspOutputDir(tagComponent).concat(pathName);
 
 		String contentJsp = processTemplate(_tplJsp, context);
@@ -346,7 +349,8 @@ public class TagBuilder extends BaseBuilder {
 		}
 	}
 
-	private void _createTag(TagComponent tagComponent, Map<String, Object> context)
+	private void _createTag(
+			TagComponent tagComponent, Map<String, Object> context)
 		throws Exception {
 
 		StringBuilder sb = new StringBuilder();

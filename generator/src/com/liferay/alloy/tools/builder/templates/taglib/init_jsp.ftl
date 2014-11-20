@@ -41,7 +41,7 @@ if ((dynamicAttributes != null) && !dynamicAttributes.isEmpty()) {
 	<#if !attribute.isEvent()>
 		<#assign outputSimpleClassName = attribute.getOutputTypeSimpleClassName()>
 	</#if>
-	
+
 	<#if attribute.getDefaultValue()??>
 		<#assign defaultValueSuffix = getDefaultValueSuffix(outputSimpleClassName, attribute.getDefaultValue())>
 	</#if>

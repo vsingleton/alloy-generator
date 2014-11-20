@@ -160,7 +160,6 @@ public class AlloyDocsTransformer {
 	}
 
 	private String _cleanName(String name) {
-
 		if (name.startsWith(_ALLOY_CLASS_PREFIX)) {
 			name = name.replace(_ALLOY_CLASS_PREFIX, StringPool.EMPTY);
 		}
@@ -217,7 +216,8 @@ public class AlloyDocsTransformer {
 				Element readOnlyNode = attributeNode.addElement("readOnly");
 
 				defaultValueNode.setText(attribute.getDefaultValue());
-				attributeDescriptionNode.addCDATA(_getAttributeDescription(attribute));
+				attributeDescriptionNode.addCDATA(
+					_getAttributeDescription(attribute));
 				javaScriptTypeNode.setText(attribute.getJavaScriptType());
 				nameNode.setText(attribute.getName());
 				readOnlyNode.setText(Boolean.toString(attribute.isReadOnly()));
@@ -227,10 +227,12 @@ public class AlloyDocsTransformer {
 				Element eventNode = eventsNode.addElement("event");
 				Element nameNode = eventNode.addElement("name");
 				Element typeNode = eventNode.addElement("type");
-				Element elementDescriptionNode = eventNode.addElement("description");
+				Element elementDescriptionNode = eventNode.addElement(
+					"description");
 
 				nameNode.setText(event.getName());
-				elementDescriptionNode.addCDATA(_getAttributeDescription(event));
+				elementDescriptionNode.addCDATA(
+					_getAttributeDescription(event));
 				typeNode.setText(event.getType());
 			}
 		}
@@ -369,8 +371,8 @@ public class AlloyDocsTransformer {
 						JSONUtil.getString(attributeJSON, "description"),
 						StringPool.EMPTY);
 
-					String readOnlyString = JSONUtil.getString(attributeJSON,
-						"readonly");
+					String readOnlyString = JSONUtil.getString(
+						attributeJSON, "readonly");
 
 					boolean readOnly = false;
 

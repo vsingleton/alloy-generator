@@ -80,10 +80,6 @@ public class Component extends BaseModel {
 		return _extendsTags;
 	}
 
-	public void setExtendsTags(String[] _extendsTags) {
-		this._extendsTags = _extendsTags;
-	}
-
 	public String getInterface() {
 		return _componentInterface;
 	}
@@ -145,7 +141,6 @@ public class Component extends BaseModel {
 	}
 
 	public void initialize(Element componentElement, String defaultPackage) {
-
 		String name = componentElement.attributeValue("name");
 		setName(name);
 
@@ -156,14 +151,15 @@ public class Component extends BaseModel {
 		if (descriptionElement != null) {
 			description = Convert.toString(descriptionElement.getText());
 		}
-		
+
 		setDescription(description);
 
 		Element authorsElement = componentElement.element("authors");
-		if (authorsElement != null) {
 
+		if (authorsElement != null) {
 			List<String> authors = new ArrayList<String>();
-			List<Element> authorElementsList = authorsElement.elements("author");
+			List<Element> authorElementsList = authorsElement.elements(
+				"author");
 
 			for (Element authorElement : authorElementsList) {
 				authors.add(authorElement.getText());
@@ -187,7 +183,8 @@ public class Component extends BaseModel {
 
 		if (extendsTagsString == null) {
 			_extendsTags = null;
-		} else {
+		}
+		else {
 			_extendsTags = extendsTagsString.split(StringPool.SPACE);
 		}
 
@@ -203,16 +200,20 @@ public class Component extends BaseModel {
 
 		Element attributesElement = componentElement.element("attributes");
 		_attributes = new ArrayList<Attribute>();
+
 		if (attributesElement != null) {
-			List<Element> attributeElementsList = attributesElement.elements("attribute");
-			_attributes.addAll(getAttributesFromElements(attributeElementsList));
+			List<Element> attributeElementsList = attributesElement.elements(
+				"attribute");
+			_attributes.addAll(
+				getAttributesFromElements(attributeElementsList));
 		}
 
 		Element eventsElement = componentElement.element("events");
 		_events = new ArrayList<Event>();
+
 		if (eventsElement != null) {
 			List<Element> eventElementsList = eventsElement.elements("event");
-			_events.addAll(getEventsFromElements(eventElementsList));	
+			_events.addAll(getEventsFromElements(eventElementsList));
 		}
 	}
 
@@ -274,6 +275,10 @@ public class Component extends BaseModel {
 		this._extends = _extends;
 	}
 
+	public void setExtendsTags(String[] _extendsTags) {
+		this._extendsTags = _extendsTags;
+	}
+
 	public void setInterface(String componentInterface) {
 		_componentInterface = componentInterface;
 	}
@@ -290,7 +295,8 @@ public class Component extends BaseModel {
 		_parentClass = parentClass;
 	}
 
-	protected List<Attribute> getAttributesFromElements(List<Element> attributeElements) {
+	protected List<Attribute> getAttributesFromElements(
+		List<Element> attributeElements) {
 
 		List<Attribute> attributes = new ArrayList<Attribute>();
 
@@ -304,11 +310,9 @@ public class Component extends BaseModel {
 	}
 
 	protected List<Event> getEventsFromElements(List<Element> eventElements) {
-
 		List<Event> events = new ArrayList<Event>();
 
 		for (Element eventElement : eventElements) {
-
 			Attribute attribute = new Attribute();
 			attribute.initialize(eventElement, this);
 
@@ -332,9 +336,9 @@ public class Component extends BaseModel {
 	private String _componentInterface;
 	private List<Event> _events;
 	private String _extends;
+	private String[] _extendsTags;
 	private String _module;
 	private String _package;
 	private String _parentClass;
-	private String[] _extendsTags;
 
 }
