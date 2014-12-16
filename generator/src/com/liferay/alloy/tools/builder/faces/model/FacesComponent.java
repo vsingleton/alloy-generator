@@ -34,14 +34,13 @@ public class FacesComponent extends Component {
 	}
 
 	public String getRendererParentClass() {
-
 		if (_rendererParentClass.contains("<")) {
-			return _rendererParentClass.substring(0, _rendererParentClass.indexOf("<"));
+			return _rendererParentClass.substring(
+				0, _rendererParentClass.indexOf("<"));
 		}
 		else {
 			return _rendererParentClass;
 		}
-
 	}
 
 	public String getUnqualifiedRendererParentClass() {

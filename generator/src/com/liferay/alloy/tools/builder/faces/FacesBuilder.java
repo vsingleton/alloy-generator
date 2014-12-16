@@ -156,6 +156,11 @@ public class FacesBuilder extends BaseBuilder {
 		return context;
 	}
 
+	protected String getRendererOutputDir(Component component) {
+		return getComponentOutputDir(
+			component).concat("internal").concat(StringPool.SLASH);
+	}
+
 	protected String getTaglibsXMLOutputDir() {
 		StringBuilder sb = new StringBuilder(2);
 
@@ -209,10 +214,6 @@ public class FacesBuilder extends BaseBuilder {
 				}
 			}
 		}
-	}
-
-	protected String getRendererOutputDir(Component component) {
-		return getComponentOutputDir(component).concat("internal").concat(StringPool.SLASH);
 	}
 
 	private void _buildComponent(
