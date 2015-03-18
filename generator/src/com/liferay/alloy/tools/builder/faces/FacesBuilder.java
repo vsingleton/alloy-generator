@@ -61,7 +61,8 @@ public class FacesBuilder extends BaseBuilder {
 
 				if (facesComponent.isGenerateRenderer()) {
 					_buildComponentFile(facesComponent, context, "Renderer");
-					_buildComponentFile(facesComponent, context, "RendererBase");
+					_buildComponentFile(
+						facesComponent, context, "RendererBase");
 				}
 
 				context.remove("component");
@@ -260,11 +261,14 @@ public class FacesBuilder extends BaseBuilder {
 	private static final String _COMPONENT_IMPL_DIR =
 		_BASE_IMPL_OUTPUT_DIR + "/" + _COMPONENTS_PACKAGE.replaceAll("\\.", "/");
 
-	private static final String _FACES_VERSION = PropsUtil.getString("builder.faces.version");
+	private static final String _FACES_VERSION = PropsUtil.getString(
+		"builder.faces.version");
 
-	private static final String _FACES_MAJOR_VERSION = _FACES_VERSION.split("[.]")[0];
+	private static final String _FACES_MAJOR_VERSION = _FACES_VERSION.split(
+		"[.]")[0];
 
-	private static final String _FACES_MINOR_VERSION = _FACES_VERSION.split("[.]")[1];
+	private static final String _FACES_MINOR_VERSION = _FACES_VERSION.split(
+		"[.]")[1];
 
 	private static final String _TAGLIB_XML_OUTPUT_DIR = PropsUtil.getString(
 		"builder.faces.taglib.xml.output.dir");
