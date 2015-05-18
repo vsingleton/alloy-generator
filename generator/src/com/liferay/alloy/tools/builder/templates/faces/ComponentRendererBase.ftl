@@ -14,8 +14,8 @@ import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 </#if>
+<#if component.isYui() || component.getDelegateRendererType()??>
 
-<#if component.isYui()>
 import ${packagePath}.${component.getUncamelizedName()}.${component.getCamelizedName()};
 </#if>
 
@@ -90,6 +90,18 @@ public abstract class ${component.getCamelizedName()}RendererBase extends ${comp
 
 	protected void encodeHiddenAttributes(FacesContext facesContext, ResponseWriter responseWriter, ${component.getCamelizedName()} ${component.getUncapitalizedName()}, boolean first) throws IOException {
 		// no-op
+	}
+	</#if>
+	<#if component.getDelegateRendererType()??>
+
+	@Override
+	public String getDelegateComponentFamily() {
+		return <#if component.getDelegateComponentFamily()??>${component.getDelegateComponentFamily()}<#else>${component.getCamelizedName()}.COMPONENT_FAMILY</#if>;
+	}
+
+	@Override
+	public String getDelegateRendererType() {
+		return "${component.getDelegateRendererType()}";
 	}
 	</#if>
 }
