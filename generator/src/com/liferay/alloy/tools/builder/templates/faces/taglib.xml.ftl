@@ -1,14 +1,16 @@
 <#include "../base/init.ftl">
 <?xml version='1.0' encoding='UTF-8'?>
-<facelet-taglib xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<#-- If the JSF version is 2.1, the Facelet Taglib version is 2.0. See -->
+<#-- https://issues.liferay.com/browse/FACES-2109#commentauthor_590915_verbose for more details. -->
+<#assign defaultXMLNamespace = "http://xmlns.jcp.org/xml/ns/javaee">
+<#assign faceletTaglibVersion = facesVersion>
+<#if faceletTaglibVersion == "2.1">
+	<#assign faceletTaglibVersion = "2.0" />
+	<#assign defaultXMLNamespace = "http://java.sun.com/xml/ns/javaee" />
+</#if>
+<facelet-taglib xmlns="${defaultXMLNamespace}" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xmlns:vdldoc="http://vdldoc.org/vdldoc"
-	<#-- If the JSF version is 2.1, the Facelet Taglib version is 2.0. See -->
-	<#-- https://issues.liferay.com/browse/FACES-2109#commentauthor_590915_verbose for more details. -->
-	<#assign faceletTaglibVersion = facesVersion>
-	<#if faceletTaglibVersion == "2.1">
-		<#assign faceletTaglibVersion = "2.0" />
-	</#if>
-	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facelettaglibrary_${faceletTaglibVersion?replace(".", "_")}.xsd http://vdldoc.org/vdldoc https://raw.githubusercontent.com/omnifaces/vdldoc/master/src/main/resources/org/omnifaces/vdldoc/resources/vdldoc.taglib.xml.xsd"
+	xsi:schemaLocation="${defaultXMLNamespace} ${defaultXMLNamespace}/web-facelettaglibrary_${faceletTaglibVersion?replace(".", "_")}.xsd http://vdldoc.org/vdldoc https://raw.githubusercontent.com/omnifaces/vdldoc/master/src/main/resources/org/omnifaces/vdldoc/resources/vdldoc.taglib.xml.xsd"
 	version="${faceletTaglibVersion}">
 	<#if description??>
 	<description><![CDATA[${description}]]></description>
