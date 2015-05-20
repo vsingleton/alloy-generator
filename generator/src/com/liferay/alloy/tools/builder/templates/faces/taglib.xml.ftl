@@ -4,13 +4,15 @@
 <#-- https://issues.liferay.com/browse/FACES-2109#commentauthor_590915_verbose for more details. -->
 <#assign defaultXMLNamespace = "http://xmlns.jcp.org/xml/ns/javaee">
 <#assign faceletTaglibVersion = facesVersion>
+<#assign vdldocNamespace = "http://vdldoc.omnifaces.org" />
 <#if faceletTaglibVersion == "2.1">
 	<#assign defaultXMLNamespace = "http://java.sun.com/xml/ns/javaee" />
 	<#assign faceletTaglibVersion = "2.0" />
+	<#assign vdldocNamespace = "http://vdldoc.org/vdldoc" />
 </#if>
 <facelet-taglib xmlns="${defaultXMLNamespace}" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xmlns:vdldoc="http://vdldoc.omnifaces.org"
-	xsi:schemaLocation="${defaultXMLNamespace} ${defaultXMLNamespace}/web-facelettaglibrary_${faceletTaglibVersion?replace(".", "_")}.xsd http://vdldoc.omnifaces.org https://raw.githubusercontent.com/omnifaces/vdldoc/master/src/main/resources/org/omnifaces/vdldoc/resources/vdldoc.taglib.xml.xsd"
+	xmlns:vdldoc="${vdldocNamespace}"
+	xsi:schemaLocation="${defaultXMLNamespace} ${defaultXMLNamespace}/web-facelettaglibrary_${faceletTaglibVersion?replace(".", "_")}.xsd ${vdldocNamespace} https://raw.githubusercontent.com/omnifaces/vdldoc/master/src/main/resources/org/omnifaces/vdldoc/resources/vdldoc.taglib.xml.xsd"
 	version="${faceletTaglibVersion}">
 	<#if description??>
 	<description><![CDATA[${description}]]></description>
