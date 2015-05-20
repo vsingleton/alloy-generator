@@ -5,12 +5,12 @@
 <#assign defaultXMLNamespace = "http://xmlns.jcp.org/xml/ns/javaee">
 <#assign faceletTaglibVersion = facesVersion>
 <#if faceletTaglibVersion == "2.1">
-	<#assign faceletTaglibVersion = "2.0" />
 	<#assign defaultXMLNamespace = "http://java.sun.com/xml/ns/javaee" />
+	<#assign faceletTaglibVersion = "2.0" />
 </#if>
 <facelet-taglib xmlns="${defaultXMLNamespace}" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xmlns:vdldoc="http://vdldoc.org/vdldoc"
-	xsi:schemaLocation="${defaultXMLNamespace} ${defaultXMLNamespace}/web-facelettaglibrary_${faceletTaglibVersion?replace(".", "_")}.xsd http://vdldoc.org/vdldoc https://raw.githubusercontent.com/omnifaces/vdldoc/master/src/main/resources/org/omnifaces/vdldoc/resources/vdldoc.taglib.xml.xsd"
+	xmlns:vdldoc="http://vdldoc.omnifaces.org"
+	xsi:schemaLocation="${defaultXMLNamespace} ${defaultXMLNamespace}/web-facelettaglibrary_${faceletTaglibVersion?replace(".", "_")}.xsd http://vdldoc.omnifaces.org https://raw.githubusercontent.com/omnifaces/vdldoc/master/src/main/resources/org/omnifaces/vdldoc/resources/vdldoc.taglib.xml.xsd"
 	version="${faceletTaglibVersion}">
 	<#if description??>
 	<description><![CDATA[${description}]]></description>
