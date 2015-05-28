@@ -47,6 +47,7 @@ public class FacesBuilder extends BaseBuilder {
 		Map<String, Object> context = new HashMap<>();
 		context.put("copyrightYear", getCopyrightYear());
 		context.put("namespace", _NAMESPACE);
+		context.put("namespaceURI", _NAMESPACE_URI);
 		context.put("packagePath", _COMPONENTS_PACKAGE);
 		context.put("facesVersion", _FACES_VERSION);
 
@@ -248,7 +249,10 @@ public class FacesBuilder extends BaseBuilder {
 		"builder.faces.impl.output.dir");
 
 	private static final String _NAMESPACE = PropsUtil.getString(
-		"builder.faces.taglib.xml.namespace", "alloy");
+		"builder.faces.taglib.xml.namespace");
+
+	private static final String _NAMESPACE_URI = PropsUtil.getString(
+		"builder.faces.taglib.xml.namespace.URI");
 
 	private static final String _COMPONENTS_PACKAGE =
 		"com.liferay.faces." + FacesBuilder._NAMESPACE + ".component";

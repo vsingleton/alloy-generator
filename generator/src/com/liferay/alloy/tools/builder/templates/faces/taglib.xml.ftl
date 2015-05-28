@@ -17,7 +17,7 @@
 	<#if description??>
 	<description><![CDATA[${description}]]></description>
 	</#if>
-	<namespace>http://liferay.com/faces/${namespace}</namespace>
+	<namespace>${namespaceURI}</namespace>
 	<#if extensionElements??>
 	<#list extensionElements as element>
 	${element.asXML()?replace("\n\t", "\n")}
