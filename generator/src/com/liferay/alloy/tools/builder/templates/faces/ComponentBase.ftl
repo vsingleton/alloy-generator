@@ -75,7 +75,7 @@ public abstract class ${component.getCamelizedName()}Base extends ${component.ge
 		return com.liferay.faces.util.component.ComponentUtil.concatCssClasses(styleClass, "${namespace}-${component.getUncamelizedName("-")}"<#if component.getExtraStyleClasses()??>, "${component.getExtraStyleClasses()}"</#if>);
 		<#elseif attribute.getJavaBeanPropertyName() == "Label" && attribute.isDefaultToComponentLabel()>
 
-		String label = (String) getStateHelper().eval(${component.getCamelizedName()}PropertyKeys.styleClass, null);
+		String label = (String) getStateHelper().eval(${component.getCamelizedName()}PropertyKeys.label, null);
 
 		if (label == null) {
 
