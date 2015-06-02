@@ -73,6 +73,20 @@ public abstract class ${component.getCamelizedName()}Base extends ${component.ge
 		String styleClass = (String) getStateHelper().eval(${component.getCamelizedName()}PropertyKeys.styleClass, null);
 
 		return com.liferay.faces.util.component.ComponentUtil.concatCssClasses(styleClass, "${namespace}-${component.getUncamelizedName("-")}"<#if component.getExtraStyleClasses()??>, "${component.getExtraStyleClasses()}"</#if>);
+		<#elseif attribute.getJavaBeanPropertyName() == "Label" && attribute.isDefaultToComponentLabel()>
+
+		String label = (String) getStateHelper().eval(${component.getCamelizedName()}PropertyKeys.styleClass, null);
+
+		if (label == null) {
+
+			javax.faces.context.FacesContext facesContext = javax.faces.context.FacesContext.getCurrentInstance();
+
+			if (facesContext.getCurrentPhaseId() == javax.faces.event.PhaseId.PROCESS_VALIDATIONS) {
+				label = com.liferay.faces.util.component.ComponentUtil.getComponentLabel(this);
+			}
+		}
+
+		return label;
 		<#else>
 		return (${attribute.getJavaWrapperType()}) getStateHelper().eval(${component.getCamelizedName()}PropertyKeys.${attribute.getJavaSafeName()}, ${attribute.getDefaultValue()});
 		</#if>

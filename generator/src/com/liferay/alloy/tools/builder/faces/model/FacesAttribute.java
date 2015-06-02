@@ -66,6 +66,8 @@ public class FacesAttribute extends Attribute {
 	public void initialize(Element facesAttributeElement, Component component) {
 		super.initialize(facesAttributeElement, component);
 
+		_defaultToComponentLabel = Convert.toBoolean(
+			facesAttributeElement.elementText("defaultToComponentLabel"), true);
 		String defaultValue = Convert.toString(
 			facesAttributeElement.elementText("defaultValue"), "null");
 
@@ -132,6 +134,15 @@ public class FacesAttribute extends Attribute {
 		this._yuiType = _yuiType;
 	}
 
+	public boolean isDefaultToComponentLabel() {
+		return _defaultToComponentLabel;
+	}
+
+	public void setDefaultToComponentLabel(boolean _defaultToComponentLabel) {
+		this._defaultToComponentLabel = _defaultToComponentLabel;
+	}
+
+	private boolean _defaultToComponentLabel;
 	private boolean _inherited;
 	private String _methodSignature;
 	private boolean _override;
