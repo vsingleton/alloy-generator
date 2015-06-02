@@ -72,7 +72,7 @@ public abstract class ${component.getCamelizedName()}Base extends ${component.ge
 		// STYLE_CLASS_NAME of the super class.
 		String styleClass = (String) getStateHelper().eval(${component.getCamelizedName()}PropertyKeys.styleClass, null);
 
-		return com.liferay.faces.util.component.ComponentUtil.concatCssClasses(styleClass, "${namespace}-${component.getUncamelizedName("-")}");
+		return com.liferay.faces.util.component.ComponentUtil.concatCssClasses(styleClass, "${namespace}-${component.getUncamelizedName("-")}"<#if component.getExtraStyleClasses()??>, "${component.getExtraStyleClasses()}"</#if>);
 		<#else>
 		return (${attribute.getJavaWrapperType()}) getStateHelper().eval(${component.getCamelizedName()}PropertyKeys.${attribute.getJavaSafeName()}, ${attribute.getDefaultValue()});
 		</#if>
