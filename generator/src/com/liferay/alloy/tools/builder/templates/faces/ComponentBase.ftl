@@ -58,7 +58,26 @@ public abstract class ${component.getCamelizedName()}Base extends ${component.ge
 		setRendererType(<#if component.isGenerateRenderer()>RENDERER_TYPE<#else>""</#if>);
 	}
 	<#list component.getAttributes()?sort_by("javaBeanPropertyName") as attribute>
-	<#if attribute.isGenerateJava() && !attribute.isInherited()>
+	<#if attribute.getJavaBeanPropertyName() == "Label" && attribute.isDefaultToComponentLabel()
+		&& attribute.isGenerateJava() && attribute.isInherited()>
+
+	@Override
+	public String getLabel() {
+
+		String label = super.getLabel();
+
+		if (label == null) {
+
+			javax.faces.context.FacesContext facesContext = javax.faces.context.FacesContext.getCurrentInstance();
+
+			if (facesContext.getCurrentPhaseId() == javax.faces.event.PhaseId.PROCESS_VALIDATIONS) {
+				label = com.liferay.faces.util.component.ComponentUtil.getComponentLabel(this);
+			}
+		}
+
+		return label;
+	}
+	<#elseif attribute.isGenerateJava() && !attribute.isInherited()>
 
 	<#if attribute.isOverride()>
 	@Override
