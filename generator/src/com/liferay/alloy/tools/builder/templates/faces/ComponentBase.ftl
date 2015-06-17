@@ -31,7 +31,7 @@ public abstract class ${component.getCamelizedName()}Base extends ${component.ge
 	// Public Constants
 	public static final String COMPONENT_TYPE = "${packagePath}.${component.getUncamelizedName()}.${component.getCamelizedName()}";
 	<#if component.isGenerateRenderer()>
-	public static final String RENDERER_TYPE = "${packagePath}.${component.getUncamelizedName()}.internal.${component.getCamelizedName()}Renderer";
+	public static final String RENDERER_TYPE = "${packagePath}.${component.getUncamelizedName()}.${component.getCamelizedName()}Renderer";
 	</#if>
 	<#assign enumWritten = false>
 	<#list component.getAttributes()?sort_by("constantName") as attribute>
