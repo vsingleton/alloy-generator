@@ -31,7 +31,7 @@ import ${component.getRendererParentClass()};
 public abstract class ${component.getCamelizedName()}RendererBase extends ${component.getUnqualifiedRendererParentClass()} {
 	<#assign first = true>
 	<#list component.getAttributes()?sort_by("yuiName") as attribute>
-	<#if attribute.isGenerateJava() && (attribute.isYui() || !attribute.isInherited())>
+	<#if attribute.isGenerateJava() && (attribute.isYui() || (!attribute.isInherited() && (attribute.getJavaBeanPropertyName() != "Label" || !attribute.isDefaultToComponentLabel())))>
 	<#if first>
 
 	// Protected Constants
